@@ -112,7 +112,9 @@ class ValidateRepositoryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             fixture = RepositoryFixture(Path(directory))
             (fixture.root / "README.md").write_text(
-                "# Document\n```markdown\n[example](not-a-real-file.md)\n```\n",
+                "# Document\n" + "`" * 3
+                + "markdown\n[example](not-a-real-file.md)\n"
+                + "`" * 3 + "\n",
                 encoding="utf-8",
             )
             self.assertEqual(validate_repository(fixture.root), [])
