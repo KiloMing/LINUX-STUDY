@@ -1,0 +1,29 @@
+# C/C++ build products
+*.o
+*.d
+*.a
+*.so
+*.out
+build/
+bin/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+
+# ROS 2 / colcon
+install/
+log/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+
+# Generated robot data
+*.bag
+*.db3
+*.pgm
+*.yaml.tmp
