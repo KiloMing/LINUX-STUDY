@@ -37,7 +37,7 @@
 | semaphore 与 mutex | L2 | DAY6 源码；待跨进程初始化问题调试 |
 | condition variable | 待验证 | 学习者自述；完成 `CURRENT.md` 下一次测试 |
 | read-write lock | 待验证 | 学习者自述正在学习；完成 2 reader + 1 writer |
-| producer-consumer | L0 | 无仓库证据 |
+| producer-consumer | L2 | `LinuxCodeSrc` 单槽源码与历史运行截图；2026-09-09 能解释 FIFO、有界缓冲区、wait/signal 和数量不匹配导致的永久等待；容量 5 queue 与多线程版本尚无保存的独立运行证据，待完成 `CURRENT.md` 下一次测试 |
 | Socket | L0 | 无仓库证据 |
 | CMake | L0 | 无仓库证据；Makefile 不等于 CMake |
 | ROS 2 / TF2 / URDF / RViz | L0 | 无仓库证据 |
