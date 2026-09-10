@@ -1,10 +1,10 @@
 # CURRENT
 
-最后更新：2026-09-09
+最后更新：2026-09-10
 
 ## 当前阶段
 
-Linux 系统编程收尾与并发基础验证；当前使用 C++ + pthread，正在从单槽 producer-consumer 推进到多线程、有界缓冲区版本。
+Linux 系统编程收尾与并发基础验证；当前使用 C++ + pthread，已从有界 `std::queue<int>` 推进到 2 Producer + 2 Consumer 的设计和结束协议，尚未独立实现并编译运行。
 
 ## 仓库已验证
 
@@ -15,33 +15,35 @@ Linux 系统编程收尾与并发基础验证；当前使用 C++ + pthread，正
 
 ## 学习者自述
 
-- 单槽 mutex + full + not_empty + not_full 的循环生产/消费 0～9 已实现并运行，但尚未完成脱离答案的延迟复现。
-- 已从单槽模型推进到容量为 5 的 `std::queue<int>` 有界缓冲区，能说明 queue 是 FIFO，并纠正了把 `30, 20, 10` 当成 queue 取出顺序的错误。
-- condition variable 已复测：`pthread_cond_wait()` 阻塞当前线程并原子释放 mutex；收到 signal 后线程仍须重新竞争 mutex，wait 返回前会重新获得 mutex。signal 不保存状态；`while` 同时处理虚假唤醒和线程醒来后条件已被其他线程改变的情况。
-- 能说明 Producer 在 `push()` 后 `signal(not_empty)` 通知 Consumer，Consumer 在 `pop()` 后 `signal(not_full)` 通知 Producer。每次只释放一个槽位时通常用 signal 即可；broadcast 会带来额外唤醒，但 `while` 重检可维持正确性。
-- 已写/讨论 2 Producer + 1 Consumer 共享同一个 queue：两个 Producer 共用 `producer(void*)`，通过 `void*` 参数和 `static_cast<int*>` 取得各自起始值。
-- 已定位真实挂起原因：两个 Producer 各生产 10 个、Consumer 只消费 10 个，Consumer 退出后缓冲区最终填满，Producer 永久等待 `not_full`，`main` 卡在 `join`。这是生产和消费总量不匹配造成的永久等待，不是 mutex 本身形成的死锁。
-- 已开始讲解 2 Producer + 2 Consumer，但停止在正式实践前，不记为完成或掌握。
+- 已有单槽循环版本的实现和运行经历，尚未完成脱离答案的延迟复现；9 月 9 日的 FIFO、数量不匹配挂起讨论见 [daily/2026-09-09.md](daily/2026-09-09.md)。
+- 今天继续 2 Producer + 2 Consumer 设计，复习 wait 原子释放 mutex 并等待、唤醒后重新竞争 mutex、拿锁后才返回；`while` 既防虚假唤醒，也防其他线程先改变条件。
+- 引入 `producers_done` 和 `PRODUCER_COUNT`，不再依赖固定 `TOTAL = 20`。能答出所有 Producer 结束但 buffer 仍有数据时应继续消费；完整结束协议仍需提示。
+- 已讲解每个 Producer 完成后在锁内递增计数，最后一个 Producer `broadcast(not_empty)` 唤醒所有等待 Consumer，自行检查退出条件。Producer 完成不等于整个任务完成。
+- 已讨论 4 个 `pthread_t`、先 create 全部线程再 join，避免先等 Producer 而 Consumer 尚未创建时因满队列永久等待；create 顺序不保证执行顺序，mutex 保护共享 buffer 和状态。
 
-上述 queue 与多 Producer 内容来自 2026-09-09 学习对话，没有保存为源码或运行结果，因此不支持 L3。`MASTERY.md` 仅把已有单槽代码、历史运行证据和本次解释所达到的 producer-consumer 记录更新到 L2。
+今天的实际回答与薄弱点见 [daily/2026-09-10.md](daily/2026-09-10.md)。没有独立编译运行 2P2C，也没有新增源码验证；producer-consumer 保留 L2，condition variable 和 rwlock 仍待验证。
 
 ## 待验证
 
-- 不看答案把 2 Producer + 1 Consumer 的消费总数改为 20，编译运行并验证 20 次生产、20 次消费、最终 queue 为空且所有线程退出。
-- 清理 queue 版本中遗留的单槽变量 `bool full` 和 `int data`；这两项尚未实际修正。
-- 将 Producer 的数据范围改为容易区分来源的范围，例如 0–9 与 100–109；当前 `prod_id_1 = 1`、`prod_id_2 = 2` 配合 `i + id` 会产生大量重复值，尚未实际修正。
-- 独立完成并验证 2 Producer + 2 Consumer；今天只开始讲解。
-- 若要取消写死的循环次数，引入 `done` 或 Producer 完成计数，并验证结束协议；不能仅用 `buffer.empty()` 判断整个系统已经结束。
-- read-write lock 的独立复现及互斥关系验证仍需完成；`LinuxCodeSrc/DAY7/src.cpp` 对未创建的 `tid4` 调用 join 的问题尚未修正。
+- 独立补条件时仍混淆 `buffer.empty()`、固定 `count <= 20` 和 `producer_count`，尚不能独立实现完整 2P2C。重点复测：
+  - Producer wait：`buffer.size() >= MAX_SIZE`，等待 `not_full`。
+  - Consumer wait：`buffer.empty() && producers_done < PRODUCER_COUNT`，等待 `not_empty`。
+  - Consumer 退出：`buffer.empty() && producers_done == PRODUCER_COUNT`。
+  - Producer push 后 `signal(not_empty)`；Consumer pop 后 `signal(not_full)`。
+- broadcast / destroy 名称曾混淆，需区分唤醒所有等待线程和线程结束后的资源清理。
+- 完整有界队列的独立实现、空满等待、数据不丢不重、结束协议及线程退出仍待实际编译运行验证。旧单槽 `full` / `data` 遗留变量和 Producer 数据范围问题应在独立实现时处理，不记为已经修正。
+- rwlock 独立复现及互斥关系验证仍未完成；此前记录的 `LinuxCodeSrc/DAY7/src.cpp` 对未创建 `tid4` 调用 join 的问题，本次没有重新检查或修正。
 - 后续分别定位已有 mutex、`mmap`、FIFO reader 和 Mini Shell 练习中的问题。
+
+一次答错先记录为复测项，不直接判定为长期知识缺口。
 
 ## 下一次测试
 
-1. 不看笔记修正 2 Producer + 1 Consumer：让 Consumer 消费 20 个，清理单槽遗留变量，给两个 Producer 分配清晰且不重叠的数据范围；编译运行并核对生产/消费总数、最终 queue 状态和线程退出。
-2. 口述原程序为什么会卡住，逐步说明等待中的 Producer、已退出的 Consumer 和 `main` 的状态，并区分正常 blocking、永久等待和 mutex 死锁。
-3. 把程序变为 2 Producer + 2 Consumer，先设计总生产量和各 Consumer 消费量，再独立实现、运行和观察 mutex 如何保证 Consumer 不会同时操作 queue。
-4. 完成定次数版本后，再设计 Producer 完成状态，让 Consumer 在“所有 Producer 已结束且 queue 为空”时退出。
+1. 先做 5–10 分钟短复盘：不看答案写等待/退出条件和通知方向，解释 wait、while、broadcast / destroy；推演 Consumer 的三种状态。
+2. 从空文件独立写出完整 2 Producer + 2 Consumer 有界队列，采用 `producers_done` 结束协议；四个线程全部 create 后再 join，不按固定 TOTAL 分配 Consumer 消费次数。
+3. 实际编译运行并保存代码和输出：检查数据恰好消费一次、最终队列为空、全部线程退出，验证空满等待；改变生产次数后再验证结束协议，不把一次调度顺序当作保证。
+4. 之后补 rwlock 的独立实现和验证：先完成 2 Reader + 1 Writer，再用多 Writer 变式验证写写互斥，检查未创建线程的 join 问题。
 
 ## 下一步
 
-先完成并验证 2 Producer + 1 Consumer 的数量修正，再进入 2 Producer + 2 Consumer 正式实践；未获得独立代码和运行结果前不把 producer-consumer 升到 L3，也不跳到 Socket。
+先完成短复盘、2P2C 独立实现与实际编译运行，再补 rwlock 独立验证。未完成这些前不进入 Socket；保持 [ROADMAP.md](ROADMAP.md) 既定路线及 condition variable、rwlock 至少 L3 的阶段门槛。

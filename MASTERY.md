@@ -35,12 +35,22 @@
 | 进程与 fork/exec/wait | L2 | DAY4 笔记和源码；待空输入等变式调试 |
 | FIFO 与 mmap | L2 | DAY5 笔记和源码；待 EOF、长度和同步问题调试 |
 | semaphore 与 mutex | L2 | DAY6 源码；待跨进程初始化问题调试 |
-| condition variable | 待验证 | 学习者自述；完成 `CURRENT.md` 下一次测试 |
-| read-write lock | 待验证 | 学习者自述正在学习；完成 2 reader + 1 writer |
-| producer-consumer | L2 | `LinuxCodeSrc` 单槽源码与历史运行截图；2026-09-09 能解释 FIFO、有界缓冲区、wait/signal 和数量不匹配导致的永久等待；容量 5 queue 与多线程版本尚无保存的独立运行证据，待完成 `CURRENT.md` 下一次测试 |
+| condition variable | 待验证 | 2026-09-10 复习 wait 释放/重新获取 mutex、while 重检和通知方向；独立补条件仍混淆，broadcast / destroy 也需复测；待完成 `CURRENT.md` 的独立实现与运行验证 |
+| read-write lock | 待验证 | 今天未新增实践；2P2C 独立运行后补 2 Reader + 1 Writer 独立验证及多 Writer 变式，检查此前未创建 tid4 却 join 的问题 |
+| producer-consumer | L2 | 保留已有单槽源码与历史运行证据所支持的 L2；2026-09-10 推进到 2P2C 和 producers_done 结束协议，能答出生产结束但仍有数据要继续消费；等待/退出条件、计数含义和通知方向仍需提示，没有独立编译运行 2P2C，不升 L3；详见当日日志 |
 | Socket | L0 | 无仓库证据 |
 | CMake | L0 | 无仓库证据；Makefile 不等于 CMake |
 | ROS 2 / TF2 / URDF / RViz | L0 | 无仓库证据 |
 | 运动学 / Odometry / 底盘集成 | L0 | 无仓库证据 |
 | IMU / LiDAR / 状态估计 | L0 | 无仓库证据 |
 | SLAM / Nav2 | L0 | 无仓库证据 |
+
+## 2026-09-10 待复测
+
+- Producer wait：`buffer.size() >= MAX_SIZE`，等待 `not_full`。
+- Consumer wait：`buffer.empty() && producers_done < PRODUCER_COUNT`，等待 `not_empty`。
+- Consumer 退出：`buffer.empty() && producers_done == PRODUCER_COUNT`。
+- Producer push 后 `signal(not_empty)`；Consumer pop 后 `signal(not_full)`。
+- 每个 Producer 在锁内更新完成计数，最后一个 `broadcast(not_empty)`；区分 broadcast 与 destroy，区分 Producer 完成与队列全部消费完。
+
+今天仍把 empty、固定 count <= 20 和 producer_count 混淆，未达到独立实现水平。这里记录待复习项，不因一次答错降级。下一证据是短复盘后本人独立完成并编译运行 2P2C，再补 rwlock 独立验证；此前不进入 Socket。详情见 [daily/2026-09-10.md](daily/2026-09-10.md)。
