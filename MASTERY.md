@@ -35,9 +35,9 @@
 | 进程与 fork/exec/wait | L2 | DAY4 笔记和源码；待空输入等变式调试 |
 | FIFO 与 mmap | L2 | DAY5 笔记和源码；待 EOF、长度和同步问题调试 |
 | semaphore 与 mutex | L2 | DAY6 源码；待跨进程初始化问题调试 |
-| condition variable | 待验证 | 2026-09-10 复习 wait 释放/重新获取 mutex、while 重检和通知方向；独立补条件仍混淆，broadcast / destroy 也需复测；待完成 `CURRENT.md` 的独立实现与运行验证 |
-| read-write lock | 待验证 | 今天未新增实践；2P2C 独立运行后补 2 Reader + 1 Writer 独立验证及多 Writer 变式，检查此前未创建 tid4 却 join 的问题 |
-| producer-consumer | L2 | 保留已有单槽源码与历史运行证据所支持的 L2；2026-09-10 推进到 2P2C 和 producers_done 结束协议，能答出生产结束但仍有数据要继续消费；等待/退出条件、计数含义和通知方向仍需提示，没有独立编译运行 2P2C，不升 L3；详见当日日志 |
+| condition variable | 待验证 | 2026-09-11 参考完整答案后 2P2C 编译运行并正常退出（学习者自述）；等待/退出条件、wait/while 与通知方向仍需闭卷验证，不升 L3 |
+| read-write lock | 待验证 | 未新增独立验证；producer-consumer 闭卷复现后做 2 Reader + 1 Writer 及多 Writer 变式，检查此前未创建 tid4 却 join 的问题 |
+| producer-consumer | L2 | 2026-09-11 的 2P2C 已编译运行并正常退出，但参考过完整答案（学习者自述，本次未核验新源码/输出）；下一证据为 3P2C 变式、闭卷独立复现和运行结果，不升 L3 |
 | Socket | L0 | 无仓库证据 |
 | CMake | L0 | 无仓库证据；Makefile 不等于 CMake |
 | ROS 2 / TF2 / URDF / RViz | L0 | 无仓库证据 |
@@ -53,4 +53,10 @@
 - Producer push 后 `signal(not_empty)`；Consumer pop 后 `signal(not_full)`。
 - 每个 Producer 在锁内更新完成计数，最后一个 `broadcast(not_empty)`；区分 broadcast 与 destroy，区分 Producer 完成与队列全部消费完。
 
-今天仍把 empty、固定 count <= 20 和 producer_count 混淆，未达到独立实现水平。这里记录待复习项，不因一次答错降级。下一证据是短复盘后本人独立完成并编译运行 2P2C，再补 rwlock 独立验证；此前不进入 Socket。详情见 [daily/2026-09-10.md](daily/2026-09-10.md)。
+2026-09-10 仍把 empty、固定 count <= 20 和 producer_count 混淆，未达到独立实现水平。这里记录待复习项，不因一次答错降级。后续进展见下方 2026-09-11 更新；历史详情见 [daily/2026-09-10.md](daily/2026-09-10.md)。
+
+## 2026-09-11 更新
+
+2P2C 已实际编译运行并正常退出，但参考过完整答案，不满足 L3 的独立复现要求。producer-consumer 保留 L2，condition variable、rwlock 仍待验证。本次未检查新源码和运行输出，详见 [daily/2026-09-11.md](daily/2026-09-11.md)。
+
+下一证据：先做 3P2C 变式，再闭卷独立复现并保存运行结果，之后完成 rwlock 独立验证。condition variable、rwlock 至少 L3，且 producer-consumer 独立验证通过后再进入 Socket。
