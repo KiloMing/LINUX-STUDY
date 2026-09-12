@@ -37,7 +37,7 @@
 | semaphore 与 mutex | L2 | DAY6 源码；待跨进程初始化问题调试 |
 | condition variable | 待验证 | 2026-09-11 参考完整答案后 2P2C 编译运行并正常退出（学习者自述）；等待/退出条件、wait/while 与通知方向仍需闭卷验证，不升 L3 |
 | read-write lock | 待验证 | 未新增独立验证；producer-consumer 闭卷复现后做 2 Reader + 1 Writer 及多 Writer 变式，检查此前未创建 tid4 却 join 的问题 |
-| producer-consumer | L2 | 2026-09-11 的 2P2C 已编译运行并正常退出，但参考过完整答案（学习者自述，本次未核验新源码/输出）；下一证据为 3P2C 变式、闭卷独立复现和运行结果，不升 L3 |
+| producer-consumer | L2 | 2026-09-11 的 2P2C 已编译运行并正常退出，但参考过完整答案（学习者自述，本次未核验新源码/输出）；2026-09-12 完成 3P2C 代码改写阶段，修正项待核对、最终运行待验证；闭卷独立复现未完成，不升 L3 |
 | Socket | L0 | 无仓库证据 |
 | CMake | L0 | 无仓库证据；Makefile 不等于 CMake |
 | ROS 2 / TF2 / URDF / RViz | L0 | 无仓库证据 |
@@ -60,3 +60,9 @@
 2P2C 已实际编译运行并正常退出，但参考过完整答案，不满足 L3 的独立复现要求。producer-consumer 保留 L2，condition variable、rwlock 仍待验证。本次未检查新源码和运行输出，详见 [daily/2026-09-11.md](daily/2026-09-11.md)。
 
 下一证据：先做 3P2C 变式，再闭卷独立复现并保存运行结果，之后完成 rwlock 独立验证。condition variable、rwlock 至少 L3，且 producer-consumer 独立验证通过后再进入 Socket。
+
+## 2026-09-12 更新
+
+3P2C 已完成代码改写阶段，对话中已明确参数、数据区分和结束广播的修正要求；尚无修正后完整源码及最终编译运行成功证据，闭卷独立复现也未完成。producer-consumer 保留 L2，condition variable、rwlock 仍待验证，不新增独立掌握结论。详见 [daily/2026-09-12.md](daily/2026-09-12.md)。
+
+下一证据：运行验证 3P2C → 闭卷从空文件独立复现 producer-consumer → rwlock 独立验证。
