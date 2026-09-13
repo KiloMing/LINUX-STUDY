@@ -36,9 +36,9 @@
 | FIFO 与 mmap | L2 | DAY5 笔记和源码；待 EOF、长度和同步问题调试 |
 | semaphore 与 mutex | L2 | DAY6 源码；待跨进程初始化问题调试 |
 | condition variable | 待验证 | 2026-09-11 参考完整答案后 2P2C 编译运行并正常退出（学习者自述）；等待/退出条件、wait/while 与通知方向仍需闭卷验证，不升 L3 |
-| read-write lock | 待验证 | 未新增独立验证；producer-consumer 闭卷复现后做 2 Reader + 1 Writer 及多 Writer 变式，检查此前未创建 tid4 却 join 的问题 |
+| read-write lock | 基础独立验证完成（学习者自述） | 2026-09-13 已独立编写并运行通过 2R2W；本次未核验源码/输出，待补存证据和延迟复测后确认 L3，不记为整个主题完成 |
 | producer-consumer | L2 | 2026-09-11 的 2P2C 已编译运行并正常退出，但参考过完整答案（学习者自述，本次未核验新源码/输出）；2026-09-12 完成 3P2C 代码改写阶段，修正项待核对、最终运行待验证；闭卷独立复现未完成，不升 L3 |
-| Socket | L0 | 无仓库证据 |
+| Socket | L1（基础理解/初学） | 2026-09-13 开始学习 TCP 特性、两个 fd、调用流程、IPv4 地址、getaddrinfo 与资源生命周期；见当日日报，未提供完整 client/server 运行或独立实现证据，不升 L2/L3 |
 | CMake | L0 | 无仓库证据；Makefile 不等于 CMake |
 | ROS 2 / TF2 / URDF / RViz | L0 | 无仓库证据 |
 | 运动学 / Odometry / 底盘集成 | L0 | 无仓库证据 |
@@ -66,3 +66,9 @@
 3P2C 已完成代码改写阶段，对话中已明确参数、数据区分和结束广播的修正要求；尚无修正后完整源码及最终编译运行成功证据，闭卷独立复现也未完成。producer-consumer 保留 L2，condition variable、rwlock 仍待验证，不新增独立掌握结论。详见 [daily/2026-09-12.md](daily/2026-09-12.md)。
 
 下一证据：运行验证 3P2C → 闭卷从空文件独立复现 producer-consumer → rwlock 独立验证。
+
+## 2026-09-13 更新
+
+rwlock 2R2W 已独立编写并运行验证通过，记为基础独立验证完成（学习者自述）；本次未重新核验源码和输出，不扩展为变式调试或整个并发章节完成。Socket 已开始基础学习，保守记 L1，尚无完整示例运行或独立 client/server 的证据。producer-consumer 保留 L2，condition variable 的待验证项不变。
+
+今天的实际进度替代上方历史记录中“rwlock 尚未独立验证、Socket 尚未开始”的当前状态判断；此前未完成的验收仍需补齐。详见 [daily/2026-09-13.md](daily/2026-09-13.md)。
