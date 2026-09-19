@@ -13,6 +13,7 @@ Linux 文件描述符、进程/线程、基本错误处理达到可独立练习�
 - 2026-09-13 开始学习 TCP 特性、两个 fd、Socket 调用流程和 IPv4 地址配置，见 [当日记录](../daily/2026-09-13.md)。
 - 2026-09-15 最小 Echo Server 已实际跑通，并观察到 TCP 多次发送可能被合并读取，见 [当日记录](../daily/2026-09-15.md)。
 - 2026-09-18 在逐步教学下完成多进程 TCP 文本文件传输：`file_Info → "OK" → 文件正文`，理解父子进程关闭对应 fd、完整收发和二进制字节流，见 [当日记录](../daily/2026-09-18.md)。源码证据位于独立仓库 [LinuxCodeSrc `bebcefb`](https://github.com/KiloMing/LinuxCodeSrc/commit/bebcefb7c156a968e79fcfc4153c12d1cee39524)。
+- 2026-09-19 已提交学习版 Select Echo Server [`e4da15c`](https://github.com/KiloMing/LinuxCodeSrc/commit/e4da15c4df4fea2fc0d4bc736973c1ae7b17f1ae)，主干包含 `FD_ZERO/FD_SET/FD_ISSET/FD_CLR`、集合复制、`maxfd + 1`、监听 fd 就绪后 `accept()`、连接 fd 加入集合以及 `read/write` Echo。当前仍在巩固 `server_sock / accept / client_sock / fd_set` 的定义关系，尚无独立 3 客户端运行证据。
 
 当前为 L2：能解释模型并跟随示例完成实验。尚缺闭卷独立复现、短读写与异常路径修正、二进制哈希验证和协议变式，不升 L3。
 
