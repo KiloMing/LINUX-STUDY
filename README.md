@@ -28,34 +28,36 @@ Linux/C++ 系统能力
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-09-18
+## 最新学习进度：2026-09-19
 
-当天完成了多进程 TCP 文件传输实验，应用层通信顺序为：
+当天在 TCP 基础复盘后正式进入 I/O 多路复用 `select`，当前以多客户端 Echo Server 为主线。重点建立了以下关系：
 
 ```text
-Client                                  Server 子进程
-file_Info ────────────────────────────→ 接收文件名和大小
-          ←──────────────────────────── 返回 "OK" ACK
-文件正文 ─────────────────────────────→ 按 file_size 接收并保存
+socket() → server_sock（监听 fd）
+                    ↓ select 报告就绪
+                 accept()
+                    ↓
+              client_sock（连接 fd）
+                    ↓
+       FD_SET(client_sock, master_set)
+                    ↓
+             select 继续监控
+                    ↓
+              read / write
 ```
 
 本次学习内容包括：
 
-- 区分监听用的 `server_sock` 和具体通信使用的 `client_sock`。
-- `fork()` 后父进程关闭 `client_sock` 并继续 `accept()`；子进程关闭 `server_sock`，处理完成后关闭连接并退出。
-- 客户端通过 `argc/argv` 接收服务器 IP、端口和文件名，使用 `stoi()`、`htons()` 和 `inet_pton()` 配置连接。
-- 使用 `file_Info { file_name[256], uint64_t file_size }` 传递文件元信息。
-- 使用 `send_all()` / `recv_all()` 处理 TCP 短写和短读的基本问题。
-- 客户端收到完整 `"OK"` 后，使用 `open/read/send_all` 分块发送文件。
-- 服务端使用 `recv_file/open/write`，按 `file_size` 收满正文并保存为 `recv_` 前缀文件。
-- 理解 TCP 传输的是原始字节流，`open/read/send` 可以传输文本和二进制文件；正文长度必须使用 `read()` 的实际返回值。
-- 排查了 `stoi invalid_argument`、`bind: Address already in use`、`c_str()`、`send()` 返回值类型和忘记调用 `recv_file()` 等问题。
+- `fd_set`/bitmap 与 `FD_ZERO`、`FD_SET`、`FD_CLR`、`FD_ISSET`。
+- `master_set` 保存长期监控集合，`read_set = master_set` 后交给 `select()`；`select()` 会改写工作集合，只留下本轮就绪 fd。
+- `select()` 的 `nfds` 是最大被监控 fd 加 1，而不是 fd 数量。
+- 监听 fd 就绪表示有连接可 `accept()`；`accept()` 由内核返回新的连接 fd，bitmap 本身不会分配 fd。
+- 新 `client_sock` 必须显式 `FD_SET()` 后才进入后续监控；连接 fd 就绪后再 `read/write`，断开后 `close + FD_CLR`。
+- 继续区分 `server_sock`（监听）和 `client_sock`（具体连接），当前这一对象关系仍需闭卷复测。
 
-当天文本文件已经实际传输成功。实现过程使用了逐步教学和调试提示，因此当前按 L2 记录；下一步是闭卷独立复现，并验证空文件、大于缓冲区的文件、含 `0x00` 的二进制文件和两个并发客户端。
+源码仓库提交 [`e4da15c`](https://github.com/KiloMing/LinuxCodeSrc/commit/e4da15c4df4fea2fc0d4bc736973c1ae7b17f1ae) 新增 `20260919/select_server.cpp`。该实现是在教学提示下形成，且仓库未保存 3 客户端运行输出，因此 Socket 保持 L2，不据此认定独立掌握。下一步先闭卷复述 fd 生命周期，再独立重写并验证至少 3 个客户端、断连清理和新连接接入。
 
-完整学习过程、当前源码中仍待修正的问题和下一次测试见 [2026-09-18 学习记录](daily/2026-09-18.md)。Socket 阶段索引见 [socket/README.md](socket/README.md)。
-
-实验源码位于独立仓库 [KiloMing/LinuxCodeSrc](https://github.com/KiloMing/LinuxCodeSrc) 的 [`20260918/`](https://github.com/KiloMing/LinuxCodeSrc/tree/bebcefb7c156a968e79fcfc4153c12d1cee39524/20260918) 目录。本仓库负责保存学习路线、掌握证据和复测计划，不重复保存源码。
+完整记录见 [2026-09-19 学习记录](daily/2026-09-19.md)，阶段索引见 [socket/README.md](socket/README.md)。
 
 ## 学习节奏
 
@@ -92,6 +94,7 @@ file_Info ───────────────────────�
 
 ## 近期每日记录
 
+- [2026-09-19](daily/2026-09-19.md)：Select/bitmap/fd_set、监听 fd 与连接 fd、最小多客户端 Echo Server 学习版。
 - [2026-09-18](daily/2026-09-18.md)：多进程 TCP 文件传输、元信息、ACK、二进制字节流与调试记录。
 - [2026-09-15](daily/2026-09-15.md)：最小 Echo Server、TCP 合并读取、阻塞行为与当前源码核对。
 - [2026-09-13](daily/2026-09-13.md)：Socket 起步、IPv4 地址结构、两个 fd 与资源生命周期。
