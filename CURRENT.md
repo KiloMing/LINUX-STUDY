@@ -1,45 +1,46 @@
 # CURRENT
 
-最后更新：2026-09-13
+最后更新：2026-09-18
 
 ## 当前阶段
 
-Linux 系统编程继续补验证，同时已开始 TCP/Socket 基础学习，使用 C++ + pthread。rwlock 2R2W 已完成基础独立编写与运行验证（学习者自述），Socket 仍处于基础理解/初学阶段。3 Producer + 2 Consumer 已完成代码改写阶段，修正项仍需核对，尚无最终编译运行成功证据。闭卷独立复现未完成，producer-consumer 保留 L2。
+当前进入 TCP/Socket 基础实践，使用 C++、POSIX 文件 I/O 与多进程模型。2026-09-18 已在连续教学下跑通“文件元信息 → OK ACK → 文件正文”的文本文件传输，并能解释监听 fd、连接 fd 与父子进程关闭规则。Socket 记为 L2；尚未完成脱离答案的独立复现、二进制验证和健壮协议设计。
+
+此前并发学习的未完成验收仍保留：producer-consumer 为 L2；rwlock 2R2W 的基础独立验证来自学习者自述，源码和输出仍待补存。
 
 ## 仓库已验证
 
-- DAY1–DAY6 保存 Linux 基础、Git/Makefile、文件 I/O、目录操作、pipe、进程、`fork/exec/wait`、Mini Shell、FIFO、`mmap`、semaphore、mutex 的笔记或源码练习。
-- 2026-09-08 的学习事实见 [daily/2026-09-08.md](daily/2026-09-08.md)。独立源码仓库 [KiloMing/LinuxCodeSrc](https://github.com/KiloMing/LinuxCodeSrc) 的 `main` 已有单槽 producer-consumer 源码和历史运行截图；2026-09-09 收尾检查时工作区干净并与 `origin/main` 同步。
-- `LinuxCodeSrc` 中没有 2026-09-09 讨论的容量 5 `std::queue<int>`、2 Producer + 1 Consumer 版本，因而本次没有新增 queue 代码或运行结果证据。
-- “仓库已验证”只表示存在学习证据，不等于已经达到独立实现等级。
+- `daily/2026-09-15.md` 记录最小 Echo Server 已实际跑通，以及当时 TCP 合并读取现象。
+- 独立源码仓库 [KiloMing/LinuxCodeSrc](https://github.com/KiloMing/LinuxCodeSrc) 的提交 [`bebcefb`](https://github.com/KiloMing/LinuxCodeSrc/commit/bebcefb7c156a968e79fcfc4153c12d1cee39524) 含 `20260918/client_file.cpp`、`server_file.cpp`、115 字节的 `aaa.txt` 与相同内容的 `recv_aaa.txt`。
+- 本学习仓库只保存学习事实、理解、问题和复测计划；源代码继续放在 `LinuxCodeSrc`。
+- “仓库已验证”只表示证据存在，不等于已经达到闭卷独立实现等级。
 
 ## 学习者自述与对话记录
 
-- 2026-09-11 已编译运行 2P2C，程序正常退出，但参考过完整答案。
-- 本次没有检查对应新源码或运行输出；上述结果按学习者提供的事实记录，不写成仓库源码验证。
-- 2026-09-12 已完成 3P2C 代码改写阶段；对话片段暴露了参数、数据重复和结束广播等修正项，尚未提供修正后的完整源码和最终编译运行结果。详见 [daily/2026-09-12.md](daily/2026-09-12.md)。
-- 2026-09-13 rwlock 2R2W 已独立编写并运行验证通过（学习者自述，本次未重新核验源码/输出）；开始理解 TCP、Socket 流程、地址与资源生命周期，见 [daily/2026-09-13.md](daily/2026-09-13.md)。
-- producer-consumer 保留 L2；condition variable 仍待独立验证。此前运行记录见 [daily/2026-09-11.md](daily/2026-09-11.md)。
+- 2026-09-18 文本文件传输已经成功；客户端在服务端返回 `"OK"` 后分块发送，服务端按 `file_size` 保存为 `recv_` 前缀文件。
+- 能解释 `server_sock` 用于监听、`client_sock` 用于具体连接；fork 后父进程关闭连接 fd、子进程关闭监听 fd，子进程完成后应关闭连接并退出。
+- 理解 `open/read/send` 已经发送原始字节，TCP 不存在单独的文本/二进制发送模式；二进制正文长度取 `read()` 返回值，不能用 `strlen()`。
+- 上述实现经过逐步提示和调试，尚不满足 L3 的独立复现要求。详见 [daily/2026-09-18.md](daily/2026-09-18.md)。
 
 ## 待验证
 
-- 脱离答案写出等待/退出条件、通知方向及 `producers_done` 结束协议，区分 Producer 完成与队列消费完毕。
-- 能解释 wait 原子释放锁并等待、返回前重新获取锁，以及 while 重检条件、broadcast 与 destroy 的区别。
-- 正常退出不能单独证明数据不丢不重、空满等待和不同调度均正确；这些要在变式和闭卷实现中保存证据。
-- rwlock 2R2W 已完成基础独立验证；待补存源码与输出并延迟复测互斥关系。此前 `LinuxCodeSrc/DAY7/src.cpp` 的 join 问题，本次未核验是否已修正。
-- 后续分别定位已有 mutex、`mmap`、FIFO reader 和 Mini Shell 练习中的问题。
-
-一次答错先记录为复测项，不直接判定为长期知识缺口。
+- 客户端先检查 `argc`，正确处理 `stoi` 异常和端口范围。
+- `send()` 返回值使用 `ssize_t`；`send_all()` / `recv_all()` / 文件写入处理短读写和 `EINTR`。
+- 客户端累计接收完整的 2 字节 ACK；服务端检查 `recv_file()` 返回值，子进程执行 `close(client_sock) + _exit()`。
+- 空文件、大于 4096 字节文件、包含 `0x00` 的二进制文件逐字节一致；多客户端同时连接，子进程正常回收。
+- 明确结构体序列化和 `uint64_t` 字节序，增加最终完成 ACK、校验和和失败文件清理。
+- producer-consumer 闭卷独立复现、3P2C 最终运行证据及 rwlock 源码/输出仍待补齐。
 
 ## 下一次测试
 
-1. 核对并运行验证 3P2C：每个 Producer 生产 5 个，`BUFFER_SIZE = 3`，数据使用 `id*100+i`；删除遗留 `full`，完成计数在锁内更新，仅最后一个 Producer 广播。Consumer 等待/退出条件保持不变（见 2026-09-12 日报）。检查 15 个数据各消费一次、最终队列为空、3 个 Producer 和 2 个 Consumer 全部退出，保存源码与输出。
-2. 随后闭卷从空文件独立复现有界 producer-consumer，实际编译运行。检查每个数据恰好消费一次、最终队列为空、全部线程退出，验证空满等待；保存代码和输出，并在隔天复测关键逻辑。变式中若看过答案，不作为 L3 证据。
-3. 补存 rwlock 2R2W 源码和输出，隔天复测读读并发、读写互斥、写写互斥及 join 对象。
-4. 复述两个 fd 的职责，写并运行最小 TCP client/server；检查返回值和地址链表/连接的释放，保存源码与输出。
+1. 闭卷画出多进程文件传输时序图，说明每个 fd 在父进程、子进程和客户端中的职责与关闭时机。
+2. 从空文件独立实现修正版客户端和服务端，先完成参数检查、`ssize_t`、完整 ACK、`recv_file()` 返回值和子进程退出。
+3. 传输空文件、文本文件和含 `0x00` 的二进制文件，用 `cmp` 或 SHA-256 验证内容完全相同。
+4. 同时启动两个客户端，检查父进程仍能继续 `accept()`，并观察子进程退出与回收。
+5. 完成后再做显式序列化与最终 ACK 变式；不把直接发送本机结构体作为跨平台协议。
 
 ## 下一步
 
-今天已开始 Socket 基础概念学习，按实际进度记录；这不代表此前并发阶段的验收项全部通过。接下来做最小 TCP 练习，同时补齐 3P2C 运行核验、producer-consumer 闭卷复现和 rwlock 证据。长期阶段门槛不变，暂不推进复杂网络项目。
+先完成文件传输的闭卷复现与异常路径验证，再进入 UDP 或更复杂协议。并发阶段遗留验收并行补证据，不因当前程序跑通而自动视为全部完成。
 
-长期路线见 [ROADMAP.md](ROADMAP.md)。2026-09-11 按学习者要求强化 Linux/C++、嵌入式和通信等通用工程能力，以综合机器人项目收尾，保留职业转向空间。按每周 8–12 小时、考试周约 5 小时安排，以验收推进；70% 通用核心 / 20% 机器人 / 10% 前沿探索按约 12 周滚动检查，同时做职业/行业校准。教学与评级仍遵循 [TEACHING_PROTOCOL.md](TEACHING_PROTOCOL.md) 和 [MASTERY.md](MASTERY.md)。
+长期路线见 [ROADMAP.md](ROADMAP.md)，教学与评级遵循 [TEACHING_PROTOCOL.md](TEACHING_PROTOCOL.md) 和 [MASTERY.md](MASTERY.md)。

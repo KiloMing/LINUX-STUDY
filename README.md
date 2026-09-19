@@ -24,7 +24,7 @@ Linux/C++ 系统能力
 - 仓库证据覆盖 DAY1–DAY6。
 - 当前可确认主题：Linux 基础、Git/Makefile、文件 I/O、进程、IPC、semaphore、mutex。
 - 2026-09-11，2 Producer + 2 Consumer 已实际编译运行并正常退出；由于参考过完整答案，producer-consumer 保留 L2，不升 L3。
-- 当前顺序：3 Producer + 2 Consumer 变式 → 闭卷独立复现 → rwlock 独立验证。完成前不进入 Socket。
+- 当前已进入 TCP/Socket 基础实践：Echo Server 与教学引导下的多进程文本文件传输已跑通；下一步是闭卷独立复现、二进制验证和异常路径调试。
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
