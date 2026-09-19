@@ -35,7 +35,7 @@
 
 ## 阶段 1：Linux 系统编程收尾
 
-**状态：当前**
+**状态：遗留验收继续补齐；当前主线已进入阶段 2**
 
 **核心任务：** 先做 3 Producer + 2 Consumer 变式，再闭卷从空文件复现有界队列与结束协议；之后独立完成 2 Reader + 1 Writer，增加第二个 Writer 验证写写互斥。保留代码、输出和一次阻塞排查记录。
 
@@ -49,13 +49,13 @@
 
 ## 阶段 2：Socket 与 Linux 调试
 
-**状态：未开始**
+**状态：当前；TCP 基础已覆盖，正式进入 select，Socket L2；文件传输闭卷复现与健壮性验收仍待完成**
 
-**核心任务：** 先写 TCP client/server，处理短读写、消息边界与断连，再做 UDP；用 GDB、strace、ss 和日志排查阻塞、端口和连接问题，完成模拟机器人遥测程序。
+**核心任务：** 按 `select → poll → epoll LT → 非阻塞+epoll ET → UDP → 应用层协议/序列化 → 综合遥测/控制项目` 推进，select 优先多客户端服务端；同步补齐既有 TCP 文件传输闭卷复现与健壮性验收。用 GDB、strace、ss 和日志排查阻塞、端口和连接问题。课程依据与分阶段验收见 [socket/README.md](socket/README.md)，不扩展为高并发服务器专项。
 
-**学习范围：** IP、port、TCP、UDP、client/server，`socket`、`bind`、`listen`、`accept`、`connect`、`send/recv`、`sendto/recvfrom`、关闭与错误处理。
+**学习范围：** IP、port、TCP、UDP、client/server，`socket`、`bind`、`listen`、`accept`、`connect`、`send/recv`、`sendto/recvfrom`、关闭与错误处理，以及 select/poll/epoll、非阻塞、LT/ET、消息边界和显式序列化。
 
-**完成证据：** 独立实现 TCP 与 UDP 最小通信；修改消息格式和通信方向；定位端口占用、断连、短读写等问题；完成一个模拟机器人遥测或控制通信程序。
+**完成证据：** 独立实现 select 多客户端 Echo Server、TCP 文件传输与 UDP 最小通信，能实现和比较 poll、epoll LT/ET；修改消息格式和通信方向；定位端口占用、断连、短读写等问题；完成一个模拟机器人遥测或控制通信程序。
 
 **下一阶段门槛：** 能说明 TCP/UDP 的取舍，并为一个机器人通信场景选择和验证方案。
 
