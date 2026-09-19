@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-当前正式进入 I/O 多路复用 select，以多客户端 Echo Server 为主线。TCP 基础已覆盖三次握手/四次挥手、发送/接收缓冲区、Nagle 与 listen；这些是学习覆盖记录，不等于独立实践验收通过。使用 C++、POSIX 文件 I/O 与已有多进程模型作对照。2026-09-18 已在连续教学下跑通“文件元信息 → OK ACK → 文件正文”的文本文件传输，并能解释监听 fd、连接 fd 与父子进程关闭规则。Socket 记为 L2；尚未完成脱离答案的独立复现、二进制验证和健壮协议设计。
+当前正式进入 I/O 多路复用 select，以多客户端 Echo Server 为主线。TCP 基础已覆盖三次握手/四次挥手、发送/接收缓冲区、Nagle 与 listen；这些是学习覆盖记录，不等于独立实践验收通过。2026-09-19 已提交一份学习版 Select Echo Server 源码，包含监听 fd、fd_set、select、accept、新连接加入集合、客户端 read/write 与断连清理等主干；当前仍在巩固 `socket_server`、`accept()`、`client_sock` 与 bitmap 的定义关系，尚无独立多客户端运行证据。2026-09-18 的多进程文件传输验收继续保留。Socket 维持 L2。
 
 此前并发学习的未完成验收仍保留：producer-consumer 为 L2；rwlock 2R2W 的基础独立验证来自学习者自述，源码和输出仍待补存。
 
@@ -12,6 +12,7 @@
 
 - `daily/2026-09-15.md` 记录最小 Echo Server 已实际跑通，以及当时 TCP 合并读取现象。
 - 独立源码仓库 [KiloMing/LinuxCodeSrc](https://github.com/KiloMing/LinuxCodeSrc) 的提交 [`bebcefb`](https://github.com/KiloMing/LinuxCodeSrc/commit/bebcefb7c156a968e79fcfc4153c12d1cee39524) 含 `20260918/client_file.cpp`、`server_file.cpp`、115 字节的 `aaa.txt` 与相同内容的 `recv_aaa.txt`。
+- 2026-09-19 源码仓库提交 [`e4da15c`](https://github.com/KiloMing/LinuxCodeSrc/commit/e4da15c4df4fea2fc0d4bc736973c1ae7b17f1ae) 新增 `20260919/select_server.cpp`，记录当前 Select Server 学习版实现；同一提交还把 9 月 18 日文件传输代码中若干 `send()` 返回值和接收累计变量改为 `ssize_t`。
 - 本学习仓库只保存学习事实、理解、问题和复测计划；源代码继续放在 `LinuxCodeSrc`。
 - “仓库已验证”只表示证据存在，不等于已经达到闭卷独立实现等级。
 
@@ -21,7 +22,7 @@
 - 能解释 `server_sock` 用于监听、`client_sock` 用于具体连接；fork 后父进程关闭连接 fd、子进程关闭监听 fd，子进程完成后应关闭连接并退出。
 - 理解 `open/read/send` 已经发送原始字节，TCP 不存在单独的文本/二进制发送模式；二进制正文长度取 `read()` 返回值，不能用 `strlen()`。
 - 上述实现经过逐步提示和调试，尚不满足 L3 的独立复现要求。详见 [daily/2026-09-18.md](daily/2026-09-18.md)。
-- 2026-09-19 已学习 TCP 缓冲区、握手/挥手、Nagle、listen，以及 select/bitmap/fd_set；已纠正“先写 select 客户端”的教学路线。尚无独立 select 服务端运行证据，详见 [当日记录](daily/2026-09-19.md)。
+- 2026-09-19 已学习 TCP 缓冲区、握手/挥手、Nagle、listen，以及 select/bitmap/fd_set，并提交学习版 `select_server.cpp`。当前重点仍是厘清：`socket()`/`accept()` 由内核返回 fd，`FD_SET()` 只是把已有 fd 加入监控集合；`server_sock` 负责监听，`accept()` 返回的 `client_sock` 才负责具体连接。尚无独立多客户端运行证据，详见 [当日记录](daily/2026-09-19.md)。
 
 ## 待验证
 
@@ -34,7 +35,7 @@
 
 ## 下一次测试
 
-先闭卷说明 select 的五个参数、`maxfd + 1`、集合复制及监听 fd/连接 fd 的就绪处理，再从空文件独立写出 select 多客户端 Echo Server，验证至少 3 个客户端收发、断连清理和新连接接入，保留代码与输出。
+先闭卷说明 `socket_server`、`accept()`、`client_sock` 三者职责，以及 fd 是谁分配、何时通过 `FD_SET()` 加入 `master_set`；再说明 select 的五个参数、`maxfd + 1`、集合复制及监听 fd/连接 fd 的就绪处理。随后从空文件独立写出 Select 多客户端 Echo Server，验证至少 3 个客户端收发、断连清理和新连接接入，保留代码与输出。
 
 既有 TCP 文件传输闭卷复现与健壮性验收继续保留：
 
