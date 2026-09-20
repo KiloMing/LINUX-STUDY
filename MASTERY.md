@@ -38,7 +38,7 @@
 | condition variable | 待验证 | 2026-09-11 参考完整答案后 2P2C 编译运行并正常退出（学习者自述）；等待/退出条件、wait/while 与通知方向仍需闭卷验证，不升 L3 |
 | read-write lock | 基础独立验证完成（学习者自述） | 2026-09-13 已独立编写并运行通过 2R2W；本次未核验源码/输出，待补存证据和延迟复测后确认 L3，不记为整个主题完成 |
 | producer-consumer | L2 | 2026-09-11 的 2P2C 已编译运行并正常退出，但参考过完整答案（学习者自述，本次未核验新源码/输出）；2026-09-12 完成 3P2C 代码改写阶段，修正项待核对、最终运行待验证；闭卷独立复现未完成，不升 L3 |
-| Socket | L2 | 2026-09-15 Echo 实验已跑通；2026-09-18 在逐步教学下完成多进程文本文件传输并留下源码证据；2026-09-19 已提交学习版 `select_server.cpp`（LinuxCodeSrc `e4da15c`），但 `server_sock / accept / client_sock / fd_set` 定义关系仍在巩固，且无独立多客户端运行证据。下一证据：闭卷复述 fd 生命周期并独立写出 Select 多客户端 Echo Server + 既有文件传输闭卷复现，完成二进制/异常路径验证后再评估 L3 |
+| Socket | L2 | 2026-09-20 已从 select 推进到 poll，并开始 epoll LT；已有 guided poll Server 源码和 epoll 模型/API 讨论，但没有独立 3 客户端运行证据，也未闭卷独立完成 epoll LT。下一证据：独立完成 poll 多客户端 Echo Server，再独立完成 epoll LT Server；原 select、文件传输、短读写、二进制一致性与异常路径验收继续保留 |
 | CMake | L0 | 无仓库证据；Makefile 不等于 CMake |
 | ROS 2 / TF2 / URDF / RViz | L0 | 无仓库证据 |
 | 运动学 / Odometry / 底盘集成 | L0 | 无仓库证据 |
@@ -84,3 +84,12 @@ rwlock 2R2W 已独立编写并运行验证通过，记为基础独立验证完�
 TCP 基础已覆盖握手/挥手、缓冲区、Nagle 和 listen，正式进入 select/bitmap/fd_set 学习。源码仓库已提交学习版 `20260919/select_server.cpp`（`e4da15c`），但实现是在提示下形成，当前仍在巩固监听 fd、`accept()` 返回连接 fd 以及 `FD_SET()` 加入监控集合的关系，尚无独立多客户端运行证据，Socket 仍保持 L2。
 
 下一证据：从空文件独立写出 select 多客户端 Echo Server（至少 3 个客户端收发、断连后清理并继续接受连接）+ 既有 TCP 文件传输闭卷复现；原有短读写、二进制一致性、异常路径、子进程回收和协议变式验收继续保留。详见 [daily/2026-09-19.md](daily/2026-09-19.md)。
+
+
+## 2026-09-20 更新
+
+I/O 多路复用从 select 推进到 poll，并开始 epoll LT。今天能解释 `pollfd.fd/events/revents`、`fd=-1` 空槽、监听 fd 与连接 fd 的一对多关系、poll 两次遍历的不同目的，以及“就绪不等于固定长度 TCP 消息完整到达”。源码仓库新增 `20260920/poll_server.cpp` 与 README，属于 guided learning evidence。
+
+同日开始理解 `epoll_create1()`、`epoll_ctl(ADD/MOD/DEL)`、`epoll_wait()`，能说明为什么必须先判断返回 fd 是否为 `server_sock` 再决定 `accept()` 或 `read()`。尚无从空文件独立实现和多客户端运行证据，Socket 保持 L2。
+
+下一证据：闭卷独立完成 poll 3 客户端 Echo Server并保存运行输出；再独立完成 epoll LT Server，之后进入非阻塞 + epoll ET。详见 [daily/2026-09-20.md](daily/2026-09-20.md)。
