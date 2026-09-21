@@ -49,7 +49,7 @@
 
 ## 阶段 2：Socket 与 Linux 调试
 
-**状态：当前；TCP 基础已覆盖，正式进入 select，Socket L2；文件传输闭卷复现与健壮性验收仍待完成**
+**状态：主干知识已推进到 poll / epoll LT；独立验收转为并行补证，当前主线进入阶段 3**
 
 **核心任务：** 按 `select → poll → epoll LT → 非阻塞+epoll ET → UDP → 应用层协议/序列化 → 综合遥测/控制项目` 推进，select 优先多客户端服务端；同步补齐既有 TCP 文件传输闭卷复现与健壮性验收。用 GDB、strace、ss 和日志排查阻塞、端口和连接问题。课程依据与分阶段验收见 [socket/README.md](socket/README.md)，不扩展为高并发服务器专项。
 
@@ -61,9 +61,9 @@
 
 ## 阶段 3：CMake 与 C++ 工程化
 
-**状态：未开始**
+**状态：当前；2026-09-21 已完成 CMake target、out-of-source build、依赖查找/链接入门，处于 guided L2，待闭卷复现**
 
-**核心任务：** 把遥测程序整理为多目录 C++ 工程，拆出通信库和测试目标；练习 RAII、对象生命周期、智能指针、STL 和错误处理，用编译警告及 sanitizer 检查资源和内存问题。
+**核心任务：** 先独立复现普通 CMake 的多 target、构建目录分离、`find_package` 和依赖传递，再把已有通信练习整理为多目录 C++ 工程，拆出通信库和测试目标；练习 RAII、对象生命周期、智能指针、STL 和错误处理，用编译警告及 sanitizer 检查资源和内存问题。
 
 **学习范围：** target、可执行文件、静态/动态库、include 路径、链接、`find_package`、多目录工程、构建目录分离。
 
@@ -73,7 +73,7 @@
 
 ## 阶段 4：ROS 2 基础与调试
 
-**状态：未开始**
+**状态：预热已开始；2026-09-21 已创建 ament_cmake package 并练习 colcon/source/ros2 run 构建链，正式 topic/service/action 尚未开始**
 
 **核心任务：** 建立 C++ package，依次练 topic、service、action、parameter 和 launch；串起模拟传感器与控制节点，用 CLI、日志和 rosbag 观察及回放数据，排查一次 QoS 或参数问题。
 

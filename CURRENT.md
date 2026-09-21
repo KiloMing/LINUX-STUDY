@@ -1,12 +1,14 @@
 # CURRENT
 
-最后更新：2026-09-20
+最后更新：2026-09-21
 
 ## 当前阶段
 
-当前 I/O 多路复用已从 select 推进到 poll，并开始 epoll LT。2026-09-20 已整理一份学习版 poll 多客户端 Echo Server，能说明 `pollfd.fd/events/revents`、`fd=-1` 空槽、监听 fd 与连接 fd 的分工，以及 `poll()` 只报告就绪而不保证固定长度 TCP 消息已经完整到达；同时开始学习 `epoll_create1/epoll_ctl/epoll_wait`、ADD/MOD/DEL 和监听 fd / 连接 fd 的事件分流。今天仍无独立 3 客户端运行证据，也未闭卷独立完成 epoll LT Server，Socket 维持 L2。
+当前正式主线切到 **阶段 3：CMake/C++ 工程化**。阶段 2 Socket 的独立验收不取消，改为并行补证；2026-09-20 已推进到 poll 与 epoll LT，但 poll/epoll 的闭卷独立实现、3 客户端运行证据以及既有 TCP 文件传输健壮性验收仍保留。
 
-此前并发学习的未完成验收仍保留：producer-consumer 为 L2；rwlock 2R2W 的基础独立验证来自学习者自述，源码和输出仍待补存。
+2026-09-21 完成 CMake 与 ROS2 构建链的入门实践。CMake 侧已经能在提示下解释 `project()`、`add_executable()`、target、单一 `main()` 入口、多个可执行目标、`find_package()`、`target_link_libraries()`，并区分配置与真正编译：`cmake -S . -B build` 负责生成构建系统，`cmake --build build` 才执行编译。已实际遇到并定位未保存文件、CMake 语法分号、in-source build 污染源码目录等问题。
+
+ROS2 侧已创建 `ament_cmake` package，并开始理解 workspace / package / node、`find_package(rclcpp REQUIRED)`、`ament_target_dependencies()`、`install(TARGETS ...)`、`ament_package()`、`colcon build`、`source install/setup.bash`、`ros2 pkg executables` 与 `ros2 run` 的关系。当前能让 ROS2 识别到 `demo_cpp_pkg`，并通过 `ros2 pkg executables demo_cpp_pkg` 看到已安装 executable；仍出现过 target 名称不一致导致的 `No executable found`。这部分属于 guided learning evidence，尚未完成闭卷独立复现，因此 ROS2 只记入门，不提前进入 topic/service/action。
 
 ## 仓库已验证
 
@@ -37,18 +39,20 @@
 
 ## 下一次测试
 
-先闭卷说明 poll 的 `fd/events/revents`、两次遍历的不同目的，以及 `server_sock → accept() → client_sock` 的一对多关系；再从空文件独立写出 poll 多客户端 Echo Server，验证至少 3 个客户端收发、断连清理和新连接接入。随后闭卷实现 epoll LT：`epoll_create1 → epoll_ctl(ADD) → epoll_wait → accept/read → DEL/close`，保留代码与输出。
+先做 CMake/ROS2 构建链闭卷复现，不看今天的 CMakeLists：
 
-既有 TCP 文件传输闭卷复现与健壮性验收继续保留：
+1. 从空目录创建一个普通 CMake 工程，至少包含两个独立 executable；解释 `add_executable(target sources...)`、唯一 `main()` 入口以及“多个源文件组成一个程序”和“多个 target 生成多个程序”的区别。
+2. 使用 out-of-source build：`cmake -S . -B build`、`cmake --build build`；故意执行一次 in-source build，说明为什么会出现 `CMakeFiles/`、`CMakeCache.txt`、`Makefile` 等中间文件以及如何清理。
+3. 给一个 target 添加外部依赖，解释 `find_package()` 负责“找到包”，`target_link_libraries()` / `ament_target_dependencies()` 负责“把依赖交给 target”。
+4. 从标准 ROS2 workspace 结构创建一个 `ament_cmake` package，写最小 rclcpp node，完成 `colcon build --packages-select ... → source install/setup.bash → ros2 pkg executables → ros2 run` 全链路。
+5. 故意把 executable 名写错一次，根据 `ros2 pkg executables <pkg>` 定位 `No executable found`，确认自己能区分源码文件名、CMake target 名和 `ros2 run` 的 executable 名。
 
-1. 闭卷画出多进程文件传输时序图，说明每个 fd 在父进程、子进程和客户端中的职责与关闭时机。
-2. 从空文件独立实现修正版客户端和服务端，先完成参数检查、`ssize_t`、完整 ACK、`recv_file()` 返回值和子进程退出。
-3. 传输空文件、文本文件和含 `0x00` 的二进制文件，用 `cmp` 或 SHA-256 验证内容完全相同。
-4. 同时启动两个客户端，检查父进程仍能继续 `accept()`，并观察子进程退出与回收。
-5. 完成后再做显式序列化与最终 ACK 变式；不把直接发送本机结构体作为跨平台协议。
+通过以上测试后，再进入 ROS2 topic 的 publisher/subscriber。Socket 侧继续保留 poll/epoll LT 的独立 3 客户端验收和 TCP 文件传输健壮性补证。
 
 ## 下一步
 
-当前先完成 poll 与 epoll LT 的独立复现，再按 `非阻塞+epoll ET → UDP → 应用层协议/序列化 → 综合遥测/控制项目` 推进；select 的独立验收仍保留，具体验收见 [socket/README.md](socket/README.md)。TCP 文件传输闭卷复现与健壮性验收同步补齐，不因进入 select 而跳过；并发阶段遗留验收继续补证据。
+当前学习顺序调整为：**CMake 基础闭卷复现 → ROS2 标准 workspace/package 构建链 → Node 与 CLI → Topic publisher/subscriber → Service → Action → Parameter/Launch**。进入 Topic 前必须先独立跑通 package 构建、安装、source 和 `ros2 run`，避免把 ROS2 当成黑盒。
+
+Socket 不再继续扩展高并发服务器专项；已有 select/poll/epoll、TCP 文件传输和短读写等内容作为通用 Linux/通信能力并行补齐证据，不删除原验收要求。
 
 长期路线见 [ROADMAP.md](ROADMAP.md)，教学与评级遵循 [TEACHING_PROTOCOL.md](TEACHING_PROTOCOL.md) 和 [MASTERY.md](MASTERY.md)。

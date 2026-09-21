@@ -10,7 +10,7 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前证据
 
-未发现 ROS 2 package、launch、URDF 或运行记录，状态为 L0。
+2026-09-21 已在本地创建 `ament_cmake` C++ package，开始练习 `rclcpp` 依赖、`add_executable`、`ament_target_dependencies`、`install(TARGETS ...)`、`ament_package()`、`colcon build`、`source install/setup.bash`、`ros2 pkg executables` 和 `ros2 run`。当前 package 已可被 ROS2 发现，并能查询已安装 executable；曾因 target 名不一致出现 `No executable found`。这属于 guided 入门证据，ROS2 构建基础记 L1；尚无独立 node/topic 数据流，TF2/URDF/RViz 仍为 L0。
 
 ## 完成证据
 
@@ -19,3 +19,19 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 ## 新内容位置
 
 按 workspace 或明确主题建立子目录。不要提交 `build/`、`install/`、`log/`；记录所用发行版与官方文档链接。
+
+
+## 当前学习顺序
+
+```text
+CMake 构建链闭卷复现
+  → 标准 workspace / package
+  → 最小 rclcpp node
+  → colcon build / source / ros2 run
+  → topic publisher/subscriber
+  → service
+  → action
+  → parameter / launch
+```
+
+进入 topic 前先确保能独立解释并跑通“源码 → CMake target → install → source → ros2 run”链路，避免只会复制命令。

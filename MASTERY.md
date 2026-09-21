@@ -39,8 +39,8 @@
 | read-write lock | 基础独立验证完成（学习者自述） | 2026-09-13 已独立编写并运行通过 2R2W；本次未核验源码/输出，待补存证据和延迟复测后确认 L3，不记为整个主题完成 |
 | producer-consumer | L2 | 2026-09-11 的 2P2C 已编译运行并正常退出，但参考过完整答案（学习者自述，本次未核验新源码/输出）；2026-09-12 完成 3P2C 代码改写阶段，修正项待核对、最终运行待验证；闭卷独立复现未完成，不升 L3 |
 | Socket | L2 | 2026-09-20 已从 select 推进到 poll，并开始 epoll LT；已有 guided poll Server 源码和 epoll 模型/API 讨论，但没有独立 3 客户端运行证据，也未闭卷独立完成 epoll LT。下一证据：独立完成 poll 多客户端 Echo Server，再独立完成 epoll LT Server；原 select、文件传输、短读写、二进制一致性与异常路径验收继续保留 |
-| CMake | L0 | 无仓库证据；Makefile 不等于 CMake |
-| ROS 2 / TF2 / URDF / RViz | L0 | 无仓库证据 |
+| CMake | L2 | 2026-09-21 在提示下完成普通 CMake 与 ROS2 CMake 构建练习，能解释 target、`add_executable`、out-of-source build、`find_package` 与依赖链接，并真实定位多类配置错误；待从空目录闭卷完成多 target + library/依赖工程后再升 L3 |
+| ROS 2 / TF2 / URDF / RViz | L1（ROS2 构建基础） | 2026-09-21 已创建 `ament_cmake` package，练习 `colcon build`、`source install/setup.bash`、`ros2 pkg executables` 与 `ros2 run`，但仍依赖提示且尚未独立跑通完整 node/topic 数据流；TF2/URDF/RViz 仍为 L0 |
 | 运动学 / Odometry / 底盘集成 | L0 | 无仓库证据 |
 | IMU / LiDAR / 状态估计 | L0 | 无仓库证据 |
 | SLAM / Nav2 | L0 | 无仓库证据 |
@@ -93,3 +93,12 @@ I/O 多路复用从 select 推进到 poll，并开始 epoll LT。今天能解释
 同日开始理解 `epoll_create1()`、`epoll_ctl(ADD/MOD/DEL)`、`epoll_wait()`，能说明为什么必须先判断返回 fd 是否为 `server_sock` 再决定 `accept()` 或 `read()`。尚无从空文件独立实现和多客户端运行证据，Socket 保持 L2。
 
 下一证据：闭卷独立完成 poll 3 客户端 Echo Server并保存运行输出；再独立完成 epoll LT Server，之后进入非阻塞 + epoll ET。详见 [daily/2026-09-20.md](daily/2026-09-20.md)。
+
+
+## 2026-09-21 更新
+
+CMake 从 L0 进入 guided L2：能够解释 `add_executable(target sources...)`、多个源文件与唯一 `main()` 入口、多个 target 各自生成 executable、配置阶段与编译阶段、in-source / out-of-source build、`find_package()` 和 target 依赖传递。今天实际处理了未保存 CMakeLists、错误分号、依赖未先 `find_package`、源文件路径不一致以及源码目录内构建产生大量中间文件等问题。
+
+ROS2 构建基础记 L1：已创建 `ament_cmake` package，开始理解 workspace/package/node、`ament_target_dependencies()`、`install(TARGETS ...)`、`ament_package()`、`colcon build`、环境 `source` 和 `ros2 run`。当前 `ros2 pkg executables demo_cpp_pkg` 已能列出已安装 executable，但曾因 CMake target 名与运行命令不一致出现 `No executable found`。没有闭卷独立 package/node 证据，也没有 topic/service/action 运行证据，不升 L2。
+
+下一证据：从空 workspace 独立创建 package 和 rclcpp node，完成 build → source → executable 查询 → run；随后实现最小 publisher/subscriber，并保存运行输出。Socket 原有 poll/epoll 与 TCP 文件传输验收继续并行保留。
