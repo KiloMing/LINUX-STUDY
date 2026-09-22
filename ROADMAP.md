@@ -61,7 +61,7 @@
 
 ## 阶段 3：CMake 与 C++ 工程化
 
-**状态：当前；2026-09-21 已完成 CMake target、out-of-source build、依赖查找/链接入门，处于 guided L2，待闭卷复现**
+**状态：前置补证继续；2026-09-22 主线结合 ROS2 基础补 Lambda/callback、cpp-httplib 与 include path，CMake 保持 guided L2，待实际路径验证与闭卷复现**
 
 **核心任务：** 先独立复现普通 CMake 的多 target、构建目录分离、`find_package` 和依赖传递，再把已有通信练习整理为多目录 C++ 工程，拆出通信库和测试目标；练习 RAII、对象生命周期、智能指针、STL 和错误处理，用编译警告及 sanitizer 检查资源和内存问题。
 
@@ -73,7 +73,7 @@
 
 ## 阶段 4：ROS 2 基础与调试
 
-**状态：预热已开始；2026-09-21 已创建 ament_cmake package 并练习 colcon/source/ros2 run 构建链，正式 topic/service/action 尚未开始**
+**状态：当前主线开始 ROS2 基础与 C++ 回调前置学习；2026-09-22 已讨论 Node/Topic 概念，Publisher/Timer/Topic 完整实现及 service/action 尚未开始。调整依据是下载示例暴露了 Lambda/callback 生命周期与 include path 前置问题；不视为阶段 3 验收通过，不降低构建链独立复现门槛**
 
 **核心任务：** 建立 C++ package，依次练 topic、service、action、parameter 和 launch；串起模拟传感器与控制节点，用 CLI、日志和 rosbag 观察及回放数据，排查一次 QoS 或参数问题。
 

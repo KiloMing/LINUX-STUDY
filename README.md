@@ -28,36 +28,13 @@ Linux/C++ 系统能力
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-09-19
+## 最新学习进度：2026-09-22
 
-当天在 TCP 基础复盘后正式进入 I/O 多路复用 `select`，当前以多客户端 Echo Server 为主线。重点建立了以下关系：
+当前主线为 **ROS2 基础 + C++ Lambda/callback/cpp-httplib/CMake include path**。今天讨论 Node 与进程、Topic 发布/订阅、Lambda/std::function/const 引用，以及 HTTP 下载 callback 与头文件搜索路径；均为 guided evidence，CMake 保持 L2、ROS2 保持 L1。
 
-```text
-socket() → server_sock（监听 fd）
-                    ↓ select 报告就绪
-                 accept()
-                    ↓
-              client_sock（连接 fd）
-                    ↓
-       FD_SET(client_sock, master_set)
-                    ↓
-             select 继续监控
-                    ↓
-              read / write
-```
+cpp-httplib 路径修正尚需实际构建验证，start_download 的线程与 callback 生命周期待源码核对；Publisher/Timer/Topic 完整实现留到后续，ROS_DISTRO/Ubuntu/arch 仍待命令证据。CMake 构建链与既有 Socket/并发独立验收继续保留。
 
-本次学习内容包括：
-
-- `fd_set`/bitmap 与 `FD_ZERO`、`FD_SET`、`FD_CLR`、`FD_ISSET`。
-- `master_set` 保存长期监控集合，`read_set = master_set` 后交给 `select()`；`select()` 会改写工作集合，只留下本轮就绪 fd。
-- `select()` 的 `nfds` 是最大被监控 fd 加 1，而不是 fd 数量。
-- 监听 fd 就绪表示有连接可 `accept()`；`accept()` 由内核返回新的连接 fd，bitmap 本身不会分配 fd。
-- 新 `client_sock` 必须显式 `FD_SET()` 后才进入后续监控；连接 fd 就绪后再 `read/write`，断开后 `close + FD_CLR`。
-- 继续区分 `server_sock`（监听）和 `client_sock`（具体连接），当前这一对象关系仍需闭卷复测。
-
-源码仓库提交 [`e4da15c`](https://github.com/KiloMing/LinuxCodeSrc/commit/e4da15c4df4fea2fc0d4bc736973c1ae7b17f1ae) 新增 `20260919/select_server.cpp`。该实现是在教学提示下形成，且仓库未保存 3 客户端运行输出，因此 Socket 保持 L2，不据此认定独立掌握。下一步先闭卷复述 fd 生命周期，再独立重写并验证至少 3 个客户端、断连清理和新连接接入。
-
-完整记录见 [2026-09-19 学习记录](daily/2026-09-19.md)，阶段索引见 [socket/README.md](socket/README.md)。
+完整内容见 [今日记录](daily/2026-09-22.md)，当前问题与下一次测试见 [CURRENT.md](CURRENT.md)。
 
 ## 学习节奏
 
@@ -93,6 +70,10 @@ socket() → server_sock（监听 fd）
 - [DAY6](DAY6/readme.md)：`mmap`、semaphore 与 mutex 练习。
 
 ## 近期每日记录
+
+- [2026-09-22](daily/2026-09-22.md)：ROS2 Node/Topic、Lambda/callback、cpp-httplib 与 CMake include path，保留待验证问题。
+- [2026-09-21](daily/2026-09-21.md)：CMake target、依赖与 ROS2 package 构建链。
+- [2026-09-20](daily/2026-09-20.md)：poll 多客户端与 epoll LT 入门。
 
 - [2026-09-19](daily/2026-09-19.md)：Select/bitmap/fd_set、监听 fd 与连接 fd、最小多客户端 Echo Server 学习版。
 - [2026-09-18](daily/2026-09-18.md)：多进程 TCP 文件传输、元信息、ACK、二进制字节流与调试记录。

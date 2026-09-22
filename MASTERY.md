@@ -102,3 +102,9 @@ CMake 从 L0 进入 guided L2：能够解释 `add_executable(target sources...)`
 ROS2 构建基础记 L1：已创建 `ament_cmake` package，开始理解 workspace/package/node、`ament_target_dependencies()`、`install(TARGETS ...)`、`ament_package()`、`colcon build`、环境 `source` 和 `ros2 run`。当前 `ros2 pkg executables demo_cpp_pkg` 已能列出已安装 executable，但曾因 CMake target 名与运行命令不一致出现 `No executable found`。没有闭卷独立 package/node 证据，也没有 topic/service/action 运行证据，不升 L2。
 
 下一证据：从空 workspace 独立创建 package 和 rclcpp node，完成 build → source → executable 查询 → run；随后实现最小 publisher/subscriber，并保存运行输出。Socket 原有 poll/epoll 与 TCP 文件传输验收继续并行保留。
+
+## 2026-09-22 更新
+
+今天的 ROS2 Node/Topic、C++ Lambda/std::function/const 引用、cpp-httplib 下载 callback 与 CMake include path 讨论统一记为 **guided evidence**，依据是学习者提供的摘要及引导对话。没有新增闭卷源码或构建运行输出；CMake 保持 L2、ROS2 保持 L1，TF2/URDF/RViz 保持 L0，不新增独立掌握或章节完成结论。
+
+Lambda/callback/httplib 暂不单独评级。下一证据：实际工程验证 include 路径；检查 start_download 的线程与 callback 生命周期；闭卷完成 CMake/ROS2 构建链，再进入 Publisher/Timer/Topic 实现。环境版本仍待命令证据，既有 Socket/并发验收保留。详见 [daily/2026-09-22.md](daily/2026-09-22.md)。
