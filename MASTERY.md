@@ -108,3 +108,9 @@ ROS2 构建基础记 L1：已创建 `ament_cmake` package，开始理解 workspa
 今天的 ROS2 Node/Topic、C++ Lambda/std::function/const 引用、cpp-httplib 下载 callback 与 CMake include path 讨论统一记为 **guided evidence**，依据是学习者提供的摘要及引导对话。没有新增闭卷源码或构建运行输出；CMake 保持 L2、ROS2 保持 L1，TF2/URDF/RViz 保持 L0，不新增独立掌握或章节完成结论。
 
 Lambda/callback/httplib 暂不单独评级。下一证据：实际工程验证 include 路径；检查 start_download 的线程与 callback 生命周期；闭卷完成 CMake/ROS2 构建链，再进入 Publisher/Timer/Topic 实现。环境版本仍待命令证据，既有 Socket/并发验收保留。详见 [daily/2026-09-22.md](daily/2026-09-22.md)。
+
+## 2026-09-23 更新
+
+已完成 time_topic 定时发布（学习者自述），学习 Node/Timer/Publisher/Subscription 与 Executor、`[this]`、时间事件与消息事件，并记录 download_file target 未定义问题。真实 ROS2 工程暂不可访问，未取得新构建/运行与闭卷独立证据；CMake 保留 L2、ROS2 保留 L1，不将 Subscription 入门记为已完成。
+
+下一证据：核对真实 CMakeLists.txt、构建运行 timer 并保存 topic echo/hz 输出，独立编写订阅节点与复述调度关系。详见 [daily/2026-09-23.md](daily/2026-09-23.md)。

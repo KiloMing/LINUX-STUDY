@@ -28,13 +28,13 @@ Linux/C++ 系统能力
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-09-22
+## 最新学习进度：2026-09-23
 
-当前主线为 **ROS2 基础 + C++ Lambda/callback/cpp-httplib/CMake include path**。今天讨论 Node 与进程、Topic 发布/订阅、Lambda/std::function/const 引用，以及 HTTP 下载 callback 与头文件搜索路径；均为 guided evidence，CMake 保持 L2、ROS2 保持 L1。
+当前主线为 **ROS2 Timer 定时发布与 Subscription 基础**。今天已完成 `time_topic` 定时发布（学习者自述），整理 Node/Timer/Publisher/Topic/Subscription、`[this]` 与 Executor 调度关系，并记录 `download_file` target 未定义导致的 CMake 错误。
 
-cpp-httplib 路径修正尚需实际构建验证，start_download 的线程与 callback 生命周期待源码核对；Publisher/Timer/Topic 完整实现留到后续，ROS_DISTRO/Ubuntu/arch 仍待命令证据。CMake 构建链与既有 Socket/并发独立验收继续保留。
+真实 ROS2 工作区暂无法访问，CMake 配置核对与构建运行仍待验证；Subscription 处于入门阶段。CMake 保留 L2、ROS2 保留 L1，既有 HTTP、Socket/并发验收继续保留。
 
-完整内容见 [今日记录](daily/2026-09-22.md)，当前问题与下一次测试见 [CURRENT.md](CURRENT.md)。
+完整内容见 [今日记录](daily/2026-09-23.md)，当前问题与下一次测试见 [CURRENT.md](CURRENT.md)。
 
 ## 学习节奏
 
@@ -70,6 +70,8 @@ cpp-httplib 路径修正尚需实际构建验证，start_download 的线程与 c
 - [DAY6](DAY6/readme.md)：`mmap`、semaphore 与 mutex 练习。
 
 ## 近期每日记录
+
+- [2026-09-23](daily/2026-09-23.md)：Timer 定时发布 time_topic、Subscription 与 Executor 基础、CMake target 错误。
 
 - [2026-09-22](daily/2026-09-22.md)：ROS2 Node/Topic、Lambda/callback、cpp-httplib 与 CMake include path，保留待验证问题。
 - [2026-09-21](daily/2026-09-21.md)：CMake target、依赖与 ROS2 package 构建链。
