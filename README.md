@@ -28,13 +28,13 @@ Linux/C++ 系统能力
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-09-23
+## 最新学习进度：2026-09-24
 
-当前主线为 **ROS2 Timer 定时发布与 Subscription 基础**。今天已完成 `time_topic` 定时发布（学习者自述），整理 Node/Timer/Publisher/Topic/Subscription、`[this]` 与 Executor 调度关系，并记录 `download_file` target 未定义导致的 CMake 错误。
+当前主线为 **ROS2 Topic 实际收发 + C++ 语音输出 + callback 线程解耦**。今天已实际跑通 Timer Publisher → Topic → Subscription，完成 Topic 文本到 espeak-ng 的 C++ 语音输出，并排查普通 library 链接与 CMake signature 冲突。
 
-真实 ROS2 工作区暂无法访问，CMake 配置核对与构建运行仍待验证；Subscription 处于入门阶段。CMake 保留 L2、ROS2 保留 L1，既有 HTTP、Socket/并发验收继续保留。
+ROS2 Topic 基础已有真实运行证据，保守提升到 L2；queue + `speech_thread` 解耦正在实现，尚未取得最终运行证据。CMake 保持 L2，既有 Socket/并发验收继续保留。
 
-完整内容见 [今日记录](daily/2026-09-23.md)，当前问题与下一次测试见 [CURRENT.md](CURRENT.md)。
+完整内容见 [今日记录](daily/2026-09-24.md)，当前问题与下一次测试见 [CURRENT.md](CURRENT.md)。
 
 ## 学习节奏
 
@@ -71,6 +71,7 @@ Linux/C++ 系统能力
 
 ## 近期每日记录
 
+- [2026-09-24](daily/2026-09-24.md)：ROS2 Topic 实际收发、C++ espeak-ng 语音输出、链接排错与 callback/worker thread 解耦。
 - [2026-09-23](daily/2026-09-23.md)：Timer 定时发布 time_topic、Subscription 与 Executor 基础、CMake target 错误。
 
 - [2026-09-22](daily/2026-09-22.md)：ROS2 Node/Topic、Lambda/callback、cpp-httplib 与 CMake include path，保留待验证问题。

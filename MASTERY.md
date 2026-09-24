@@ -40,7 +40,7 @@
 | producer-consumer | L2 | 2026-09-11 的 2P2C 已编译运行并正常退出，但参考过完整答案（学习者自述，本次未核验新源码/输出）；2026-09-12 完成 3P2C 代码改写阶段，修正项待核对、最终运行待验证；闭卷独立复现未完成，不升 L3 |
 | Socket | L2 | 2026-09-20 已从 select 推进到 poll，并开始 epoll LT；已有 guided poll Server 源码和 epoll 模型/API 讨论，但没有独立 3 客户端运行证据，也未闭卷独立完成 epoll LT。下一证据：独立完成 poll 多客户端 Echo Server，再独立完成 epoll LT Server；原 select、文件传输、短读写、二进制一致性与异常路径验收继续保留 |
 | CMake | L2 | 2026-09-21 在提示下完成普通 CMake 与 ROS2 CMake 构建练习，能解释 target、`add_executable`、out-of-source build、`find_package` 与依赖链接，并真实定位多类配置错误；待从空目录闭卷完成多 target + library/依赖工程后再升 L3 |
-| ROS 2 / TF2 / URDF / RViz | L1（ROS2 构建基础） | 2026-09-21 已创建 `ament_cmake` package，练习 `colcon build`、`source install/setup.bash`、`ros2 pkg executables` 与 `ros2 run`，但仍依赖提示且尚未独立跑通完整 node/topic 数据流；TF2/URDF/RViz 仍为 L0 |
+| ROS 2 / TF2 / URDF / RViz | L2（Topic 基础） | 2026-09-24 已实际构建并运行 Timer Publisher + Subscription，形成持续 Topic 收发，并完成 Topic → espeak-ng 语音输出；实现仍经过教学提示，尚无从空白独立复现，不升 L3。TF2/URDF/RViz 仍为 L0 |
 | 运动学 / Odometry / 底盘集成 | L0 | 无仓库证据 |
 | IMU / LiDAR / 状态估计 | L0 | 无仓库证据 |
 | SLAM / Nav2 | L0 | 无仓库证据 |
@@ -114,3 +114,14 @@ Lambda/callback/httplib 暂不单独评级。下一证据：实际工程验证 i
 已完成 time_topic 定时发布（学习者自述），学习 Node/Timer/Publisher/Subscription 与 Executor、`[this]`、时间事件与消息事件，并记录 download_file target 未定义问题。真实 ROS2 工程暂不可访问，未取得新构建/运行与闭卷独立证据；CMake 保留 L2、ROS2 保留 L1，不将 Subscription 入门记为已完成。
 
 下一证据：核对真实 CMakeLists.txt、构建运行 timer 并保存 topic echo/hz 输出，独立编写订阅节点与复述调度关系。详见 [daily/2026-09-23.md](daily/2026-09-23.md)。
+
+
+## 2026-09-24 更新
+
+ROS2 Topic 基础由 L1 提升到 **L2**。今日已有真实运行证据：`demo_cpp_pkg` 构建成功，`ros2 pkg executables` 可见 `timer` 与 `subscription`，Publisher/Subscription 实际持续收发；随后 Subscription 接入 espeak-ng，Topic 文本已能够语音输出。
+
+今天还完成了两类真实 CMake/链接排错：根据 `undefined reference` 判断为链接阶段问题，理解 `find_library()` 只负责查找库、`target_link_libraries()` 才把普通 library 链接到具体 target；并处理 `ament_target_dependencies()` 与 `target_link_libraries()` plain/keyword signature 冲突。CMake 仍保持 L2，因为尚未从空工程闭卷复现整个依赖链。
+
+当前正在把耗时的 `espeak_Synchronize()` 从 Subscription callback 移入独立 `speech_thread`，使用 queue/mutex/condition_variable 形成生产者-消费者模型。该线程版目前只有设计与代码教学，没有最终运行证据，不记为完成，也不提升并发主题等级。
+
+下一证据：独立从空白写 Publisher/Subscription；用 CLI 定位 Topic 名不一致；实际跑通 queue + speech_thread，并验证 Ctrl+C 时线程正常退出。详见 [daily/2026-09-24.md](daily/2026-09-24.md)。

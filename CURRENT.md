@@ -1,12 +1,12 @@
 # CURRENT
 
-最后更新：2026-09-23
+最后更新：2026-09-24
 
 ## 当前阶段
 
-当前主线为 **ROS2 Timer 定时发布与 Subscription 基础**，继续承接 CMake/C++ 工程化与 ROS2 基础。
+当前主线为 **ROS2 Topic 实际收发 + C++ 语音输出 + callback 线程解耦**，继续承接 CMake/C++ 工程化与 ROS2 基础。
 
-2026-09-23 已完成 `time_topic` 定时发布（学习者自述），学习 Timer 句柄/创建、`[this]`、spin/Executor、Topic 通信模型和 Subscription 消息回调。实际工程未取回，CMake 保留 L2、ROS2 保留 L1；Subscription 不记为已完成。详见 [当日记录](daily/2026-09-23.md)。
+2026-09-24 已在真实工作区完成 Timer Publisher → Topic → Subscription 的构建与运行，`timer`/`subscription` executable 可被 ROS2 查询，发布端与订阅端实际持续收发；随后将 Subscription 收到的字符串接入 espeak-ng 完成语音输出。Topic 基础已有运行证据，ROS2 Topic 部分保守提升到 L2。当前正在把耗时语音播放从 Subscription callback 移到独立 `speech_thread`，该线程版尚待最终运行验证。详见 [当日记录](daily/2026-09-24.md)。
 
 Socket 的 poll/epoll LT、3 客户端独立运行与 TCP 文件传输健壮性，以及已有并发练习验收继续并行补证。
 
@@ -17,6 +17,7 @@ Socket 的 poll/epoll LT、3 客户端独立运行与 TCP 文件传输健壮性�
 - 2026-09-19 源码仓库提交 [`e4da15c`](https://github.com/KiloMing/LinuxCodeSrc/commit/e4da15c4df4fea2fc0d4bc736973c1ae7b17f1ae) 新增 `20260919/select_server.cpp`，记录 Select Server 学习版实现；同一提交还把 9 月 18 日文件传输代码中若干 `send()` 返回值和接收累计变量改为 `ssize_t`。
 - 2026-09-20 源码仓库新增 `20260920/poll_server.cpp` 与 `20260920/README.md`，记录 poll 多客户端主干以及 epoll LT 入门模型；均标记为 guided learning evidence，不作为独立 L3 证据。
 - 本学习仓库只保存学习事实、理解、问题和复测计划；源代码继续放在 `LinuxCodeSrc`。
+- 2026-09-24 对话运行截图验证 `demo_cpp_pkg` 的 `timer` 与 `subscription` 已成功构建、安装并运行，Publisher/Subscription 能持续收发 Topic 消息；随后 Topic → espeak-ng 语音输出也已跑通。
 - “仓库已验证”只表示证据存在，不等于已经达到闭卷独立实现等级。
 
 ## 学习者自述与对话记录
@@ -41,22 +42,22 @@ Socket 的 poll/epoll LT、3 客户端独立运行与 TCP 文件传输健壮性�
 
 - A) cpp-httplib 头文件引用路径尚需在实际工程中验证。对话中的目录是 `include/cpp-httplib/httplib.h`；视频的 `include_directories(include)` 配套 `#include "cpp-httplib/httplib.h"`，当前 `<httplib.h>` 则要求搜索起点指向 `include/cpp-httplib`。
 - B) 需要继续理解 `start_download` 的线程创建与 callback 生命周期；实际源码未核验，不能直接认定异步方式或引用安全。
-- C) 已完成 time_topic 定时发布（学习者自述）；需取回真实工程检查 timer/download_file target、rclcpp/std_msgs 与 install 列表，保存构建和 Topic 输出。当前虚拟机 SSH 认证失败，LinuxCodeSrc 远端没有 ROS2 工程，尚未修复真实 CMakeLists.txt。
-- D) `ROS_DISTRO`、Ubuntu 版本和 arch 均待实际学习环境命令证据；[ENVIRONMENT.md](ENVIRONMENT.md) 保持待确认。
+- C) Timer Publisher → Topic → Subscription 已实际跑通；仍需用 `ros2 topic info/echo/hz` 保存 CLI 观察证据，并从空白独立复现一次。
+- D) espeak-ng 已接入 Subscription 并完成语音输出；已解决普通 library 链接与 plain/keyword signature 冲突。当前 queue + `speech_thread` 解耦代码尚待实际运行验证。
+- E) `ROS_DISTRO`、Ubuntu 版本和 arch 均待实际学习环境命令证据；[ENVIRONMENT.md](ENVIRONMENT.md) 保持待确认。
 
 ## 下一次测试
 
-1. 先闭卷解释 Timer 句柄/创建、`[this]`、spin/Executor、两种 callback 的事件来源；再复述：Node 与进程、Publisher → Topic → Subscriber、Lambda 的捕获/参数/返回类型、std::function 与 callback；记录真实回答。
-2. 在实际学习环境保存 `printenv ROS_DISTRO`、`cat /etc/os-release`、`uname -m`，并记录 CMake/编译器版本。
-3. 独立配对并验证两种 httplib include 方案，保存构建输出与 target include 参数；解释 CMakeLists.txt/Makefile、include path/find_package 的区别。
-4. 检查实际 `download/start_download`，说明 `cb(path, response->body)` 的调用时机、执行线程、callback/引用/this 的生命周期和线程等待方式，再做最小实验。
-5. 保留 9 月 21 日闭卷验收：从空目录建多 executable 的 out-of-source CMake 工程，解释唯一 main、依赖查找与 target 绑定；从空 workspace 创建 ament_cmake package 与最小 node，完成 build → source → executable 查询 → run，并定位一次 executable 名称错误。
-
-6. 核对真实 CMakeLists.txt 的创建 → 依赖 → 安装链并构建 timer，用 topic echo/hz 验证 time_topic；再独立编写 Subscription 节点。参考今日记录保存命令输出。Socket 既有独立验收不取消。
+1. 闭卷解释 Timer 句柄/创建、Spin/Executor 与两种 callback 的事件来源，重点说明“注册 callback”为什么不等于“自动执行”。
+2. 从空白独立完成最小 Publisher + Subscription，并用 `ros2 pkg executables`、`ros2 topic info/echo/hz` 保存运行与观察证据。
+3. 故意制造 Topic 名不一致，解释为什么节点都能运行但不通信，并从 Publisher/Subscription count 定位问题。
+4. 不看答案说明 `#include`、`find_library()`、`target_link_libraries()` 与 `ament_target_dependencies()` 的职责边界，复现一次 `undefined reference` 的判断过程。
+5. 完成 queue + mutex + condition_variable + speech_thread 版本，验证接收与语音播放解耦；Ctrl+C 时线程必须能正常退出。
+6. 保留 CMake 多 target/out-of-source 闭卷验收，以及 Socket、TCP 文件传输、producer-consumer/rwlock 遗留验收。
 
 ## 下一步
 
-当前学习顺序为：**核对 timer 的真实 CMake 配置与运行 → Subscription 入门与收发验证 → CMake/ROS2 构建链闭卷复现 → Service → Action → Parameter/Launch**。cpp-httplib include path 与 callback 生命周期仍需补证；继续独立跑通构建、安装、source 和 `ros2 run`。
+当前学习顺序为：**Topic + 语音工作线程解耦运行验证 → Topic 闭卷独立复现/CLI 调试 → CMake/ROS2 构建链补证 → Service → Action → Parameter/Launch**。cpp-httplib include path 与 callback 生命周期仍需补证；Socket/并发遗留验收继续并行保留。
 
 Socket 不再继续扩展高并发服务器专项；已有 select/poll/epoll、TCP 文件传输和短读写等内容作为通用 Linux/通信能力并行补齐证据，不删除原验收要求。
 
