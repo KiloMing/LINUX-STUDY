@@ -73,7 +73,7 @@
 
 ## 阶段 4：ROS 2 基础与调试
 
-**状态：当前主线开始 ROS2 基础与 C++ 回调前置学习；2026-09-22 已讨论 Node/Topic 概念，Publisher/Timer/Topic 完整实现及 service/action 尚未开始。调整依据是下载示例暴露了 Lambda/callback 生命周期与 include path 前置问题；不视为阶段 3 验收通过，不降低构建链独立复现门槛**
+**状态：当前主线；截至 2026-09-25，Topic 基础保持 L2。9 月 24 日已有收发与语音运行证据，9 月 25 日按学习者课程进展练习 turtlesim 画圆/订阅，并写出尚未编译运行的闭环草稿。近期先修正、编译、验证到点，再限幅与观察；语音工作线程、独立复现及阶段 3 构建链验收仍需补证。Service/Action 尚未开始，不降低阶段门槛。详见 [当前快照](CURRENT.md) 与 [当日记录](daily/2026-09-25.md)**
 
 **核心任务：** 建立 C++ package，依次练 topic、service、action、parameter 和 launch；串起模拟传感器与控制节点，用 CLI、日志和 rosbag 观察及回放数据，排查一次 QoS 或参数问题。
 

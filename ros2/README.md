@@ -16,6 +16,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 2026-09-24 已在真实工作区完成 Timer Publisher → Topic → Subscription 联调：package 构建成功，`timer`/`subscription` executable 可查询并实际持续收发。随后用 C++ 接入 espeak-ng 完成 Topic 文本语音输出，并真实排查 `undefined reference`、普通 library 链接及 `target_link_libraries` signature 冲突。当前正把语音播放从 Subscription callback 解耦到 queue + `speech_thread`；线程版尚待最终运行验证。Topic 基础记 L2，详见 [当日笔记](../daily/2026-09-24.md)。
 
+2026-09-25 学习者反馈 `demo_cpp_topic` 画圆发布与 Pose 打印成功；同一 Node 的闭环 `CycleContarl` 草稿尚未编译/运行，Topic 保持 L2。见 [今日记录](../daily/2026-09-25.md) 与 [UNVERIFIED 快照](2026-09-25-cycle-contarl-UNVERIFIED.md)。
+
 ## 完成证据
 
 能够独立建立 package 和节点数据流，解释输入/输出/参数/依赖，使用 ROS 2 命令定位问题，并完成 TF/URDF/RViz 的机器人模型实践。
@@ -28,7 +30,10 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 ## 当前学习顺序
 
 ```text
-Topic + speech worker 运行验证
+修正并编译 CycleContarl（当前未验证）
+  → turtlesim 到目标点验证
+  → 限幅与控制效果观察
+  → Topic + speech worker 遗留运行/退出验证
   → topic publisher/subscriber 闭卷独立复现
   → ros2 topic CLI 调试
   → CMake/ROS2 构建链补证

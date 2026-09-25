@@ -28,13 +28,13 @@ Linux/C++ 系统能力
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-09-24
+## 最新学习进度：2026-09-25
 
-当前主线为 **ROS2 Topic 实际收发 + C++ 语音输出 + callback 线程解耦**。今天已实际跑通 Timer Publisher → Topic → Subscription，完成 Topic 文本到 espeak-ng 的 C++ 语音输出，并排查普通 library 链接与 CMake signature 冲突。
+当前主线为 **ROS2 turtlesim Topic 发布/订阅与闭环控制框架**。创建 `demo_cpp_topic`，练习 Twist 定时发布画圆、Pose 订阅打印及 CMake 多 executable；分离发布/订阅程序已有学习者成功反馈。
 
-ROS2 Topic 基础已有真实运行证据，保守提升到 L2；queue + `speech_thread` 解耦正在实现，尚未取得最终运行证据。CMake 保持 L2，既有 Socket/并发验收继续保留。
+最新 `CycleContarl` 草稿尚未进行 colcon 编译/运行验证，保留 `linear.y` 转向错误及未使用限幅等检查项。ROS2 Topic 和 CMake 维持 L2，不认定闭环已掌握。明日先修正并编译，再验证到目标点，之后限幅与观察；speech_thread 和 Socket/并发遗留验收保留。
 
-完整内容见 [今日记录](daily/2026-09-24.md)，当前问题与下一次测试见 [CURRENT.md](CURRENT.md)。
+完整内容见 [今日记录](daily/2026-09-25.md)、[UNVERIFIED 代码快照](ros2/2026-09-25-cycle-contarl-UNVERIFIED.md)；当前问题与下一次测试见 [CURRENT.md](CURRENT.md)。
 
 ## 学习节奏
 
@@ -70,6 +70,8 @@ ROS2 Topic 基础已有真实运行证据，保守提升到 L2；queue + `speech
 - [DAY6](DAY6/readme.md)：`mmap`、semaphore 与 mutex 练习。
 
 ## 近期每日记录
+
+- [2026-09-25](daily/2026-09-25.md)：turtlesim Twist 发布画圆、Pose 订阅、CMake 多 executable 与未验证闭环控制快照。
 
 - [2026-09-24](daily/2026-09-24.md)：ROS2 Topic 实际收发、C++ espeak-ng 语音输出、链接排错与 callback/worker thread 解耦。
 - [2026-09-23](daily/2026-09-23.md)：Timer 定时发布 time_topic、Subscription 与 Executor 基础、CMake target 错误。

@@ -125,3 +125,11 @@ ROS2 Topic 基础由 L1 提升到 **L2**。今日已有真实运行证据：`dem
 当前正在把耗时的 `espeak_Synchronize()` 从 Subscription callback 移入独立 `speech_thread`，使用 queue/mutex/condition_variable 形成生产者-消费者模型。该线程版目前只有设计与代码教学，没有最终运行证据，不记为完成，也不提升并发主题等级。
 
 下一证据：独立从空白写 Publisher/Subscription；用 CLI 定位 Topic 名不一致；实际跑通 queue + speech_thread，并验证 Ctrl+C 时线程正常退出。详见 [daily/2026-09-24.md](daily/2026-09-24.md)。
+
+## 2026-09-25 更新
+
+ROS2 Topic 与 CMake 均保持 L2，不升 L3。`demo_cpp_topic` 的 Twist 定时画圆、Pose 订阅打印经过引导及 CMake 多 target 排错，学习者回复运行“成功”；本次未重新运行或核验原工作区输出，没有闭卷独立复现证据。
+
+闭环控制仅完成 guided 草稿：同一 Node 组合 Publisher/Subscription，计算 sqrt 距离、atan2 方向、[-pi, pi] 归一化和 P 控制。最新 `CycleContarl` **尚未进行 colcon 编译/运行验证**，且转向写在 `linear.y`、限幅尚未实现；闭环单项待验证，不认定已掌握，也不提升运动学等主题等级。
+
+下一证据：修正 `angular.z` 和数学头文件/常量，编译并运行 turtlesim，保存到目标点的 Pose/误差与控制效果；再做限幅、独立复现及延迟测试。此前 speech_thread、CMake 和 Socket/并发验收保留。详见 [今日记录](daily/2026-09-25.md)。
