@@ -133,3 +133,9 @@ ROS2 Topic 与 CMake 均保持 L2，不升 L3。`demo_cpp_topic` 的 Twist 定�
 闭环控制仅完成 guided 草稿：同一 Node 组合 Publisher/Subscription，计算 sqrt 距离、atan2 方向、[-pi, pi] 归一化和 P 控制。最新 `CycleContarl` **尚未进行 colcon 编译/运行验证**，且转向写在 `linear.y`、限幅尚未实现；闭环单项待验证，不认定已掌握，也不提升运动学等主题等级。
 
 下一证据：修正 `angular.z` 和数学头文件/常量，编译并运行 turtlesim，保存到目标点的 Pose/误差与控制效果；再做限幅、独立复现及延迟测试。此前 speech_thread、CMake 和 Socket/并发验收保留。详见 [今日记录](daily/2026-09-25.md)。
+
+## 2026-09-26 更新
+
+Topic 与 CMake 保持 L2。自定义 SystemStatus、ament_python 发布、Qt5 Widgets 接入与多线程显示按学习记录已跑通，记为 guided evidence；本次无源码归档与重新构建输出，不升 L3。闭环已学习阈值与限幅，旧草稿仍未核验最终修复。Service 记为概念入门（L1），仅建立请求/响应理解，不记录 Client/Server 实现完成。Parameter 尚未形成稳定理解。
+
+下一证据：独立复现 status 数据链、保存构建与运行输出；补测闭环到点和 Qt 主线程更新/退出；继续 4.1.1 的最小服务调用。见 [今日记录](daily/2026-09-26.md)。

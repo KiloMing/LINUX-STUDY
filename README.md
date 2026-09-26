@@ -28,13 +28,13 @@ Linux/C++ 系统能力
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-09-25
+## 最新学习进度：2026-09-26
 
-当前主线为 **ROS2 turtlesim Topic 发布/订阅与闭环控制框架**。创建 `demo_cpp_topic`，练习 Twist 定时发布画圆、Pose 订阅打印及 CMake 多 executable；分离发布/订阅程序已有学习者成功反馈。
+已学习 turtlesim Topic 闭环控制、自定义 SystemStatus 接口、Python 系统状态发布和 C++/Qt 订阅显示；status 链路按学习对话已跑通。本次整理未重新运行 ROS2 实验，Topic/CMake 保持 L2。
 
-最新 `CycleContarl` 草稿尚未进行 colcon 编译/运行验证，保留 `linear.y` 转向错误及未使用限幅等检查项。ROS2 Topic 和 CMake 维持 L2，不认定闭环已掌握。明日先修正并编译，再验证到目标点，之后限幅与观察；speech_thread 和 Socket/并发遗留验收保留。
+**当前停在第 4 章 4.1.1 服务通信介绍，下一步从 Service 的 Client / Server / Request / Response 继续。**
 
-完整内容见 [今日记录](daily/2026-09-25.md)、[UNVERIFIED 代码快照](ros2/2026-09-25-cycle-contarl-UNVERIFIED.md)；当前问题与下一次测试见 [CURRENT.md](CURRENT.md)。
+完整内容见 [今日记录](daily/2026-09-26.md)，证据边界、遗留验收和下一次测试见 [CURRENT.md](CURRENT.md)。
 
 ## 学习节奏
 
@@ -71,6 +71,7 @@ Linux/C++ 系统能力
 
 ## 近期每日记录
 
+- [2026-09-26](daily/2026-09-26.md)：Topic 闭环、SystemStatus 接口、Python 发布、Qt 显示与 Service 续学快照。
 - [2026-09-25](daily/2026-09-25.md)：turtlesim Twist 发布画圆、Pose 订阅、CMake 多 executable 与未验证闭环控制快照。
 
 - [2026-09-24](daily/2026-09-24.md)：ROS2 Topic 实际收发、C++ espeak-ng 语音输出、链接排错与 callback/worker thread 解耦。

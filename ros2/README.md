@@ -18,6 +18,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 2026-09-25 学习者反馈 `demo_cpp_topic` 画圆发布与 Pose 打印成功；同一 Node 的闭环 `CycleContarl` 草稿尚未编译/运行，Topic 保持 L2。见 [今日记录](../daily/2026-09-25.md) 与 [UNVERIFIED 快照](2026-09-25-cycle-contarl-UNVERIFIED.md)。
 
+2026-09-26 自定义 SystemStatus → Python 发布 → C++/Qt 显示链路按学习记录已跑通，闭环学习推进到阈值和限幅。当前停在第 4 章 4.1.1 Service；本次未重新构建验证，见 [今日记录](../daily/2026-09-26.md)。
+
 ## 完成证据
 
 能够独立建立 package 和节点数据流，解释输入/输出/参数/依赖，使用 ROS 2 命令定位问题，并完成 TF/URDF/RViz 的机器人模型实践。
@@ -29,17 +31,4 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-```text
-修正并编译 CycleContarl（当前未验证）
-  → turtlesim 到目标点验证
-  → 限幅与控制效果观察
-  → Topic + speech worker 遗留运行/退出验证
-  → topic publisher/subscriber 闭卷独立复现
-  → ros2 topic CLI 调试
-  → CMake/ROS2 构建链补证
-  → service
-  → action
-  → parameter / launch
-```
-
-进入 topic 前先确保能独立解释并跑通“源码 → CMake target → install → source → ros2 run”链路，避免只会复制命令。
+从第 4 章 4.1.1 Service 继续：Client / Server / Request / Response → 最小服务调用 → 后续 Parameter 内容。Topic/Qt 独立复现、闭环最终行为、GUI 线程与退出、speech worker 和构建链验收继续并行补证。精确断点以 [CURRENT.md](../CURRENT.md) 为准。
