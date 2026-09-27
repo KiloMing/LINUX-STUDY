@@ -1,16 +1,16 @@
 # CURRENT
 
-最后更新：2026-09-26
+最后更新：2026-09-27
 
 ## 当前进度快照
 
-当前主线为 **ROS2 Topic 实践 → 第 4 章 Service**，停在 **4.1.1 服务通信介绍**。今天已学习 turtlesim 闭环控制、status_interfaces 自定义消息、status_publisher Python 发布，以及 status_display C++/Qt 订阅显示。
+当前主线为 **ROS2 第四章 Service → Parameter**。今日已跟随教学完成 Python 人脸检测 Service 4.2.1～4.2.4，以及 C++ Patrol Service 4.3.1～4.3.3 的接口、Server、异步 Client 实战。
 
-**下一步从 Service 继续：Topic 是持续广播；Service 是 Client 请求一次、Server 处理并返回一次结果。** 先巩固 Client / Server / Request / Response，再做最小调用。Parameter 只曾被提及，不记为已完成 4.1.2。
+**视频进度：4.3.3 完成；明天从 4.4.1《参数声明设置》开始。** Service 为 guided L2，独立复现和章节验收仍待验证。4.1.2 此前跳过，Parameter 仅概念预告，尚未开始参数实战。
 
 ## 仓库已验证
 
-- 本仓库已保存 [2026-09-26 每日记录](daily/2026-09-26.md)，覆盖六项学习内容、问题与后续验证边界。
+- 本仓库已保存 [2026-09-27 每日学习快照](daily/2026-09-27.md)，含两条 Service 链路、关键命令、错误修正与明天接续点；本次只核验文档，未重新运行 ROS2。
 - [9 月 25 日 CycleContarl 旧草稿](ros2/2026-09-25-cycle-contarl-UNVERIFIED.md) 继续保留 UNVERIFIED；本次没有取得最终 ROS2 源码或重新执行构建。
 - 既有 Linux/Socket/Topic 证据见 [9 月 25 日记录](daily/2026-09-25.md) 及其前序每日记录；历史证据不等于本次独立复测。
 
@@ -20,9 +20,14 @@
 - status_interfaces 接口生成与查询、status_publisher 的 /sys_status 发布和 topic echo 已跑通（按学习记录）。
 - hello_qt、sys_status_display 已跑通；对话文字记录 Qt 窗口显示主机、CPU、内存和网络状态。本次未重新核验历史截图。
 - 已理解用 std::thread 跑 rclcpp::spin，主线程跑 app.exec；GUI 跨线程直接更新需改为主线程处理，不能将“能显示”当作线程安全证据。
-- Topic 与 CMake 维持 L2；没有新增闭卷独立复现，Service 仅建立基础概念。
+- Python `/face_detect` 已完成发图、CvBridge 转换、face_recognition 检测、返回坐标并绘框；对话记录 1 张脸及约 0.202s，历史截图本次未重新核验。
+- C++ `/patrol` 先经命令行调用验证移动，再由 Timer + async_send_request Client 成功收到 `target accepted`。接受目标不等于已到点。
+- `.venv`/解释器、Python import、spin 调用顺序、C++ 拼写与 CMake 依赖经过排错；编译成功后的 IntelliSense 飘红需配置生成接口的 include root。SHM 警告当天未阻断主线，未确认修复。
+- Topic、CMake 保持 L2；Service 从概念入门推进到 guided L2，尚无闭卷独立复现。
 
 ## 待验证
+
+- 独立复现 FaceDetector 与 Patrol 的接口、Server、Client，保存最终源码、构建与运行输出；补测非法目标、服务缺席、请求失败、图片读取失败和空检测结果。
 
 - 客户端先检查 `argc`，正确处理 `stoi` 异常和端口范围。
 - `send()` 返回值使用 `ssize_t`；`send_all()` / `recv_all()` / 文件写入处理短读写和 `EINTR`。
@@ -33,7 +38,7 @@
 
 ## 当前问题/待解决
 
-- 9 月 25 日旧草稿遗留核验（9 月 26 日已学习阈值和限幅，最终源码尚未核验）：将 `cmd_vel.linear.y = k_ang * error_ang` 修正为 `angular.z`；确认 `<cmath>`/`M_PI`；核对闭环 executable 的 CMake 依赖与安装。`target_ang_` 可局部化，`max_speed_` 尚未实际限幅。
+- 9 月 25 日旧草稿遗留核验（9 月 26 日已学习阈值和限幅，最终源码尚未核验）：将 `cmd_vel.linear.y = k_ang * error_ang` 修正为 `angular.z`；确认 `<cmath>`/`M_PI`；核对闭环 executable 的 CMake 依赖与安装。`target_ang_` 可局部化；旧草稿的 `max_speed_` 未实际限幅，今日对话代码已出现限幅与 angular.z，但最终工程仍需归档核验。
 
 - A) cpp-httplib 头文件引用路径尚需在实际工程中验证。对话中的目录是 `include/cpp-httplib/httplib.h`；视频的 `include_directories(include)` 配套 `#include "cpp-httplib/httplib.h"`，当前 `<httplib.h>` 则要求搜索起点指向 `include/cpp-httplib`。
 - B) 需要继续理解 `start_download` 的线程创建与 callback 生命周期；实际源码未核验，不能直接认定异步方式或引用安全。
@@ -43,12 +48,12 @@
 
 ## 下一次测试
 
-1. 先口述 Client / Server / Request / Response，并对比 /spawn 与 /turtle1/pose。
-2. 从 4.1.1 做一次最小 Service 查询与调用，记录接口及返回结果，再进入 Parameter。
+1. 闭卷复述 Python 人脸检测与 C++ Patrol 的请求/响应链路、一次请求与 Timer Client 的差别，以及 SUCCESS 的含义。
+2. 从空文件独立复现最小 Patrol Server/Client，记录正常/非法目标、服务未启动和退出行为；课程从 4.4.1 参数声明设置接续。
 3. 并行补存 status 三个包的源码、构建、接口查询、topic echo 与 GUI 证据，独立复现发布/订阅。
 4. 核验闭环 angular.z、角度跨界、阈值、最大速度和到点停止；核验 GUI 主线程更新、shutdown/join 与窗口退出。
 5. 保留 speech_thread 运行/退出、CMake 构建链、Socket/TCP 和 producer-consumer/rwlock 的独立验收；历史清单见 [9 月 25 日记录](daily/2026-09-25.md) 及此前 daily。
 
 ## 下一步
 
-**继续第 4 章 Service 的 4.1.1；先请求/响应，再后续参数内容。** 课程推进与独立能力验收分开记录，既有待验证项继续并行补证，不阻断本次已明确的续学入口。长期路线和评级标准保持不变。
+**明天从 4.4.1《参数声明设置》开始，以 TurtleController 的固定控制参数为背景。** 课程推进与独立能力验收分开记录，既有待验证项继续并行补证，不阻断本次已明确的续学入口。长期路线和评级标准保持不变。

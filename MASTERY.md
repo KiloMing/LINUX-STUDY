@@ -41,6 +41,8 @@
 | Socket | L2 | 2026-09-20 已从 select 推进到 poll，并开始 epoll LT；已有 guided poll Server 源码和 epoll 模型/API 讨论，但没有独立 3 客户端运行证据，也未闭卷独立完成 epoll LT。下一证据：独立完成 poll 多客户端 Echo Server，再独立完成 epoll LT Server；原 select、文件传输、短读写、二进制一致性与异常路径验收继续保留 |
 | CMake | L2 | 2026-09-21 在提示下完成普通 CMake 与 ROS2 CMake 构建练习，能解释 target、`add_executable`、out-of-source build、`find_package` 与依赖链接，并真实定位多类配置错误；待从空目录闭卷完成多 target + library/依赖工程后再升 L3 |
 | ROS 2 / TF2 / URDF / RViz | L2（Topic 基础） | 2026-09-24 已实际构建并运行 Timer Publisher + Subscription，形成持续 Topic 收发，并完成 Topic → espeak-ng 语音输出；实现仍经过教学提示，尚无从空白独立复现，不升 L3。TF2/URDF/RViz 仍为 L0 |
+| ROS2 Service | L2（guided 实战完成） | 2026-09-27 Python FaceDetector 与 C++ Patrol Server/Client 按学习对话跑通；含提示和完整示例，无独立复现，不升 L3；待保存最终源码、运行及异常路径证据 |
+| ROS2 Parameter | 尚未开始实战（仅概念预告） | 4.1.2 此前跳过，下一步 4.4.1 参数声明设置；没有声明、设置或动态更新的运行证据 |
 | 运动学 / Odometry / 底盘集成 | L0 | 无仓库证据 |
 | IMU / LiDAR / 状态估计 | L0 | 无仓库证据 |
 | SLAM / Nav2 | L0 | 无仓库证据 |
@@ -139,3 +141,9 @@ ROS2 Topic 与 CMake 均保持 L2，不升 L3。`demo_cpp_topic` 的 Twist 定�
 Topic 与 CMake 保持 L2。自定义 SystemStatus、ament_python 发布、Qt5 Widgets 接入与多线程显示按学习记录已跑通，记为 guided evidence；本次无源码归档与重新构建输出，不升 L3。闭环已学习阈值与限幅，旧草稿仍未核验最终修复。Service 记为概念入门（L1），仅建立请求/响应理解，不记录 Client/Server 实现完成。Parameter 尚未形成稳定理解。
 
 下一证据：独立复现 status 数据链、保存构建与运行输出；补测闭环到点和 Qt 主线程更新/退出；继续 4.1.1 的最小服务调用。见 [今日记录](daily/2026-09-26.md)。
+
+## 2026-09-27 更新
+
+Service 由概念入门推进到 **L2（guided 实战完成）**：Python FaceDetector 已形成发图、检测、返回坐标并绘框的闭环；C++ Patrol 已完成接口生成、Server 复用目标点控制、命令行调用与 Timer 异步 Client 响应。证据来自学习者成功反馈及对话文字，本次未重新查看截图、取得最终完整工程或运行 ROS2。Python Client 曾提供完整示例，C++ 经过逐步提示，不升 L3，也不认定已通过教学协议的章节独立验收。
+
+Topic/CMake 保持 L2；Parameter 仅概念预告，4.1.2 此前跳过，4.4.1 尚未开始实战。下一证据：从空文件独立复现两种 Service，保存构建/运行，测试非法目标、服务缺席、空检测与退出，并在延迟后复测。课程明天从 4.4.1《参数声明设置》接续。见 [今日学习快照](daily/2026-09-27.md)。

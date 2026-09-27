@@ -28,13 +28,13 @@ Linux/C++ 系统能力
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-09-26
+## 最新学习进度：2026-09-27
 
-已学习 turtlesim Topic 闭环控制、自定义 SystemStatus 接口、Python 系统状态发布和 C++/Qt 订阅显示；status 链路按学习对话已跑通。本次整理未重新运行 ROS2 实验，Topic/CMake 保持 L2。
+Python 自定义人脸检测 Service 与 C++ Patrol Service（4.3.1～4.3.3）已按学习对话完成实战闭环。Service 记 guided L2，仍需后续独立复现验证；本次整理未重新运行 ROS2。
 
-**当前停在第 4 章 4.1.1 服务通信介绍，下一步从 Service 的 Client / Server / Request / Response 继续。**
+**今日视频进度：4.3.3 完成；明天从 4.4.1《参数声明设置》开始。** Parameter 仅概念预告，尚未开始实战，4.1.2 保留此前跳过状态。
 
-完整内容见 [今日记录](daily/2026-09-26.md)，证据边界、遗留验收和下一次测试见 [CURRENT.md](CURRENT.md)。
+完整内容见 [今日学习快照](daily/2026-09-27.md)，证据边界、遗留验收和下一次测试见 [CURRENT.md](CURRENT.md)。
 
 ## 学习节奏
 
@@ -70,6 +70,8 @@ Linux/C++ 系统能力
 - [DAY6](DAY6/readme.md)：`mmap`、semaphore 与 mutex 练习。
 
 ## 近期每日记录
+
+- [2026-09-27](daily/2026-09-27.md)：Python 人脸检测与 C++ Patrol Service 闭环、环境/构建排错及 4.4.1 续学快照。
 
 - [2026-09-26](daily/2026-09-26.md)：Topic 闭环、SystemStatus 接口、Python 发布、Qt 显示与 Service 续学快照。
 - [2026-09-25](daily/2026-09-25.md)：turtlesim Twist 发布画圆、Pose 订阅、CMake 多 executable 与未验证闭环控制快照。

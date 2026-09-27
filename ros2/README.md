@@ -20,6 +20,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 2026-09-26 自定义 SystemStatus → Python 发布 → C++/Qt 显示链路按学习记录已跑通，闭环学习推进到阈值和限幅。当前停在第 4 章 4.1.1 Service；本次未重新构建验证，见 [今日记录](../daily/2026-09-26.md)。
 
+2026-09-27 Python FaceDetector 与 C++ Patrol Service 4.3.1～4.3.3 按学习对话完成实战闭环，Service 记 guided L2；保留独立复现与异常路径验收。见 [今日学习快照](../daily/2026-09-27.md)。
+
 ## 完成证据
 
 能够独立建立 package 和节点数据流，解释输入/输出/参数/依赖，使用 ROS 2 命令定位问题，并完成 TF/URDF/RViz 的机器人模型实践。
@@ -31,4 +33,4 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-从第 4 章 4.1.1 Service 继续：Client / Server / Request / Response → 最小服务调用 → 后续 Parameter 内容。Topic/Qt 独立复现、闭环最终行为、GUI 线程与退出、speech worker 和构建链验收继续并行补证。精确断点以 [CURRENT.md](../CURRENT.md) 为准。
+4.3.3 已完成，明天从 4.4.1《参数声明设置》开始，再进入 4.4.2、4.4.3。Parameter 仅概念预告，4.1.2 此前跳过；Service 独立复现仍待验证。Topic/Qt 独立复现、闭环最终行为、GUI 线程与退出、speech worker 和构建链验收继续并行补证。精确断点以 [CURRENT.md](../CURRENT.md) 为准。
