@@ -73,7 +73,7 @@
 
 ## 阶段 4：ROS 2 基础与调试
 
-**状态：当前主线；截至 2026-09-27，Python 人脸检测与 C++ Patrol Service 已完成 guided 实战，视频到 4.3.3 结束，Service 记 L2，尚待独立复现。下一步从 4.4.1 参数声明设置开始，Parameter 仅概念预告。Topic/CMake 保持 L2；独立复现、闭环最终行为、GUI 线程与已有构建链验收并行补证，不降低阶段门槛。详见 [当前快照](CURRENT.md) 与 [当日记录](daily/2026-09-27.md)**
+**状态：当前主线；截至 2026-09-28，第四章课程按学习记录已跟完，进入 Turtle Patrol System 综合项目。实际源码已到 SetTarget Service + Pose Subscriber，Publisher/闭环未实现；Parameter/Launch 保持 guided L2，独立复现和延迟验收待补。阶段门槛不变，详见 [当前快照](CURRENT.md) 与 [当日记录](daily/2026-09-28.md)**
 
 **核心任务：** 建立 C++ package，依次练 topic、service、action、parameter 和 launch；串起模拟传感器与控制节点，用 CLI、日志和 rosbag 观察及回放数据，排查一次 QoS 或参数问题。
 
