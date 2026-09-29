@@ -6,9 +6,9 @@
 
 | 项目 | 当前值 | 确认方式 |
 |---|---|---|
-| 操作系统 | 待确认 | `uname -a` |
-| Linux 发行版/虚拟机 | 待确认 | `/etc/os-release` 与虚拟机设置 |
-| CPU 架构 | 待确认 | `uname -m` |
+| 操作系统 | Linux（TF 学习虚拟机） | 2026-09-29 实机读取 |
+| Linux 发行版/虚拟机 | Ubuntu 24.04.5 LTS / Parallels | 2026-09-29 `/etc/os-release` |
+| CPU 架构 | aarch64 | 2026-09-29 `uname -m` |
 | 编译器 | 待确认 | `gcc --version`、`g++ --version` |
 | CMake | 待确认 | `cmake --version` |
 | Python | 待确认 | `python3 --version` |
@@ -19,7 +19,7 @@
 
 | 项目 | 当前值 | 确认方式 |
 |---|---|---|
-| ROS 2 | 待确认 | `printenv ROS_DISTRO` 与安装来源 |
+| ROS 2 | Jazzy（TF 学习环境） | 2026-09-29 加载 `/opt/ros/jazzy/setup.bash` 后构建及运行成功 |
 | 仿真器 | 待确认 | 软件版本命令与项目配置 |
 
 在 ROS 2 版本和 Ubuntu 版本确认前，不锁定发行版，也不直接复制特定发行版教程。

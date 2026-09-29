@@ -73,7 +73,7 @@
 
 ## 阶段 4：ROS 2 基础与调试
 
-**状态：当前主线；截至 2026-09-28，第四章课程按学习记录已跟完，进入 Turtle Patrol System 综合项目。实际源码已到 SetTarget Service + Pose Subscriber，Publisher/闭环未实现；Parameter/Launch 保持 guided L2，独立复现和延迟验收待补。阶段门槛不变，详见 [当前快照](CURRENT.md) 与 [当日记录](daily/2026-09-28.md)**
+**状态：第四章课程已跟完，独立验收继续补齐；Turtle Patrol 尚缺闭环。2026-09-29 按实际课程进度进入第五章 TF，阶段门槛不变，见 [当前快照](CURRENT.md)。**
 
 **核心任务：** 建立 C++ package，依次练 topic、service、action、parameter 和 launch；串起模拟传感器与控制节点，用 CLI、日志和 rosbag 观察及回放数据，排查一次 QoS 或参数问题。
 
@@ -85,7 +85,7 @@
 
 ## 阶段 5：TF2、URDF、RViz 与仿真
 
-**状态：未开始**
+**状态：已开始 TF；5.3.1/5.3.2 课程实验已验证，5.3.3 C++ 查询开始。URDF/RViz/仿真尚未开始，独立验收待补。**
 
 **核心任务：** 建立差速机器人 URDF 和 TF 树，在 RViz 与仿真中显示模型及传感器；修改安装位姿，并排查一次错误 frame 或时间戳。
 

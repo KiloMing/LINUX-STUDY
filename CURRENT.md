@@ -1,30 +1,20 @@
 # CURRENT
 
-最后更新：2026-09-28
+最后更新：2026-09-29
 
 ## 当前进度快照
 
-主线为 **Turtle Patrol System 独立综合项目**，工作区 `~/my_ros/my_test`。按用户学习记录，第四章 Parameter/Parameter Client、Launch、namespace/remapping、双 turtlesim 隔离已跟随教学完成；不等于通过独立章节验收。Service / Parameter / Launch 保持 guided/半独立 L2，不因一次成功升 L3。
+当前课程主线进入第五章 TF。5.3.1 静态发布、5.3.2 动态发布已跟随课程完成并验证；5.3.3 C++ 查询 TF 已开始，精确播放秒数未知。学习者自述与引用对话进度一致，独立掌握与延迟复现仍待验证，不上调 MASTERY。
 
-完整过程见 [今日记录](daily/2026-09-28.md)。
+见 [今日记录](daily/2026-09-29.md) 和 [源码快照](ros2/tf_test/README.md)。此前 Turtle Patrol 尚到 Service + Pose Subscriber，闭环等遗留项保留于 [昨日记录](daily/2026-09-28.md)。
 
-## 本次实际源码核验
+## 仓库已验证
 
-Codex 通过 Parallels 读取 `/home/kiloming/my_ros/my_test/src` 两个包，未修改工程或重新运行 ROS2。
-
-- `turtle_patrol_interface`：SetTarget.srv 为 float64 target_x/target_y → bool accepted/string message；接口生成配置已存在。
-- `turtle_patrol`：最小 set_target Service、main/init-make_shared-spin-shutdown、目标成员与相对 turtle1/pose Subscriber 已存在。
-- 合法分支已设置 has_target_=true；非法分支已填 Response 并提前返回，从源码看不会覆盖旧目标，运行变式仍待验证。
-- 当前坐标范围为 [0,12]，需统一可达边界；Pose 回调只打印坐标，尚无速度 Publisher 或闭环。
-- controller 的 CMake 已绑定 rclcpp、turtlesim、接口依赖；package.xml 只补了接口依赖，**仍缺 rclcpp 与 turtlesim**。
-- 已有构建日志显示 turtle_patrol rc=0，接口包在该次未选中；不等同于本次干净重建。
-
-## 学习记录与证据边界
-
-- 用户描述最后截图持续输出 x≈5.54、y≈5.54、theta≈0.00；原图本次未重新核验，未重新启动节点。
-- Parameter、Parameter Client、Launch 和双系统运行按今日学习记录保存，本次未重跑课程示例。
-- main/service API、shared_ptr 创建、Response 状态迁移、CMake 拼写和包依赖曾出错；纠正后保留延迟复测。
-- 节点没日志不等于没运行；Fast DDS SHM 警告未证明阻断主线，未记为彻底修复。
+- 实际工程来自虚拟机 ~/my_ros/tf_test，静态 (5,3,0)/60°，动态 (2,3,2)/30°，动态 sendTransform 已存在。
+- 两个发布器重新构建成功；tf2_echo 三组查询成功，包括 base_link → target_point = (2.598,-1.500,-2.000)/30°。
+- CMake/package.xml 无重复 tf2_geometry_msgs；两个目标已配置依赖和安装。
+- tf_listen 仍是未完成草稿，保存为 .incomplete，不参与编译；不能把 CLI 成功写成 C++ 查询节点完成。
+- 源码快照不含 build/install/log；实际工作区 src 下本次未发现这些误生成目录。
 
 ## 待验证
 
@@ -45,15 +35,14 @@ Codex 通过 Parallels 读取 `/home/kiloming/my_ros/my_test/src` 两个包，�
 - B) 需要继续理解 `start_download` 的线程创建与 callback 生命周期；实际源码未核验，不能直接认定异步方式或引用安全。
 - C) Timer Publisher → Topic → Subscription 已实际跑通；仍需用 `ros2 topic info/echo/hz` 保存 CLI 观察证据，并从空白独立复现一次。
 - D) espeak-ng 已接入 Subscription 并完成语音输出；已解决普通 library 链接与 plain/keyword signature 冲突。当前 queue + `speech_thread` 解耦代码尚待实际运行验证。
-- E) `ROS_DISTRO`、Ubuntu 版本和 arch 均待实际学习环境命令证据；[ENVIRONMENT.md](ENVIRONMENT.md) 保持待确认。
+- E) TF 学习环境已确认 Ubuntu 24.04.5 / aarch64 / Jazzy，见 [ENVIRONMENT.md](ENVIRONMENT.md)。
 
 ## 下一次测试
 
-1. 5–10 分钟闭卷写最小 Service/main，解释 unique/shared/weak、accepted 与到点、成员生命周期、future 和 wait_for_service。
-2. 补 package.xml 的 rclcpp/turtlesim，验证两包依赖与构建；测试合法→非法→合法请求的 Response 和旧目标保留，统一坐标范围。
-3. 延迟复测 Parameter 拒绝/批量更新、Parameter Client 失败，以及 Launch 类型、namespace/remapping 与 endpoint 隔离。
-4. 历史 Socket/TCP、并发、Qt 主线程、speech_thread、旧闭环草稿等验收继续保留；不因当前主线变化自动认定完成。
+1. 闭卷解释父子 frame、TransformStamped、setRPY 的弧度、tf2::toMsg 与 sendTransform。
+2. 确认动态 z=2 是否符合实验意图，再预测相对变换。
+3. 解释 lookupTransform 的 target/source 顺序、最新共同时间与异常处理。
 
 ## 下一步
 
-短复测和 manifest 补齐后，从 `geometry_msgs::msg::Twist` Publisher（相对 `turtle1/cmd_vel`）开始，接 Pose 误差计算、转向/前进、限幅/到点停止，再接 Parameter、Client、单系统/双 namespace Launch。独立实现、变式、故障定位和延迟复现完成后再评 L3。
+继续 5.3.3：从草稿补 Buffer、TransformListener、timer、lookupTransform、try-catch 与 main，随后配置 CMake 并对照 CLI 实测结果。Turtle Patrol、Service/Parameter/Launch 与历史独立验收继续保留，不视为已完成。

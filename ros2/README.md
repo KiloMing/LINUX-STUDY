@@ -33,4 +33,4 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-4.3.3 已完成，明天从 4.4.1《参数声明设置》开始，再进入 4.4.2、4.4.3。Parameter 仅概念预告，4.1.2 此前跳过；Service 独立复现仍待验证。Topic/Qt 独立复现、闭环最终行为、GUI 线程与退出、speech worker 和构建链验收继续并行补证。精确断点以 [CURRENT.md](../CURRENT.md) 为准。
+截至 2026-09-29，第五章 5.3.1/5.3.2 已完成课程实验并重新验证；5.3.3 已开始，下一步写/理解 C++ 查询。见 [今日学习记录](../daily/2026-09-29.md) 与 [TF 源码快照](tf_test/README.md)。第四章独立验收及 Turtle Patrol 闭环仍待补。精确断点以 [CURRENT.md](../CURRENT.md) 为准。
