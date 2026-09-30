@@ -10,7 +10,7 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前证据
 
-2026-09-21 已在本地创建 `ament_cmake` C++ package，开始练习 `rclcpp` 依赖、`add_executable`、`ament_target_dependencies`、`install(TARGETS ...)`、`ament_package()`、`colcon build`、`source install/setup.bash`、`ros2 pkg executables` 和 `ros2 run`。当前 package 已可被 ROS2 发现，并能查询已安装 executable；曾因 target 名不一致出现 `No executable found`。这属于 guided 入门证据，ROS2 构建基础记 L1；尚无独立 node/topic 数据流，TF2/URDF/RViz 仍为 L0。
+2026-09-21 已在本地创建 `ament_cmake` C++ package，开始练习 `rclcpp` 依赖、`add_executable`、`ament_target_dependencies`、`install(TARGETS ...)`、`ament_package()`、`colcon build`、`source install/setup.bash`、`ros2 pkg executables` 和 `ros2 run`。当前 package 已可被 ROS2 发现，并能查询已安装 executable；曾因 target 名不一致出现 `No executable found`。这属于 guided 入门证据，ROS2 构建基础记 L1；尚无独立 node/topic 数据流，当时 TF2/URDF/RViz 尚未开始；后续课程进度见下文，独立掌握仍按验收记录。
 
 2026-09-23 已完成 `time_topic` 定时发布（学习者自述），并开始 Subscription。新增 Timer 句柄与创建、lambda 捕获、Executor 调度以及 CMake target 未定义问题的记录，见 [当日笔记](../daily/2026-09-23.md)。
 
@@ -33,4 +33,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-截至 2026-09-29，第五章 5.3.1/5.3.2 已完成课程实验并重新验证；5.3.3 已开始，下一步写/理解 C++ 查询。见 [今日学习记录](../daily/2026-09-29.md) 与 [TF 源码快照](tf_test/README.md)。第四章独立验收及 Turtle Patrol 闭环仍待补。精确断点以 [CURRENT.md](../CURRENT.md) 为准。
+截至 2026-09-30，已按学习反馈完成 6.2.1～6.2.3：URDF 基础模型显示、RViz 黑屏排查解决、Xacro 参数与 macro，robot_state_publisher / RViz 最终显示成功。本次未重跑模型验证，见 [今日学习记录](../daily/2026-09-30.md)。
+
+当前进入 6.2.4「创建机器人及传感器部件」开头，下一步拆分 base、IMU、Laser、Camera，再 include 与宏实例化总装；模块化尚未实现。
+
+9 月 29 日的 TF 静态/动态发布与 CLI 查询实测见 [TF 源码快照](tf_test/README.md)，C++ listener 仍为未完成草稿。第四章独立验收及 Turtle Patrol 闭环仍待补。精确断点和证据边界以 [CURRENT.md](../CURRENT.md) 为准。

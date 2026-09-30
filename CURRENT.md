@@ -1,14 +1,14 @@
 # CURRENT
 
-最后更新：2026-09-29
+最后更新：2026-09-30
 
 ## 当前进度快照
 
-当前课程主线进入第五章 TF。5.3.1 静态发布、5.3.2 动态发布已跟随课程完成并验证；5.3.3 C++ 查询 TF 已开始，精确播放秒数未知。学习者自述与引用对话进度一致，独立掌握与延迟复现仍待验证，不上调 MASTERY。
+当前课程主线进入第六章：按学习者自述与今日学习反馈，6.2.1 URDF 基础、6.2.2 RViz 显示模型、6.2.3 Xacro 简化 URDF 已完成；Xacro 参数与 macro 已练习，RViz 黑屏已排查解决，robot_state_publisher / RViz 最终显示成功。当前在 6.2.4「创建机器人及传感器部件」开头，模块拆分尚未开始，精确播放秒数未知。
 
-见 [今日记录](daily/2026-09-29.md) 和 [源码快照](ros2/tf_test/README.md)。此前 Turtle Patrol 尚到 Service + Pose Subscriber，闭环等遗留项保留于 [昨日记录](daily/2026-09-28.md)。
+见 [今日记录](daily/2026-09-30.md)。本次未重新运行 ROS2/RViz，未取得今日模型源码和黑屏根因证据；独立掌握与延迟复现仍待验证，不上调 MASTERY。此前 TF 查询草稿见 [9 月 29 日记录](daily/2026-09-29.md)，Turtle Patrol 遗留项见 [9 月 28 日记录](daily/2026-09-28.md)。
 
-## 仓库已验证
+## 仓库已验证（2026-09-29 TF 快照）
 
 - 实际工程来自虚拟机 ~/my_ros/tf_test，静态 (5,3,0)/60°，动态 (2,3,2)/30°，动态 sendTransform 已存在。
 - 两个发布器重新构建成功；tf2_echo 三组查询成功，包括 base_link → target_point = (2.598,-1.500,-2.000)/30°。
@@ -39,10 +39,13 @@
 
 ## 下一次测试
 
-1. 闭卷解释父子 frame、TransformStamped、setRPY 的弧度、tf2::toMsg 与 sendTransform。
-2. 确认动态 z=2 是否符合实验意图，再预测相对变换。
-3. 解释 lookupTransform 的 target/source 顺序、最新共同时间与异常处理。
+1. 闭卷解释 URDF 的 link/joint/visual/geometry/origin，复现 robot_state_publisher → RViz 模型显示。
+2. 解释 Xacro 参数、`${}`、macro 的定义与调用，修改尺寸并核对展开与显示结果。
+3. 保存启动命令、模型和 RViz 状态，补齐黑屏排查的具体原因与修复证据。
+4. 保留 TF 独立验收：解释父子 frame、四元数、sendTransform、lookupTransform 参数顺序与时间，确认动态 z=2 的实验意图。
 
 ## 下一步
 
-继续 5.3.3：从草稿补 Buffer、TransformListener、timer、lookupTransform、try-catch 与 main，随后配置 CMake 并对照 CLI 实测结果。Turtle Patrol、Service/Parameter/Launch 与历史独立验收继续保留，不视为已完成。
+从 6.2.4 开始创建 base、IMU、Laser、Camera 的独立 Xacro 模块，再由 fishbot.urdf.xacro include 并实例化总装，逐步验证显示。
+
+5.3.3 C++ listener 在仓库中仍为未完成草稿，后续补齐 Buffer、TransformListener、timer、lookupTransform、try-catch、main 与 CMake，并对照 CLI 验证；没有新证据前不标记完成。Turtle Patrol、Service/Parameter/Launch 与历史独立验收继续保留。

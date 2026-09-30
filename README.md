@@ -21,20 +21,20 @@ Linux/C++ 系统能力
 
 ## 当前事实
 
-- 仓库证据覆盖 DAY1–DAY6。
-- 当前可确认主题：Linux 基础、Git/Makefile、文件 I/O、进程、IPC、semaphore、mutex。
+- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-09-30。
+- 学习主题已从 Linux 基础、Git/Makefile、文件 I/O、进程、IPC、semaphore、mutex，推进到 ROS2 通信、TF、URDF 与 Xacro；各主题的独立掌握程度以验收证据为准。
 - 2026-09-11，2 Producer + 2 Consumer 已实际编译运行并正常退出；由于参考过完整答案，producer-consumer 保留 L2，不升 L3。
 - 当前已进入 TCP/Socket 基础实践：Echo Server 与教学引导下的多进程文本文件传输已跑通，Socket 当前记录为 L2。
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-09-27
+## 最新学习进度：2026-09-30
 
-Python 自定义人脸检测 Service 与 C++ Patrol Service（4.3.1～4.3.3）已按学习对话完成实战闭环。Service 记 guided L2，仍需后续独立复现验证；本次整理未重新运行 ROS2。
+已按学习反馈完成 URDF 基础模型显示、RViz 黑屏排查与解决，以及 Xacro 参数、`${}` 与 macro 练习；robot_state_publisher / RViz 最终显示成功。6.2.3「使用 Xacro 简化 URDF」已完成，当前进入 6.2.4「创建机器人及传感器部件」开头。
 
-**今日视频进度：4.3.3 完成；明天从 4.4.1《参数声明设置》开始。** Parameter 仅概念预告，尚未开始实战，4.1.2 保留此前跳过状态。
+**下一步：拆分 base、IMU、Laser、Camera 模块，再通过 include 与宏实例化完成总装。模块化尚未实现。** 本次整理未重跑 ROS2/RViz；课程实验与独立掌握分开记录，历史待验收项继续保留。
 
-完整内容见 [今日学习快照](daily/2026-09-27.md)，证据边界、遗留验收和下一次测试见 [CURRENT.md](CURRENT.md)。
+完整内容见 [今日学习快照](daily/2026-09-30.md)，证据边界、遗留验收和下一次测试见 [CURRENT.md](CURRENT.md)。
 
 ## 学习节奏
 
@@ -70,6 +70,10 @@ Python 自定义人脸检测 Service 与 C++ Patrol Service（4.3.1～4.3.3）�
 - [DAY6](DAY6/readme.md)：`mmap`、semaphore 与 mutex 练习。
 
 ## 近期每日记录
+
+- [2026-09-30](daily/2026-09-30.md)：URDF/RViz 模型显示、黑屏排查解决、Xacro 参数与 macro，以及 6.2.4 模块化续学位置。
+- [2026-09-29](daily/2026-09-29.md)：C++ 静态/动态 TF 实测、tf2_echo 查询与 C++ listener 草稿。
+- [2026-09-28](daily/2026-09-28.md)：依据实际工程核对 Turtle Patrol 进度与待验证项。
 
 - [2026-09-27](daily/2026-09-27.md)：Python 人脸检测与 C++ Patrol Service 闭环、环境/构建排错及 4.4.1 续学快照。
 
