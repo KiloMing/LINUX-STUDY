@@ -21,20 +21,20 @@ Linux/C++ 系统能力
 
 ## 当前事实
 
-- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-09-30。
+- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-01。
 - 学习主题已从 Linux 基础、Git/Makefile、文件 I/O、进程、IPC、semaphore、mutex，推进到 ROS2 通信、TF、URDF 与 Xacro；各主题的独立掌握程度以验收证据为准。
 - 2026-09-11，2 Producer + 2 Consumer 已实际编译运行并正常退出；由于参考过完整答案，producer-consumer 保留 L2，不升 L3。
 - 当前已进入 TCP/Socket 基础实践：Echo Server 与教学引导下的多进程文本文件传输已跑通，Socket 当前记录为 L2。
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-09-30
+## 最新学习进度：2026-10-01
 
-已按学习反馈完成 URDF 基础模型显示、RViz 黑屏排查与解决，以及 Xacro 参数、`${}` 与 macro 练习；robot_state_publisher / RViz 最终显示成功。6.2.3「使用 Xacro 简化 URDF」已完成，当前进入 6.2.4「创建机器人及传感器部件」开头。
+完成二轮差速小车 base、wheel、caster、camera 与 laser 双 link 的 Xacro 拆分总装，学习 visual/collision/inertial 同级关系及惯性参数；RViz 截图确认碰撞体和 TF 显示正常。本次核对实际源码，并修复雷达 material 层级残留问题。
 
-**下一步：拆分 base、IMU、Laser、Camera 模块，再通过 include 与宏实例化完成总装。模块化尚未实现。** 本次整理未重跑 ROS2/RViz；课程实验与独立掌握分开记录，历史待验收项继续保留。
+下一步核对轮子惯性坐标系、运行依赖及独立复现；IMU 尚未实例化，未宣称动力学仿真或差速控制完成。
 
-完整内容见 [今日学习快照](daily/2026-09-30.md)，证据边界、遗留验收和下一次测试见 [CURRENT.md](CURRENT.md)。
+见 [今日学习快照](daily/2026-10-01.md)、[模型源码与验证](ros2/chapt6_ws/README.md) 和 [CURRENT.md](CURRENT.md)。
 
 ## 学习节奏
 
@@ -71,6 +71,7 @@ Linux/C++ 系统能力
 
 ## 近期每日记录
 
+- [2026-10-01](daily/2026-10-01.md)：Xacro 部件总装、碰撞与惯性层级排错、RViz/TF 截图及实际源码验证。
 - [2026-09-30](daily/2026-09-30.md)：URDF/RViz 模型显示、黑屏排查解决、Xacro 参数与 macro，以及 6.2.4 模块化续学位置。
 - [2026-09-29](daily/2026-09-29.md)：C++ 静态/动态 TF 实测、tf2_echo 查询与 C++ listener 草稿。
 - [2026-09-28](daily/2026-09-28.md)：依据实际工程核对 Turtle Patrol 进度与待验证项。

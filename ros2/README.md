@@ -33,8 +33,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-截至 2026-09-30，已按学习反馈完成 6.2.1～6.2.3：URDF 基础模型显示、RViz 黑屏排查解决、Xacro 参数与 macro，robot_state_publisher / RViz 最终显示成功。本次未重跑模型验证，见 [今日学习记录](../daily/2026-09-30.md)。
+截至 2026-10-01，承接 6.2.3 附近进度，base、wheel、caster、camera、laser 双 link 已完成模块化与总装；RViz 截图确认 Collision Enabled 后模型显示正常。本次检查实际 Xacro，修正雷达 material 层级，见 [今日记录](../daily/2026-10-01.md) 与 [源码快照及验证](chapt6_ws/README.md)。
 
-当前进入 6.2.4「创建机器人及传感器部件」开头，下一步拆分 base、IMU、Laser、Camera，再 include 与宏实例化总装；模块化尚未实现。
+IMU 已 include、未实例化；轮子为 continuous joint，传感器为 fixed。下一步核对惯性坐标系、补齐运行依赖，再继续课程与独立验收；精确视频断点未确认。
 
 9 月 29 日的 TF 静态/动态发布与 CLI 查询实测见 [TF 源码快照](tf_test/README.md)，C++ listener 仍为未完成草稿。第四章独立验收及 Turtle Patrol 闭环仍待补。精确断点和证据边界以 [CURRENT.md](../CURRENT.md) 为准。

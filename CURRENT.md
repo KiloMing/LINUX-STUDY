@@ -1,12 +1,12 @@
 # CURRENT
 
-最后更新：2026-09-30
+最后更新：2026-10-01
 
 ## 当前进度快照
 
-当前课程主线进入第六章：按学习者自述与今日学习反馈，6.2.1 URDF 基础、6.2.2 RViz 显示模型、6.2.3 Xacro 简化 URDF 已完成；Xacro 参数与 macro 已练习，RViz 黑屏已排查解决，robot_state_publisher / RViz 最终显示成功。当前在 6.2.4「创建机器人及传感器部件」开头，模块拆分尚未开始，精确播放秒数未知。
+当前推进第六章 URDF/Xacro 机器人部件建模，承接 6.2.3 附近的学习。按学习者自述、截图和实际源码，base、wheel、caster、camera、laser 双 link 已拆分总装，视觉与碰撞模型已在 RViz 显示。轮子为 continuous joint，传感器为 fixed；IMU 仅 include、未实例化。精确播放位置未确认。
 
-见 [今日记录](daily/2026-09-30.md)。本次未重新运行 ROS2/RViz，未取得今日模型源码和黑屏根因证据；独立掌握与延迟复现仍待验证，不上调 MASTERY。此前 TF 查询草稿见 [9 月 29 日记录](daily/2026-09-29.md)，Turtle Patrol 遗留项见 [9 月 28 日记录](daily/2026-09-28.md)。
+见 [今日学习快照](daily/2026-10-01.md) 与 [源码及验证](ros2/chapt6_ws/README.md)。本次检查 camera collision 拼写、laser 两个 link 的同级结构，并修复雷达 material 错放在 link 下的问题。截图属于学习时的 RViz 证据，本次未重新启动 RViz。独立复现待验证，不上调 MASTERY。
 
 ## 仓库已验证（2026-09-29 TF 快照）
 
@@ -39,13 +39,13 @@
 
 ## 下一次测试
 
-1. 闭卷解释 URDF 的 link/joint/visual/geometry/origin，复现 robot_state_publisher → RViz 模型显示。
-2. 解释 Xacro 参数、`${}`、macro 的定义与调用，修改尺寸并核对展开与显示结果。
-3. 保存启动命令、模型和 RViz 状态，补齐黑屏排查的具体原因与修复证据。
-4. 保留 TF 独立验收：解释父子 frame、四元数、sendTransform、lookupTransform 参数顺序与时间，确认动态 z=2 的实验意图。
+1. 闭卷解释 visual/collision/inertial；复现并定位 collision 拼写及嵌套错误。
+2. 修改 camera 尺寸并同步几何与惯性；根据宏公式解释 w/h/d 的轴向映射。
+3. 画出 base_footprint → base_link → 轮子/相机/雷达支柱 → 雷达的 TF 树，区分 fixed 与 continuous。
+4. 保留 TF 独立验收：解释父子 frame、四元数、sendTransform、lookupTransform 参数顺序与时间。
 
 ## 下一步
 
-从 6.2.4 开始创建 base、IMU、Laser、Camera 的独立 Xacro 模块，再由 fishbot.urdf.xacro include 并实例化总装，逐步验证显示。
+以已完成的部件总装为起点继续课程；先核对轮子几何旋转与惯性坐标系的一致性、补齐运行依赖和启动入口，再进入动力学仿真。IMU 文件存在但尚未实例化。RViz 碰撞显示成功不等于物理仿真或差速控制完成。
 
 5.3.3 C++ listener 在仓库中仍为未完成草稿，后续补齐 Buffer、TransformListener、timer、lookupTransform、try-catch、main 与 CMake，并对照 CLI 验证；没有新证据前不标记完成。Turtle Patrol、Service/Parameter/Launch 与历史独立验收继续保留。
