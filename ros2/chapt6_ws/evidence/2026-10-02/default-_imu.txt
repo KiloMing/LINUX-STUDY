@@ -62,4 +62,3 @@ linear_acceleration_covariance {
   data: 0
   data: 0
 }
-
