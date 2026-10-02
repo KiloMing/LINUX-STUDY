@@ -21,20 +21,18 @@ Linux/C++ 系统能力
 
 ## 当前事实
 
-- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-01。
+- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-02。
 - 学习主题已从 Linux 基础、Git/Makefile、文件 I/O、进程、IPC、semaphore、mutex，推进到 ROS2 通信、TF、URDF 与 Xacro；各主题的独立掌握程度以验收证据为准。
 - 2026-09-11，2 Producer + 2 Consumer 已实际编译运行并正常退出；由于参考过完整答案，producer-consumer 保留 L2，不升 L3。
 - 当前已进入 TCP/Socket 基础实践：Echo Server 与教学引导下的多进程文本文件传输已跑通，Socket 当前记录为 L2。
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-10-01
+## 最新学习进度：2026-10-02
 
-完成二轮差速小车 base、wheel、caster、camera 与 laser 双 link 的 Xacro 拆分总装，学习 visual/collision/inertial 同级关系及惯性参数；RViz 截图确认碰撞体和 TF 显示正常。本次核对实际源码，并修复雷达 material 层级残留问题。
+**6.5.2 gz_ros2_control 排查中。** 今日完成 GZ_IP、IMU/LiDAR/RGBD 仿真实验和 ros2_control 架构学习，保存全部拼写、路径、插件层级、YAML 安装与旧 URDF 排错过程。同日后续日志已有控制管理器、左右轮接口和传感器样本；控制器激活、整车控制与独立验收仍待完成。
 
-下一步核对轮子惯性坐标系、运行依赖及独立复现；IMU 尚未实例化，未宣称动力学仿真或差速控制完成。
-
-见 [今日学习快照](daily/2026-10-01.md)、[模型源码与验证](ros2/chapt6_ws/README.md) 和 [CURRENT.md](CURRENT.md)。
+见 [今日学习快照](daily/2026-10-02.md)、[源码与验证证据](ros2/chapt6_ws/README.md) 和 [CURRENT.md](CURRENT.md)。
 
 ## 学习节奏
 
@@ -70,6 +68,8 @@ Linux/C++ 系统能力
 - [DAY6](DAY6/readme.md)：`mmap`、semaphore 与 mutex 练习。
 
 ## 近期每日记录
+
+- [2026-10-02](daily/2026-10-02.md)：Gazebo 传感器、GZ_IP、ros2_control 6.5.1/6.5.2 与完整排错、源码和日志快照。
 
 - [2026-10-01](daily/2026-10-01.md)：Xacro 部件总装、碰撞与惯性层级排错、RViz/TF 截图及实际源码验证。
 - [2026-09-30](daily/2026-09-30.md)：URDF/RViz 模型显示、黑屏排查解决、Xacro 参数与 macro，以及 6.2.4 模块化续学位置。

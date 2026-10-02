@@ -7,13 +7,13 @@
     <xacro:include filename="$(find mybot_description)/urdf/second_robot/sensor/camera.urdf.xacro"/>
     <xacro:include filename="$(find mybot_description)/urdf/second_robot/sensor/caster.urdf.xacro"/>
     <xacro:include filename="$(find mybot_description)/urdf/second_robot/sensor/wheel.urdf.xacro"/>
-
+    <xacro:include filename="$(find mybot_description)/urdf/second_robot/ros2_control.xacro"/>
 
     <!-- create base -->
     <xacro:base_xacro length="0.12" radius="0.10"/>
 
     <!-- create IMU -->
-    <!-- <xacro:imu_xacro xyz="0 0 0.08"/>   -->
+    <xacro:imu_xacro xyz="0 0 0.08"/>
 
     <!-- create laser -->
     <xacro:laser_xacro xyz="0 0 0.10"/>
@@ -30,5 +30,22 @@
     <xacro:wheel_xacro wheel_name="left" xyz="0 0.11 -0.06"/>
     <xacro:wheel_xacro wheel_name="right" xyz="0 -0.11 -0.06"/>
 
+    <!--
+    <gazebo>
+        <plugin
+            filename="gz-sim-diff-drive-system"
+            name="gz::sim::systems::DiffDrive">
+
+            <left_joint>left_joint</left_joint>
+            <right_joint>right_joint</right_joint>
+
+            <wheel_separation>0.22</wheel_separation>
+            <wheel_radius>0.032</wheel_radius>
+
+            <topic>cmd_vel</topic>
+
+        </plugin>
+    </gazebo>
+    -->
 
 </robot>

@@ -1,0 +1,6 @@
+Earlier repair task samples; inspected during archive, not fresh runtime checks.
+default-_camera_depth_image.txt: bytes=4016974, sha256=c77ba56d1fc6cdc4e1e236382ee857c2af092809b688f7f4cff426ea50c62f6e
+default-_camera_image.txt: bytes=3686661, sha256=3c3d8c991ffc8cb18679bd085fdcaea6677598542d19572033900fa86bcf14cd
+default-_camera_points.txt: bytes=27385578, sha256=f53f1cb4e43780969f1aa89d7aed9d39f706bc7d90e7d4183071553a21bc7210
+default-_imu.txt: bytes=942, sha256=dffcbdfdbed9cbc3abfef67906a60aa3cef8811136a7753eb0b93872a31176dc
+default-_scan.txt: bytes=10126, sha256=caf60062f451981e6df7564b44acd1a92cde72081356aaf308a16e7cb63d9147

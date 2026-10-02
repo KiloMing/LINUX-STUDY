@@ -33,8 +33,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-截至 2026-10-01，承接 6.2.3 附近进度，base、wheel、caster、camera、laser 双 link 已完成模块化与总装；RViz 截图确认 Collision Enabled 后模型显示正常。本次检查实际 Xacro，修正雷达 material 层级，见 [今日记录](../daily/2026-10-01.md) 与 [源码快照及验证](chapt6_ws/README.md)。
+截至 2026-10-02，学习快照为 **6.5.2 gz_ros2_control 排查中**。IMU、LiDAR、RGBD 已有实验与消息样本，学习 GZ_IP、Twist、控制架构及配置安装链路。同日后续日志显示控制管理器和左右轮接口已出现，但控制器激活与整车运行验收尚未完成。
 
-IMU 已 include、未实例化；轮子为 continuous joint，传感器为 fixed。下一步核对惯性坐标系、补齐运行依赖，再继续课程与独立验收；精确视频断点未确认。
+详见 [今日记录](../daily/2026-10-02.md) 与 [源码快照及证据](chapt6_ws/README.md)。本次仅重新验证展开、XML 与配置路径；独立掌握仍按验收记录，不上调等级。
 
 9 月 29 日的 TF 静态/动态发布与 CLI 查询实测见 [TF 源码快照](tf_test/README.md)，C++ listener 仍为未完成草稿。第四章独立验收及 Turtle Patrol 闭环仍待补。精确断点和证据边界以 [CURRENT.md](../CURRENT.md) 为准。

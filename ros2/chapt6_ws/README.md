@@ -1,34 +1,63 @@
-# 2026-10-01 机器人建模源码快照
+# 2026-10-02 Gazebo / ros2_control 源码与学习快照
 
-来源：Ubuntu 虚拟机 `/home/kiloming/my_ros/chapt6_ws/src/mybot_description`。归档实际 package 源码，不含 build/install/log；清理行尾空白，并修正 laser_link 的 material 层级，修复已同步实际工作区。
+来源：Ubuntu 24.04 ARM64 / ROS2 Jazzy / Gazebo Harmonic，实际目录 `/home/kiloming/my_ros/chapt6_ws/src/mybot_description`。沿用昨日归档位置，保存当前实际源码（仅规范行尾空白），不带 build/install/log，不修改虚拟机运行工程。昨日版本保留在 Git 历史，见 [10 月 1 日记录](../../daily/2026-10-01.md)。
 
-## 本次验证
+**学习快照/当前课程进度：6.5.2 gz_ros2_control 排查中。** [完整今日问题-原因-解决办法](../../daily/2026-10-02.md) 区分对话断点与后续修复证据。
 
-- 实际 ROS2 Jazzy 工作区 colcon build：退出码 0，1 package finished。
-- 实际 xacro 展开 second_robot.urdf.xacro：退出码 0。
-- check_urdf：Successfully Parsed XML，根为 base_footprint，9 links / 8 joints。
-- 所有源 XML/Xacro 可解析；展开模型中 8 个实体 link 均有同级 visual/collision/inertial；base_footprint 为无几何的参考 frame。
-- camera 与 laser 双 link 均无 collission 拼写及错误嵌套；雷达 material 已位于 visual 内。
-- 本次未重启 RViz、未执行动力学仿真；学习时显示证据见 [当日记录与截图](../../daily/2026-10-01.md)。
+## 当前源码
 
-## 复现命令
+- IMU 已 include 并实例化；IMU 50 Hz、LiDAR 10 Hz、RGBD 30 Hz，保留传感器原有配置。
+- world 含 Physics、UserCommands、SceneBroadcaster、Sensors（ogre2）、Imu 系统。
+- `ros2_control.xacro` 对接 left_joint/right_joint；velocity command、position/velocity state。
+- Gazebo 插件 parameters 正确嵌套并指向已安装 config/ros2_control.yaml；CMake 安装 config/worlds；旧 DiffDrive 已注释。
+- 同日修复新增 sim_control.launch.py：从同一 Xacro 产生 robot_description，robot_state_publisher 发布描述，Gazebo create 从该 topic 创建机器人；另桥接 Gazebo→ROS `/clock`。运行依赖已补 launch/xacro/ros_gz 等。
+- launch 含虚拟机特定软件渲染设置及 `--render-engine ogre`；world Sensors 的 ogre2 原样保留。默认 GUI 和 server 分别启动，可用 gui:=false 关闭 GUI。后台运行依赖有效桌面显示授权，不能把“关闭 GUI”当作传感器无需渲染环境。
 
-在已安装所需依赖的 ROS2 Jazzy 环境，将本目录作为工作区：
+## 本次归档重新检查
+
+- 从真实工作区重新展开 second_robot.urdf.xacro，check_urdf 成功：10 links / 9 joints，包含 imu_link。
+- parameters 在 Gazebo plugin 内且实际安装 YAML 可读。
+- left_joint/right_joint 的控制声明与展开 URDF 的物理 joint 逐项匹配。
+- 仓库源码与虚拟机文件规范行尾后的内容一致；仅归档，无功能改写。
+- 本次未重新启动 Gazebo、未重新构建、未执行控制器激活或运动测试。
+
+## 同日修复任务留存的运行证据
+
+这些是此前任务生成、本次检查后归档的输出，不冒充本次新运行结果：
+
+- [节点](evidence/2026-10-02/nodes-default.txt)：/controller_manager、/gz_ros_control、/robot_state_publisher、/ros_gz_bridge。
+- [接口](evidence/2026-10-02/interfaces-default.txt)：两轮 velocity command 为 available/unclaimed；position/velocity state 齐全。尚未占用，不代表差速控制器已激活。
+- [Gazebo 话题](evidence/2026-10-02/topics.txt)：包含 IMU、scan、RGBD image/depth/points/camera_info。
+- [IMU 样本](evidence/2026-10-02/default-_imu.txt)：z≈9.8，四元数接近单位旋转。
+- [样本摘要](evidence/2026-10-02/sensor-samples.txt)：记录 IMU、scan、RGBD 图像/深度/点云样本字节数与 SHA256。大体积原始文本留在虚拟机 diagnostics/2026-10-02/final，不提交重复大数据。非零文件大小仅证明有样本，不能证明持续频率与质量。
+
+## 复现入口（下次完整验收）
+
+在安装依赖的 Jazzy 环境，从工作区运行：
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 colcon build --packages-select mybot_description
 source install/setup.bash
-xacro src/mybot_description/urdf/second_robot/second_robot.urdf.xacro -o /tmp/second_robot.urdf
-check_urdf /tmp/second_robot.urdf
-ros2 launch mybot_description display2_robot.launch.py
+export GZ_IP=127.0.0.1
+ros2 launch mybot_description sim_control.launch.py
 ```
 
-RViz 中配置 RobotModel、robot_description、Fixed Frame 和 TF，再切换 Visual Enabled / Collision Enabled。使用 display2 入口；旧 display_robot 入口保留为历史源码，引用的旧模型不在当前 package 中。
+在相同 ROS_DOMAIN_ID/GZ_PARTITION 环境另开终端检查：
 
-## 保留的待学习项
+```bash
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
+ros2 node list
+ros2 control list_hardware_interfaces
+ros2 control list_controllers
+ros2 topic echo /clock --once
+gz topic -l
+gz topic -e -t /imu -n 1
+```
 
-- wheel 的 visual/collision 旋转了 1.5708 rad，惯性宏仍沿默认 Z 轴，进入动力学仿真前需统一惯性坐标系。
-- package.xml 尚未声明 xacro、robot_state_publisher、joint_state_publisher、rviz2 等运行依赖；当前环境已有安装不代表全新环境可自动补齐。
-- IMU 宏已 include，但调用被注释；未启用传感器仿真或差速控制插件。
-- 不把 XML 解析、碰撞体显示或课程实验成功记为独立掌握/物理正确性验收。
+ROS 传感器桥接尚未由本 launch 自动配置；Gazebo 有话题不等于 ROS 有同名 topic。Image Display 可在 Gazebo 内选择 /camera/image。手动文件 spawn 时，统一生成和加载 /tmp/second_robot.urdf，仍需发布机器人描述并检查时钟，避免加载旧 /tmp/mybot.urdf。
+
+## 保留的待验收项
+
+控制器配置与激活、轮速命令/反馈/里程计、完整重启及持续传感器数据；轮子几何与惯性坐标系一致性；旧 display_robot 启动路径和显示工具运行依赖。保留模型原状，不在归档中偷偷修正未验收项。课程实验成功不等于独立掌握。
