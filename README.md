@@ -21,18 +21,20 @@ Linux/C++ 系统能力
 
 ## 当前事实
 
-- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-02。
+- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-04。
 - 学习主题已从 Linux 基础、Git/Makefile、文件 I/O、进程、IPC、semaphore、mutex，推进到 ROS2 通信、TF、URDF 与 Xacro；各主题的独立掌握程度以验收证据为准。
 - 2026-09-11，2 Producer + 2 Consumer 已实际编译运行并正常退出；由于参考过完整答案，producer-consumer 保留 L2，不升 L3。
 - 当前已进入 TCP/Socket 基础实践：Echo Server 与教学引导下的多进程文本文件传输已跑通，Socket 当前记录为 L2。
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-10-02
+## 最新学习进度：2026-10-04
 
-**6.5.2 gz_ros2_control 排查中。** 今日完成 GZ_IP、IMU/LiDAR/RGBD 仿真实验和 ros2_control 架构学习，保存全部拼写、路径、插件层级、YAML 安装与旧 URDF 排错过程。同日后续日志已有控制管理器、左右轮接口和传感器样本；控制器激活、整车控制与独立验收仍待完成。
+**Chapter 7 / 7.2.1 在线 SLAM 建图完成，地图已保存。** 今天继续排查地图重影和红色 LaserScan 错位，确认直线 odom 与 Gazebo 基本一致，暂不再改轮径、轮距。在静态 `testworld.sdf` 仓储场景中，将 LiDAR 更新率由 10Hz 提高到 20Hz，并使用低速弧线运动、避免原地旋转和撞墙后，建图明显稳定，Gazebo 场景与 RViz OccupancyGrid 基本一致。
 
-见 [今日学习快照](daily/2026-10-02.md)、[源码与验证证据](ros2/chapt6_ws/README.md) 和 [CURRENT.md](CURRENT.md)。
+已用 `nav2_map_server` 的 `map_saver_cli` 生成 `test_map.pgm` 和 `test_map.yaml`。下一步学习地图加载、已有地图定位及后续导航；课程进度与闭卷独立掌握程度分别记录。
+
+见 [今日学习记录与成功截图](daily/2026-10-04.md)、[CURRENT.md](CURRENT.md) 和 [已有工程快照](ros2/chapt6_ws/README.md)。
 
 ## 学习节奏
 
@@ -69,6 +71,8 @@ Linux/C++ 系统能力
 
 ## 近期每日记录
 
+- [2026-10-04](daily/2026-10-04.md)：SLAM 重影排查、静态仓储场景、20Hz LiDAR、弧线建图与地图保存成功截图。
+- [2026-10-03](daily/2026-10-03.md)：ros2_control 收尾、时钟与扫描桥接修复，进入 7.2.1 在线建图。
 - [2026-10-02](daily/2026-10-02.md)：Gazebo 传感器、GZ_IP、ros2_control 6.5.1/6.5.2 与完整排错、源码和日志快照。
 
 - [2026-10-01](daily/2026-10-01.md)：Xacro 部件总装、碰撞与惯性层级排错、RViz/TF 截图及实际源码验证。
