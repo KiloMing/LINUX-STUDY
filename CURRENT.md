@@ -1,18 +1,22 @@
 # CURRENT
 
-最后更新：2026-10-04
+最后更新：2026-10-05
 
 ## 当前进度快照
 
-**学习快照/当前课程进度：Chapter 7 / 7.2.1 在线 SLAM 建图完成，地图已保存。** 2026-10-04 在静态 `testworld.sdf` 仓储场景中，将 `gpu_lidar` 更新率从 10Hz 提高到 20Hz，采用低速弧线运动并避免原地旋转、撞墙后，Gazebo 场景与 RViz OccupancyGrid 基本一致。已通过 `map_saver_cli` 生成 `test_map.pgm` 和 `test_map.yaml`，下一步为地图加载、定位与后续导航。
+**学习快照/当前课程进度：7.4.1 与 7.4.2 已完成，7.4.3 已进入。** 已完成 AMCL 初始位姿发布相关练习，并通过 C++ TF listener 周期查询机器人在 `map` 中的实时 x/y/yaw；静止时输出稳定，移动时位置与 yaw 连续变化。当前正在编写 Nav2 `NavigateToPose` C++ Action Client，停在 Action 类型别名、GoalHandle 与 Client 成员定义阶段。
+
+7.4.3 尚未完成：`action_client.cpp` 还需补构造函数、`create_client()`、`send_goal()`、goal response/feedback/result callbacks、`CMakeLists.txt` 与 `package.xml`，之后才能编译并进行实际单点导航验证。今天已定位 `NavigateToPose` 类型别名缺失和 class 结尾缺少分号两个错误；不能把“编辑器红线已解释”写成“客户端已编译通过”。
+
+`collision_monitor` lifecycle 排错的当前规则是先查状态再做 transition：`unconfigured` 才 configure，`inactive` 才 activate，已经 `active` 时不重复 configure。`NavigateToPose` 字段以本机 `ros2 interface show nav2_msgs/action/NavigateToPose` 为准，今天截图确认 Result 包含 `uint16 error_code` 与 `string error_msg`。
 
 10 月 3 日完成 `joint_state_broadcaster`、`JointGroupEffortController` 与 `diff_drive_controller`，明确 effort 是旋转关节轴上的力矩目标、velocity 是轮速目标，并区分 command/state interface 与 claimed/unclaimed。`sim_control` / `gz_sim_control` 已整合 Gazebo、`robot_state_publisher`、`/clock` 与 `/scan` bridge、spawn 以及 joint state/diff drive 控制器自动激活。
 
 已修复两条关键链路：`/clock` 重复 publisher 会使 `slam_toolbox` 报 `Detected jump back in time`，因此只保留一次时钟桥接；`scan_bridge` 必须使用 `additional_env=gz_env`，否则其 `GZ_IP` 与 Gazebo Server 不一致，Gazebo `/scan` 无法桥接到 ROS2。Gazebo 话题列举命令为 `gz topic -l`。
 
-已安装并启动 `slam_toolbox`，理解 `map→odom→base_footprint→base_link→laser_link`、`/map`、`/scan`、OccupancyGrid 和 RViz `Fixed Frame=map`。10 月 4 日直线测试中 Gazebo 位移约 5.65768 m、odom 约 5.660 m，基本一致，轮径和轮距暂不再改。见 [今日学习记录与截图](daily/2026-10-04.md)、[前一天排错记录](daily/2026-10-03.md) 与 [已有工程快照](ros2/chapt6_ws/README.md)。
+已安装并启动 `slam_toolbox`，理解 `map→odom→base_footprint→base_link→laser_link`、`/map`、`/scan`、OccupancyGrid 和 RViz `Fixed Frame=map`。10 月 4 日直线测试中 Gazebo 位移约 5.65768 m、odom 约 5.660 m，基本一致，轮径和轮距暂不再改。见 [10 月 5 日定位与导航记录](daily/2026-10-05.md)、[10 月 4 日建图记录](daily/2026-10-04.md) 与 [已有工程快照](ros2/chapt6_ws/README.md)。
 
-今日运行结果依据学习者自述、学习会话与成功截图归档。本次未重新运行 Ubuntu 仿真，也未同步最新源码、场景或地图原文件；课程完成状态与独立验收分别记录，不上调 MASTERY。
+今日运行结果依据学习者自述、学习会话与截图归档。本仓库未同步 10 月 5 日虚拟机中的 `local_init.cpp`、TF listener 或 `action_client.cpp`，也没有重新构建 Nav2 客户端；课程完成状态与仓库可复现证据、独立验收分别记录，不上调 MASTERY。
 
 ## 仓库已验证（2026-09-29 TF 快照）
 
@@ -35,6 +39,9 @@
 
 ## 当前问题/待解决
 
+- 7.4.3 `NavigateToPose` C++ Action Client 只完成到类型定义阶段。虚拟机源码需要补 `using NavigateToPose = nav2_msgs::action::NavigateToPose;`、GoalHandle、class 结尾分号和后续完整实现，再做构建与运行验证。
+- 10 月 5 日代码尚未同步到仓库，当前无法在仓库内检查 CMake/package.xml 或重现编译错误；后续要归档源码和最小构建/运行证据。
+- `collision_monitor` lifecycle 操作必须先查状态，避免把“已 inactive/active 时重复 configure 被拒绝”误判为节点故障。
 - SLAM 重影问题已在今天的建图操作中明显改善并完成地图保存。当前仿真仍对原地旋转和碰撞敏感，使用 `u/o/m` 等弧线运动，避免 `j/l` 原地旋转及撞墙；这不是对所有差速机器人的普遍限制。
 - 直线 odom 与 Gazebo 基本一致，轮径/轮距暂不再改。昨天提出的轮子惯量方向检查尚无完成证据，不再作为推进地图加载的前置阻塞项。
 - 后续补录 `/scan` 实际频率与重启复现证据，同步最新 20Hz LiDAR 配置、`testworld.sdf`、匹配 world 名的 launch 和地图原文件。
@@ -49,16 +56,17 @@
 
 ## 下一次测试
 
-1. 闭卷解释 command/state interface、claimed/unclaimed，以及 effort 与 velocity 的物理含义。
-2. 加载保存的 `test_map.yaml`，核对地图图片路径和显示结果，解释建图与定位的区别。
-3. 完整重启静态场景和 SLAM，确认控制器、单一 `/clock` publisher、`/scan` 实际频率及仿真时间一致。
-4. 用低速弧线运动复现建图结果；保存 TF/odom 数据，之后按课程开展已有地图定位实验。
-5. 保留 TF 独立验收：父子 frame、四元数、sendTransform、lookupTransform 与时间。
+1. 补全 `NavigateToPoseClient` 构造函数并用 `create_client<NavigateToPose>(this, "/navigate_to_pose")` 创建客户端。
+2. 实现 `send_goal()`，在 `map` frame 中设置自由区域目标 x/y/yaw，并把 yaw 转成 quaternion。
+3. 完成 goal response、feedback、result 三个回调，区分“目标被接受”与“最终导航成功”。
+4. 更新实际工程的 `CMakeLists.txt` 与 `package.xml`，完成 `colcon build`、source、executable 查询和运行验证。
+5. 启动 Nav2 后先检查 `/navigate_to_pose` server 与 `collision_monitor` lifecycle 状态，再发送目标；保存 accepted、feedback、result 和机器人到达证据。
+6. 将 10 月 5 日实际源码及构建证据同步到仓库；在此之前不把 7.4.3 标记完成。
 
 ## 下一步
 
-从已保存的地图继续：重新加载 `test_map.yaml`，理解 SLAM 建图和已有地图定位的区别，再学习定位与后续 Navigation2。7.2.1 在线建图和地图保存已经完成，不重复停留在昨天的重影排查断点。
+从 7.4.3 Action Client 的构造函数继续：创建 `/navigate_to_pose` client，补 `send_goal()` 与三个回调，再更新构建依赖并进行单点导航实测。7.4.1/7.4.2 已完成，不重复回退；7.4.3 只有在编译通过、Nav2 接受目标、持续收到反馈并最终成功到达后才完成。
 
 第六章 `ros2_control` 已完成课程收尾：当前 launch 自动启动 joint state 与 diff drive 控制器，并只桥接一次 `/clock`；`scan_bridge` 与 Gazebo Server 统一继承 `gz_env`。仍应在每次完整重启后用控制器列表、publisher 详情、消息与 TF 做运行验收。
 
-5.3.3 C++ listener 在仓库中仍为未完成草稿，后续补齐 Buffer、TransformListener、timer、lookupTransform、try-catch、main 与 CMake，并对照 CLI 验证；没有新证据前不标记完成。Turtle Patrol、Service/Parameter/Launch 与历史独立验收继续保留。
+9 月 29 日 `ros2/tf_test` 中的 5.3.3 C++ listener 仍是旧的未完成草稿；10 月 5 日课程工作区中的实时位姿查询已按截图跑通，但尚未同步到仓库。两份证据不混写：课程进度记 7.4.2 完成，仓库旧草稿仍保持原状态。Turtle Patrol、Service/Parameter/Launch 与历史独立验收继续保留。
