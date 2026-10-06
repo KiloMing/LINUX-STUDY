@@ -24,6 +24,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 2026-10-05 完成 Chapter 7 / 7.4.1 AMCL 初始位姿发布和 7.4.2 C++ TF 实时位姿查询，实测 x/y/yaw 能随机器人运动连续变化。已进入 7.4.3，查看 `nav2_msgs/action/NavigateToPose` 后开始编写 C++ Action Client，当前停在类型别名、GoalHandle 与 Client 成员定义阶段。实际源码尚在虚拟机，未同步到仓库；详见 [当日学习与踩坑记录](../daily/2026-10-05.md)。
 
+2026-10-06 按当日实际运行完成 7.4.3 `NavigateToPose`、7.4.4 `FollowWaypoints` 与 7.5 巡检控制节点。巡检流程已连接自定义 `SpeechText` Service、speaker + `espeak-ng`、Gazebo camera bridge、`sensor_msgs/msg/Image`、`cv_bridge` 和 OpenCV 到点拍照；解决 `frame_id=msp`、yaw 单位、Timer 重复 Goal、Server 名称、Feedback 字段、rosidl 配置、`GZ_IP` 和 `latest_image_` 判空反向等问题。最终源码尚未从 Ubuntu 同步到仓库，详见 [当日完整记录](../daily/2026-10-06.md)。
+
 ## 完成证据
 
 能够独立建立 package 和节点数据流，解释输入/输出/参数/依赖，使用 ROS 2 命令定位问题，并完成 TF/URDF/RViz 的机器人模型实践。
@@ -35,8 +37,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-截至 2026-10-05，学习快照为 **7.4.1、7.4.2 已完成，7.4.3 `NavigateToPose` C++ Action Client 进行中**。当前先补全构造函数、`create_client()`、`send_goal()` 和三个 Action 回调，再更新 CMake/package.xml 并做编译、运行与实际到达验证。
+截至 2026-10-06，学习快照为 **7.4.3、7.4.4、7.5 已按当日运行完成**。当前优先同步 Ubuntu 最终运行源码并做干净构建、完整重启、异常路径和独立复现，不回退重做课程步骤。
 
-详见 [今日记录](../daily/2026-10-05.md)、[当前断点](../CURRENT.md) 与 [已有源码快照](chapt6_ws/README.md)。10 月 5 日代码尚未同步，本次只记录学习会话和截图能够证明的进度；独立掌握仍按验收记录，不上调等级。
+详见 [10 月 6 日巡检记录](../daily/2026-10-06.md)、[当前断点](../CURRENT.md) 与 [已有源码快照](chapt6_ws/README.md)。10 月 6 日最终源码尚未同步，本次只记录学习会话和运行确认能够证明的进度；独立掌握仍按验收记录，不上调等级。
 
 9 月 29 日的 TF 静态/动态发布与 CLI 查询实测见 [TF 源码快照](tf_test/README.md)，C++ listener 仍为未完成草稿。第四章独立验收及 Turtle Patrol 闭环仍待补。精确断点和证据边界以 [CURRENT.md](../CURRENT.md) 为准。

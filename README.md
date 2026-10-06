@@ -21,20 +21,20 @@ Linux/C++ 系统能力
 
 ## 当前事实
 
-- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-05。
+- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-06。
 - 学习主题已从 Linux 基础、Git/Makefile、文件 I/O、进程、IPC、semaphore、mutex，推进到 ROS2 通信、TF、URDF 与 Xacro；各主题的独立掌握程度以验收证据为准。
 - 2026-09-11，2 Producer + 2 Consumer 已实际编译运行并正常退出；由于参考过完整答案，producer-consumer 保留 L2，不升 L3。
 - 当前已进入 TCP/Socket 基础实践：Echo Server 与教学引导下的多进程文本文件传输已跑通，Socket 当前记录为 L2。
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-10-05
+## 最新学习进度：2026-10-06
 
-**Chapter 7 / 7.4.1、7.4.2 已完成，7.4.3 进行中。** 今天完成 AMCL 初始位姿发布和 TF 实时位姿查询，实测机器人静止时 x/y/yaw 稳定、移动时连续更新；随后查看 `/navigate_to_pose` Action Server 与 `nav2_msgs/action/NavigateToPose` 接口，开始编写 C++ Action Client。
+**Chapter 7 / 7.4.3、7.4.4 与 7.5 已按当日运行完成。** `NavigateToPose` 单点导航和 `FollowWaypoints` 路点导航均已跑通，并组合出 A/B/C/D 巡检流程；到点后通过自定义 `SpeechText` Service 调用 speaker + `espeak-ng` 播报，同时保存 Gazebo 相机图像。
 
-当前停在 `NavigateToPose` 类型别名、GoalHandle 和 Client 成员定义阶段；已定位类型别名缺失与 class 结尾缺分号。下一次从构造函数、`create_client()`、`send_goal()`、三个回调以及 CMake/package.xml 编译验证继续。10 月 5 日实际源码仍在虚拟机、尚未同步到本仓库，因此不把 7.4.3 写成已完成。
+今天完整排查了 `frame_id=msp`、yaw 单位、Timer 重复发 Goal、Action Server 名称、Feedback 字段、rosidl 配置、camera bridge/`GZ_IP` 和 `latest_image_` 判断反向等问题。10 月 6 日最终源码仍在 Ubuntu 实际工作区，尚未同步到本仓库；当前完成状态来自当日真实运行确认，不冒充仓库内重建证据。
 
-见 [今日详细学习与踩坑记录](daily/2026-10-05.md)、[CURRENT.md](CURRENT.md) 和 [SLAM/Nav2 主题索引](slam/README.md)。
+见 [今日详细学习与踩坑记录](daily/2026-10-06.md)、[CURRENT.md](CURRENT.md) 和 [ROS 2 主题索引](ros2/README.md)。
 
 ## 学习节奏
 
@@ -71,6 +71,7 @@ Linux/C++ 系统能力
 
 ## 近期每日记录
 
+- [2026-10-06](daily/2026-10-06.md)：完成 NavigateToPose、FollowWaypoints 与巡检控制节点；串联 SpeechText/espeak-ng、Gazebo camera bridge、cv_bridge/OpenCV 拍照，并详录 frame、yaw、Timer、rosidl、GZ_IP 和判空错误。
 - [2026-10-05](daily/2026-10-05.md)：AMCL 初始位姿、四元数/yaw、TF 实时位姿、NavigateToPose Action 与 C++ Client 起步，以及 lifecycle/类型/语法踩坑。
 - [2026-10-04](daily/2026-10-04.md)：SLAM 重影排查、静态仓储场景、20Hz LiDAR、弧线建图与地图保存成功截图。
 - [2026-10-03](daily/2026-10-03.md)：ros2_control 收尾、时钟与扫描桥接修复，进入 7.2.1 在线建图。

@@ -4,6 +4,8 @@
 
 **最后更新：2026-10-03。学习快照/当前课程进度：第六章 ros2_control 已收尾，已进入第七章 7.2.1；当前阻塞点为地图与实时 LaserScan 错位/重影。** [10 月 3 日完整记录](../../daily/2026-10-03.md) 区分已经修复的启动链路问题、当前诊断证据与尚未实施的惯量修复。下列“当前源码”和 2026-10-02 证据仍是上次实际归档内容；本次未直接登录 Ubuntu 工作区重新同步，不能据此断言 10 月 3 日运行源码已逐字归档。
 
+> 进度补充（2026-10-06）：课程工作区已经继续完成 7.4.3 单点导航、7.4.4 路点导航和 7.5 巡检控制闭环，包括 `SpeechText`/`espeak-ng` 播报、camera bridge 与 `cv_bridge`/OpenCV 到点拍照。详情见 [10 月 6 日记录](../../daily/2026-10-06.md)。本目录仍是 10 月 2 日源码快照，10 月 6 日最终运行源码尚未同步，不能用本目录复现或代替当天工程。
+
 ## 2026-10-03 会话增量
 
 - 完成 `joint_state_broadcaster`、`JointGroupEffortController` 与 `diff_drive_controller`，理解 effort/velocity、command/state interface、claimed/unclaimed。

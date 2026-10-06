@@ -1,14 +1,18 @@
 # CURRENT
 
-最后更新：2026-10-05
+最后更新：2026-10-06
 
 ## 当前进度快照
 
-**学习快照/当前课程进度：7.4.1 与 7.4.2 已完成，7.4.3 已进入。** 已完成 AMCL 初始位姿发布相关练习，并通过 C++ TF listener 周期查询机器人在 `map` 中的实时 x/y/yaw；静止时输出稳定，移动时位置与 yaw 连续变化。当前正在编写 Nav2 `NavigateToPose` C++ Action Client，停在 Action 类型别名、GoalHandle 与 Client 成员定义阶段。
+**学习快照/当前课程进度：7.4.3、7.4.4 与 7.5 已按当日实际运行完成。** `NavigateToPose` 单点导航和 `/follow_waypoints` 路点导航均已跑通；巡检控制节点能按 A/B/C/D 导航，根据 `current_waypoint` 与最终 Result 识别到点，通过自定义 `SpeechText` Service 调用 speaker + `espeak-ng` 播报，并保存 Gazebo 相机的当前图像。
 
-7.4.3 尚未完成：`action_client.cpp` 还需补构造函数、`create_client()`、`send_goal()`、goal response/feedback/result callbacks、`CMakeLists.txt` 与 `package.xml`，之后才能编译并进行实际单点导航验证。今天已定位 `NavigateToPose` 类型别名缺失和 class 结尾缺少分号两个错误；不能把“编辑器红线已解释”写成“客户端已编译通过”。
+10 月 6 日已解决 `frame_id=msp` 拼写、yaw 度/弧度混用、Timer 重复发送 Goal、`FollowWaypoints` Server 名称、Feedback 字段、`package.xml`/CMake rosidl 配置、camera bridge 与 `GZ_IP`、以及 `latest_image_` 判空条件写反等问题。完整学习和排错过程见 [10 月 6 日巡检闭环记录](daily/2026-10-06.md)。
 
-`collision_monitor` lifecycle 排错的当前规则是先查状态再做 transition：`unconfigured` 才 configure，`inactive` 才 activate，已经 `active` 时不重复 configure。`NavigateToPose` 字段以本机 `ros2 interface show nav2_msgs/action/NavigateToPose` 为准，今天截图确认 Result 包含 `uint16 error_code` 与 `string error_msg`。
+当前链路是 `FollowWaypoints Action → 到点事件 → SpeechText Service + Image Subscription`。Gazebo camera 经 `ros_gz_bridge` 转为 `/camera/image` 的 `sensor_msgs/msg/Image`，巡检节点缓存最新帧，到点时经 `cv_bridge` 转为 OpenCV `bgr8` 并用 `cv::imwrite()` 保存。最后路点不能只靠 Feedback 索引变化判断，需要在 `SUCCEEDED` Result 中补处理。
+
+10 月 6 日最终运行结果来自学习者确认。本仓库归档前工作区干净，没有发现从 Ubuntu 虚拟机同步来的当日最终源码；对话附件仍是修复 `latest_image_` 前的中间版本。因此本次只提交记录和索引，不把旧附件当作最终可复现源码，也不声称 Codex/macOS 环境重新完成了 ROS 2 构建。
+
+`collision_monitor` lifecycle 排错规则仍是先查状态再做 transition：`unconfigured` 才 configure，`inactive` 才 activate，已经 `active` 时不重复 configure。Action/Service 字段继续以本机 `ros2 interface show` 为准，不凭其他版本示例猜测。
 
 10 月 3 日完成 `joint_state_broadcaster`、`JointGroupEffortController` 与 `diff_drive_controller`，明确 effort 是旋转关节轴上的力矩目标、velocity 是轮速目标，并区分 command/state interface 与 claimed/unclaimed。`sim_control` / `gz_sim_control` 已整合 Gazebo、`robot_state_publisher`、`/clock` 与 `/scan` bridge、spawn 以及 joint state/diff drive 控制器自动激活。
 
@@ -16,7 +20,7 @@
 
 已安装并启动 `slam_toolbox`，理解 `map→odom→base_footprint→base_link→laser_link`、`/map`、`/scan`、OccupancyGrid 和 RViz `Fixed Frame=map`。10 月 4 日直线测试中 Gazebo 位移约 5.65768 m、odom 约 5.660 m，基本一致，轮径和轮距暂不再改。见 [10 月 5 日定位与导航记录](daily/2026-10-05.md)、[10 月 4 日建图记录](daily/2026-10-04.md) 与 [已有工程快照](ros2/chapt6_ws/README.md)。
 
-今日运行结果依据学习者自述、学习会话与截图归档。本仓库未同步 10 月 5 日虚拟机中的 `local_init.cpp`、TF listener 或 `action_client.cpp`，也没有重新构建 Nav2 客户端；课程完成状态与仓库可复现证据、独立验收分别记录，不上调 MASTERY。
+10 月 5 日的定位与 TF 结果依据学习者自述、学习会话与截图归档；当时本仓库未同步虚拟机中的 `local_init.cpp`、TF listener 或 `action_client.cpp`。10 月 6 日仍延续相同证据边界：课程运行进度、仓库可复现源码和独立验收分别记录，不因 guided integration 跑通而直接上调 MASTERY。
 
 ## 仓库已验证（2026-09-29 TF 快照）
 
@@ -39,8 +43,10 @@
 
 ## 当前问题/待解决
 
-- 7.4.3 `NavigateToPose` C++ Action Client 只完成到类型定义阶段。虚拟机源码需要补 `using NavigateToPose = nav2_msgs::action::NavigateToPose;`、GoalHandle、class 结尾分号和后续完整实现，再做构建与运行验证。
-- 10 月 5 日代码尚未同步到仓库，当前无法在仓库内检查 CMake/package.xml 或重现编译错误；后续要归档源码和最小构建/运行证据。
+- 10 月 6 日的最终 `NavigateToPose`、`FollowWaypoints`、巡检控制器、speaker、`SpeechText.srv` 与 camera bridge 源码仍在 Ubuntu 实际工作区，尚未同步到本仓库。下一次必须从最终运行版本同步，而不是使用对话附件中的修复前快照。
+- 仓库内尚不能重新检查当天 CMake/package.xml 的 Action、rosidl、`sensor_msgs`、`cv_bridge` 与 OpenCV 配置，也没有保存干净构建、完整重启和 A/B/C/D 每点一次语音/照片的运行证据。
+- 多圈巡检需要进一步验证点位索引重置、每点只触发一次、最后点补触发和照片覆盖策略；保存文件名应加入圈数或时间戳。
+- 仍需测试 Action Server、Speech Service、camera bridge 缺席，以及 Goal aborted/canceled、首帧未到、图片路径不可写和图像转换失败等异常路径。
 - `collision_monitor` lifecycle 操作必须先查状态，避免把“已 inactive/active 时重复 configure 被拒绝”误判为节点故障。
 - SLAM 重影问题已在今天的建图操作中明显改善并完成地图保存。当前仿真仍对原地旋转和碰撞敏感，使用 `u/o/m` 等弧线运动，避免 `j/l` 原地旋转及撞墙；这不是对所有差速机器人的普遍限制。
 - 直线 odom 与 Gazebo 基本一致，轮径/轮距暂不再改。昨天提出的轮子惯量方向检查尚无完成证据，不再作为推进地图加载的前置阻塞项。
@@ -56,17 +62,17 @@
 
 ## 下一次测试
 
-1. 补全 `NavigateToPoseClient` 构造函数并用 `create_client<NavigateToPose>(this, "/navigate_to_pose")` 创建客户端。
-2. 实现 `send_goal()`，在 `map` frame 中设置自由区域目标 x/y/yaw，并把 yaw 转成 quaternion。
-3. 完成 goal response、feedback、result 三个回调，区分“目标被接受”与“最终导航成功”。
-4. 更新实际工程的 `CMakeLists.txt` 与 `package.xml`，完成 `colcon build`、source、executable 查询和运行验证。
-5. 启动 Nav2 后先检查 `/navigate_to_pose` server 与 `collision_monitor` lifecycle 状态，再发送目标；保存 accepted、feedback、result 和机器人到达证据。
-6. 将 10 月 5 日实际源码及构建证据同步到仓库；在此之前不把 7.4.3 标记完成。
+1. 从 Ubuntu `~/my_ros/chapt6_ws` 同步 10 月 6 日最终运行源码：Action Client、巡检控制器、speaker、`SpeechText.srv`、camera bridge launch、CMake 和 package.xml。
+2. 在仓库中先做逐文件 diff，确认 `latest_image_` 已使用 `if (!latest_image_)`，节点名、Server 名、字段和依赖都是最终版本，再归档而不覆盖其他工作。
+3. 在干净终端重新构建并重新 source，完整重启 Gazebo、Nav2、speaker 和 patrol controller，排除旧 install 空间造成的假成功。
+4. 保存 Action、Service、Topic/QoS、每点到达日志、语音结果和 `photo_A`～`photo_D` 文件证据。
+5. 注入 Server/Service/bridge 缺席、Goal aborted/canceled、相机首帧未到和图片路径不可写等错误，确认节点能报告并继续安全运行。
+6. 脱离笔记独立复现最小 `FollowWaypoints` Client 和一次完整巡检，再决定是否上调 Action/Service/传感器集成掌握等级。
 
 ## 下一步
 
-从 7.4.3 Action Client 的构造函数继续：创建 `/navigate_to_pose` client，补 `send_goal()` 与三个回调，再更新构建依赖并进行单点导航实测。7.4.1/7.4.2 已完成，不重复回退；7.4.3 只有在编译通过、Nav2 接受目标、持续收到反馈并最终成功到达后才完成。
+课程功能已经推进到 7.5 巡检闭环完成。下一步不是重写 7.4.3，而是同步 Ubuntu 中真正跑通的最终源码，并做干净重建、完整重启、异常路径与独立复现验收。
 
 第六章 `ros2_control` 已完成课程收尾：当前 launch 自动启动 joint state 与 diff drive 控制器，并只桥接一次 `/clock`；`scan_bridge` 与 Gazebo Server 统一继承 `gz_env`。仍应在每次完整重启后用控制器列表、publisher 详情、消息与 TF 做运行验收。
 
-9 月 29 日 `ros2/tf_test` 中的 5.3.3 C++ listener 仍是旧的未完成草稿；10 月 5 日课程工作区中的实时位姿查询已按截图跑通，但尚未同步到仓库。两份证据不混写：课程进度记 7.4.2 完成，仓库旧草稿仍保持原状态。Turtle Patrol、Service/Parameter/Launch 与历史独立验收继续保留。
+9 月 29 日 `ros2/tf_test` 中的 5.3.3 C++ listener 仍是旧的未完成草稿；10 月 5 日课程工作区中的实时位姿查询和 10 月 6 日巡检闭环都已按当日运行完成，但尚未同步最终源码。课程进度、仓库快照与独立掌握三类证据继续分开记录。Turtle Patrol、Service/Parameter/Launch 与历史独立验收继续保留。
