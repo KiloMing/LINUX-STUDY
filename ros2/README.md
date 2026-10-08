@@ -26,6 +26,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 2026-10-06 按当日实际运行完成 7.4.3 `NavigateToPose`、7.4.4 `FollowWaypoints` 与 7.5 巡检控制节点。巡检流程已连接自定义 `SpeechText` Service、speaker + `espeak-ng`、Gazebo camera bridge、`sensor_msgs/msg/Image`、`cv_bridge` 和 OpenCV 到点拍照；解决 `frame_id=msp`、yaw 单位、Timer 重复 Goal、Server 名称、Feedback 字段、rosidl 配置、`GZ_IP` 和 `latest_image_` 判空反向等问题。最终源码尚未从 Ubuntu 同步到仓库，详见 [当日完整记录](../daily/2026-10-06.md)。
 
+2026-10-08 学习至第八章 8.2.3：pluginlib 的 Shape、Square/Triangle、PLUGINLIB_EXPORT_CLASS、plugins.xml、CMake 注册和 ClassLoader；排查大小写、area() const 与 target 依赖问题。8.1.3 插件编译成功由用户明确确认；8.1.4 加载运行未确认。8.2 Planner Server/GlobalPlanner、Path/Twist、五个接口、WeakPtr/SharedPtr、StraightLinePlanner 框架和直线插值均为教学指导，编译及 Gazebo/Nav2 联调未确认。本机未找到源码且 Ubuntu SSH 认证失败，本次只归档文档。见 [当日记录](../daily/2026-10-08.md)。
+
 ## 完成证据
 
 能够独立建立 package 和节点数据流，解释输入/输出/参数/依赖，使用 ROS 2 命令定位问题，并完成 TF/URDF/RViz 的机器人模型实践。
@@ -37,7 +39,9 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-截至 2026-10-06，学习快照为 **7.4.3、7.4.4、7.5 已按当日运行完成**。当前优先同步 Ubuntu 最终运行源码并做干净构建、完整重启、异常路径和独立复现，不回退重做课程步骤。
+截至 2026-10-08，课程讲解推进到 **8.2.3**，第八章实际结果仅有用户确认的 **8.1.3 插件编译成功**。先获取实际 chapt8_ws，验证 8.1.4 加载与 8.2 构建/联调；不把教学示例当作已验证产物。
+
+第七章 **7.4.3、7.4.4、7.5 已按 10 月 6 日当日运行完成** 的记录继续保留；最终源码同步、干净构建、完整重启、异常路径和独立复现仍待完成。
 
 详见 [10 月 6 日巡检记录](../daily/2026-10-06.md)、[当前断点](../CURRENT.md) 与 [已有源码快照](chapt6_ws/README.md)。10 月 6 日最终源码尚未同步，本次只记录学习会话和运行确认能够证明的进度；独立掌握仍按验收记录，不上调等级。
 

@@ -21,20 +21,20 @@ Linux/C++ 系统能力
 
 ## 当前事实
 
-- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-06。
+- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-08。
 - 学习主题已从 Linux 基础、Git/Makefile、文件 I/O、进程、IPC、semaphore、mutex，推进到 ROS2 通信、TF、URDF 与 Xacro；各主题的独立掌握程度以验收证据为准。
 - 2026-09-11，2 Producer + 2 Consumer 已实际编译运行并正常退出；由于参考过完整答案，producer-consumer 保留 L2，不升 L3。
 - 当前已进入 TCP/Socket 基础实践：Echo Server 与教学引导下的多进程文本文件传输已跑通，Socket 当前记录为 L2。
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-10-06
+## 最新学习进度：2026-10-08
 
-**Chapter 7 / 7.4.3、7.4.4 与 7.5 已按当日运行完成。** `NavigateToPose` 单点导航和 `FollowWaypoints` 路点导航均已跑通，并组合出 A/B/C/D 巡检流程；到点后通过自定义 `SpeechText` Service 调用 speaker + `espeak-ng` 播报，同时保存 Gazebo 相机图像。
+**第八章已讲解至 8.2.3；8.1.3 插件编译成功由用户明确确认。** 已学习 pluginlib 的 Shape、Square/Triangle、导出与注册、ClassLoader，以及 Nav2 自定义 StraightLinePlanner 框架、智能指针和直线插值。8.1.4 实际加载运行、8.2 编译及 Gazebo/Nav2 联调均未确认。
 
-今天完整排查了 `frame_id=msp`、yaw 单位、Timer 重复发 Goal、Action Server 名称、Feedback 字段、rosidl 配置、camera bridge/`GZ_IP` 和 `latest_image_` 判断反向等问题。10 月 6 日最终源码仍在 Ubuntu 实际工作区，尚未同步到本仓库；当前完成状态来自当日真实运行确认，不冒充仓库内重建证据。
+本机未找到第八章实际源码，Ubuntu SSH 认证失败，本次只归档学习记录。第七章 10 月 6 日导航、语音和拍照巡检已按当日运行完成，但最终源码仍待同步与重建验收；MASTERY 保持不变。
 
-见 [今日详细学习与踩坑记录](daily/2026-10-06.md)、[CURRENT.md](CURRENT.md) 和 [ROS 2 主题索引](ros2/README.md)。
+见 [今日学习与排错记录](daily/2026-10-08.md)、[第七章巡检记录](daily/2026-10-06.md)、[CURRENT.md](CURRENT.md) 和 [ROS 2 主题索引](ros2/README.md)。
 
 ## 学习节奏
 
@@ -70,6 +70,8 @@ Linux/C++ 系统能力
 - [DAY6](DAY6/readme.md)：`mmap`、semaphore 与 mutex 练习。
 
 ## 近期每日记录
+
+- [2026-10-08](daily/2026-10-08.md)：pluginlib、三类编译排错与 Nav2 自定义规划器教学；8.1.3 编译已确认，加载测试及 8.2 编译/联调待验证。
 
 - [2026-10-06](daily/2026-10-06.md)：完成 NavigateToPose、FollowWaypoints 与巡检控制节点；串联 SpeechText/espeak-ng、Gazebo camera bridge、cv_bridge/OpenCV 拍照，并详录 frame、yaw、Timer、rosidl、GZ_IP 和判空错误。
 - [2026-10-05](daily/2026-10-05.md)：AMCL 初始位姿、四元数/yaw、TF 实时位姿、NavigateToPose Action 与 C++ Client 起步，以及 lifecycle/类型/语法踩坑。
