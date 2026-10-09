@@ -1,12 +1,12 @@
 # CURRENT
 
-最后更新：2026-10-08
+最后更新：2026-10-09
 
 ## 当前进度快照
 
-**第八章已学习至 8.2.3 直线插值讲解；不等于运行完成。** 8.1 pluginlib 已学习 Shape、Square/Triangle、导出、XML/CMake 注册与 ClassLoader。8.1.3 插件编译成功由用户明确确认；8.1.4 加载测试代码已讲解，实际运行成功尚未确认。8.2 Planner Server/GlobalPlanner、Path/Twist、五个接口、智能指针、StraightLinePlanner 框架和 createPlan 算法均属教学指导，编译及 Gazebo/Nav2 联调未确认。
+**第八章推进至 StraightLinePlanner 联调、Costmap 障碍物拒绝和纯 C++ 四/八方向 A*。** 学习者确认插件编译/注册、Planner Server 加载、RViz 路径与 MPPI 跟踪成功，障碍测试出现 cost=253。本次通过 Parallels 读取 Ubuntu 真实源码并确认共享库目标存在，重新编译运行八方向固定地图，路径为 `(1,1)->(2,1)->(3,1)->(3,2)->(4,3)`；ROS2 联调未重跑，四方向历史结果依学习者自述。
 
-10 月 8 日归档时，本机未找到第八章源码，Ubuntu SSH 认证失败，未能读取实际 `chapt8_ws`；本次仅更新记录，不生成聊天示例源码，不上调 MASTERY。见 [10 月 8 日学习与排错记录](daily/2026-10-08.md)。以下第七章运行确认及源码待归档事实继续保留。
+源码实际为循环后一次显式 unlock，异常时由 RAII 解锁，并非完全改为独立作用域释放。八方向包含 Octile、sqrt(2) 斜移和禁止切角，搜索主体仍在 main。见 [10 月 9 日核验与排错记录](daily/2026-10-09.md)。本次只归档文档，MASTERY 不变。
 
 **第七章历史运行快照：7.4.3、7.4.4 与 7.5 已按 10 月 6 日实际运行完成。** `NavigateToPose` 单点导航和 `/follow_waypoints` 路点导航均已跑通；巡检控制节点能按 A/B/C/D 导航，根据 `current_waypoint` 与最终 Result 识别到点，通过自定义 `SpeechText` Service 调用 speaker + `espeak-ng` 播报，并保存 Gazebo 相机的当前图像。
 
@@ -36,7 +36,7 @@
 
 ## 待验证
 
-- 第八章：实际 chapt8_ws 源码同步、8.1.4 插件加载输出、8.2 框架编译、直线路径边界处理及 Gazebo/Nav2 联调。8.1.3 用户确认编译成功不代表这些项目已完成。
+- 第八章：周期重规划日志、完整 footprint、astarSearch() 封装、Nav2 AStarPlanner、多场景无路/非法起终点/切角边界测试均未确认完成。8.1.4 Square/Triangle 独立加载输出仍待补，不能用 Nav2 加载结果替代。
 
 - 独立复现 FaceDetector 与 Patrol 的接口、Server、Client，保存最终源码、构建与运行输出；补测非法目标、服务缺席、请求失败、图片读取失败和空检测结果。
 
@@ -68,7 +68,7 @@
 
 ## 下一次测试
 
-第八章优先：恢复 Ubuntu 访问并定位实际 `chapt8_ws`；核对并同步真实源码，重新构建插件、运行 8.1.4 加载测试并保留输出。随后核对本机 GlobalPlanner 接口、构建 StraightLinePlanner、检查直线插值边界，再做 Gazebo/Nav2 联调。详见 [10 月 8 日测试清单](daily/2026-10-08.md)。
+第八章优先：用真实 A* 源码补无路、非法/被阻塞起终点和切角边界测试，再封装 astarSearch() 并推进 Nav2 AStarPlanner；补周期重规划日志、完整 footprint 与干净插件重建/重启证据。详见 [10 月 9 日清单](daily/2026-10-09.md)。
 
 第七章待归档与验收清单继续保留：
 
@@ -81,7 +81,7 @@
 
 ## 下一步
 
-课程讲解已推进到第八章 8.2.3，先补第八章源码与运行证据。第七章 7.5 巡检闭环的当日运行确认保持有效，仍需同步 Ubuntu 中真正跑通的最终源码，并做干净重建、完整重启、异常路径与独立复现验收。
+第八章当前已推进至直线规划器联调与纯 C++ 八方向 A*，下一步补边界测试、函数封装及 Nav2 A* 集成。第七章 7.5 巡检闭环的当日运行确认保持有效，仍需同步 Ubuntu 中真正跑通的最终源码，并做干净重建、完整重启、异常路径与独立复现验收。
 
 第六章 `ros2_control` 已完成课程收尾：当前 launch 自动启动 joint state 与 diff drive 控制器，并只桥接一次 `/clock`；`scan_bridge` 与 Gazebo Server 统一继承 `gz_env`。仍应在每次完整重启后用控制器列表、publisher 详情、消息与 TF 做运行验收。
 

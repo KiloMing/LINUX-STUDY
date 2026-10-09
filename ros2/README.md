@@ -28,6 +28,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 2026-10-08 学习至第八章 8.2.3：pluginlib 的 Shape、Square/Triangle、PLUGINLIB_EXPORT_CLASS、plugins.xml、CMake 注册和 ClassLoader；排查大小写、area() const 与 target 依赖问题。8.1.3 插件编译成功由用户明确确认；8.1.4 加载运行未确认。8.2 Planner Server/GlobalPlanner、Path/Twist、五个接口、WeakPtr/SharedPtr、StraightLinePlanner 框架和直线插值均为教学指导，编译及 Gazebo/Nav2 联调未确认。本机未找到源码且 Ubuntu SSH 认证失败，本次只归档文档。见 [当日记录](../daily/2026-10-08.md)。
 
+2026-10-09 已归档直线规划器编译/加载、RViz 与 MPPI 联调确认，Costmap 障碍物拒绝及四/八方向 A*。本次读取真实源码并重新编译运行八方向固定地图，记录循环后显式 unlock 的真实状态，见 [当日记录](../daily/2026-10-09.md)。
+
 ## 完成证据
 
 能够独立建立 package 和节点数据流，解释输入/输出/参数/依赖，使用 ROS 2 命令定位问题，并完成 TF/URDF/RViz 的机器人模型实践。
@@ -39,7 +41,7 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-截至 2026-10-08，课程讲解推进到 **8.2.3**，第八章实际结果仅有用户确认的 **8.1.3 插件编译成功**。先获取实际 chapt8_ws，验证 8.1.4 加载与 8.2 构建/联调；不把教学示例当作已验证产物。
+截至 2026-10-09，推进至直线规划器联调与纯 C++ 八方向 A*。下一步补无路/非法起终点/切角边界测试、astarSearch() 封装与 Nav2 AStarPlanner；周期重规划日志和完整 footprint 仍待完成。8.1.4 独立加载输出待补，不能由 Nav2 加载结果替代。
 
 第七章 **7.4.3、7.4.4、7.5 已按 10 月 6 日当日运行完成** 的记录继续保留；最终源码同步、干净构建、完整重启、异常路径和独立复现仍待完成。
 
