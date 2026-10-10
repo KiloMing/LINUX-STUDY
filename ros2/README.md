@@ -30,6 +30,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 2026-10-09 已归档直线规划器编译/加载、RViz 与 MPPI 联调确认，Costmap 障碍物拒绝及四/八方向 A*。本次读取真实源码并重新编译运行八方向固定地图，记录循环后显式 unlock 的真实状态，见 [当日记录](../daily/2026-10-09.md)。
 
+2026-10-10 已按学习会话确认 A* 不可达测试、astarSearch() 封装和 start==goal 单点路径，AStarPlanner 插件框架构建与 pluginlib 发现成功。记录 Costmap 转换、Path/MPPI 职责、算法拆分拼写/声明错误及 createPlan() 审查问题；尚无 Gazebo 绕障成功证据，Action 状态与速度超时异常待定位。本次未重跑 ROS2，MASTERY 不变，见 [当日记录](../daily/2026-10-10.md)。
+
 ## 完成证据
 
 能够独立建立 package 和节点数据流，解释输入/输出/参数/依赖，使用 ROS 2 命令定位问题，并完成 TF/URDF/RViz 的机器人模型实践。
@@ -41,7 +43,7 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-截至 2026-10-09，推进至直线规划器联调与纯 C++ 八方向 A*。下一步补无路/非法起终点/切角边界测试、astarSearch() 封装与 Nav2 AStarPlanner；周期重规划日志和完整 footprint 仍待完成。8.1.4 独立加载输出待补，不能由 Nav2 加载结果替代。
+截至 2026-10-10，已推进至 AStarPlanner 集成实现与审查。下一步先确认 waypoint_follower 异常触发阶段、lifecycle 状态和 Planner Server 前序日志，再核验 createPlan() 修正、重新构建并测试实际绕障和异常场景。搜索内部取消、周期重规划、完整 footprint 与切角边界仍待验证。8.1.4 独立加载输出待补，不能由 Nav2 加载结果替代。
 
 第七章 **7.4.3、7.4.4、7.5 已按 10 月 6 日当日运行完成** 的记录继续保留；最终源码同步、干净构建、完整重启、异常路径和独立复现仍待完成。
 

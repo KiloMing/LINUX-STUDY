@@ -1,12 +1,14 @@
 # CURRENT
 
-最后更新：2026-10-09
+最后更新：2026-10-10
 
 ## 当前进度快照
 
-**第八章推进至 StraightLinePlanner 联调、Costmap 障碍物拒绝和纯 C++ 四/八方向 A*。** 学习者确认插件编译/注册、Planner Server 加载、RViz 路径与 MPPI 跟踪成功，障碍测试出现 cost=253。本次通过 Parallels 读取 Ubuntu 真实源码并确认共享库目标存在，重新编译运行八方向固定地图，路径为 `(1,1)->(2,1)->(3,1)->(3,2)->(4,3)`；ROS2 联调未重跑，四方向历史结果依学习者自述。
+**第八章已推进至 AStarPlanner 集成实现与代码审查。** 按学习者当日确认和对话，A* 不可达测试得到 `No path found !`，已封装 astarSearch()、修正 goal_y、加入输入边界检查，并验证 start==goal 返回单点路径 `(1,1)`。AStarPlanner 插件框架 colcon build 成功，pluginlib 可发现；已学习 Costmap 坐标转换、Path/MPPI 职责并开始算法模块拆分。
 
-源码实际为循环后一次显式 unlock，异常时由 RAII 解锁，并非完全改为独立作用域释放。八方向包含 Octile、sqrt(2) 斜移和禁止切角，搜索主体仍在 main。见 [10 月 9 日核验与排错记录](daily/2026-10-09.md)。本次只归档文档，MASTERY 不变。
+createPlan() 的残留 throw、取消条件、blocked 分配、origin 赋值、锁作用域、StartOccupied 与 `<cmath>` 等修正仍需核验。waypoint_follower 出现 Goal inactive、callback missed deadline、cancel goal unavailable，底盘出现 velocity timeout；触发阶段和原因未定位，不能归因于 A*。尚无 Gazebo AStarPlanner 绕障成功证据。本次只归档对话，未重跑 ROS2，MASTERY 不变。见 [10 月 10 日记录](daily/2026-10-10.md)。
+
+10 月 9 日真实源码核验与八方向固定地图重跑的历史证据保留；当天搜索仍在 main、循环后显式 unlock 的状态见 [历史记录](daily/2026-10-09.md)，不能作为今天最终集成代码已核验的证据。
 
 **第七章历史运行快照：7.4.3、7.4.4 与 7.5 已按 10 月 6 日实际运行完成。** `NavigateToPose` 单点导航和 `/follow_waypoints` 路点导航均已跑通；巡检控制节点能按 A/B/C/D 导航，根据 `current_waypoint` 与最终 Result 识别到点，通过自定义 `SpeechText` Service 调用 speaker + `espeak-ng` 播报，并保存 Gazebo 相机的当前图像。
 
@@ -36,7 +38,7 @@
 
 ## 待验证
 
-- 第八章：周期重规划日志、完整 footprint、astarSearch() 封装、Nav2 AStarPlanner、多场景无路/非法起终点/切角边界测试均未确认完成。8.1.4 Square/Triangle 独立加载输出仍待补，不能用 Nav2 加载结果替代。
+- 第八章：createPlan() 最终修正、干净重建与实际绕障、搜索内部取消、周期重规划、完整 footprint、非法/被占据起终点和切角边界仍待验证。无路和 start==goal 已有会话结果，函数封装及插件框架编译/发现已确认，不扩大为完整集成完成。8.1.4 Square/Triangle 独立加载输出仍待补，不能用 Nav2 加载结果替代。
 
 - 独立复现 FaceDetector 与 Patrol 的接口、Server、Client，保存最终源码、构建与运行输出；补测非法目标、服务缺席、请求失败、图片读取失败和空检测结果。
 
@@ -68,7 +70,7 @@
 
 ## 下一次测试
 
-第八章优先：用真实 A* 源码补无路、非法/被阻塞起终点和切角边界测试，再封装 astarSearch() 并推进 Nav2 AStarPlanner；补周期重规划日志、完整 footprint 与干净插件重建/重启证据。详见 [10 月 9 日清单](daily/2026-10-09.md)。
+第八章优先：定位 waypoint_follower 异常触发阶段，检查 lifecycle 状态及 Planner Server 前序日志；核对 createPlan() 审查项，重新构建、完整重启并验证实际绕障和异常场景。补搜索内部取消、周期重规划、完整 footprint 与最终源码证据。详见 [10 月 10 日清单](daily/2026-10-10.md)。
 
 第七章待归档与验收清单继续保留：
 
@@ -81,7 +83,7 @@
 
 ## 下一步
 
-第八章当前已推进至直线规划器联调与纯 C++ 八方向 A*，下一步补边界测试、函数封装及 Nav2 A* 集成。第七章 7.5 巡检闭环的当日运行确认保持有效，仍需同步 Ubuntu 中真正跑通的最终源码，并做干净重建、完整重启、异常路径与独立复现验收。
+第八章当前已推进至 AStarPlanner 集成审查，下一步定位 Action 异常并核验完整导航；插件可发现不等于 Gazebo 绕障成功。第七章 7.5 巡检闭环的当日运行确认保持有效，仍需同步 Ubuntu 中真正跑通的最终源码，并做干净重建、完整重启、异常路径与独立复现验收。
 
 第六章 `ros2_control` 已完成课程收尾：当前 launch 自动启动 joint state 与 diff drive 控制器，并只桥接一次 `/clock`；`scan_bridge` 与 Gazebo Server 统一继承 `gz_env`。仍应在每次完整重启后用控制器列表、publisher 详情、消息与 TF 做运行验收。
 

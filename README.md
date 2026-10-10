@@ -21,18 +21,18 @@ Linux/C++ 系统能力
 
 ## 当前事实
 
-- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-09。
+- 仓库保留 DAY1–DAY6 原始记录，daily 学习快照已更新至 2026-10-10。
 - 学习主题已从 Linux 基础、Git/Makefile、文件 I/O、进程、IPC、semaphore、mutex，推进到 ROS2 通信、TF、URDF 与 Xacro；各主题的独立掌握程度以验收证据为准。
 - 2026-09-11，2 Producer + 2 Consumer 已实际编译运行并正常退出；由于参考过完整答案，producer-consumer 保留 L2，不升 L3。
 - 当前已进入 TCP/Socket 基础实践：Echo Server 与教学引导下的多进程文本文件传输已跑通，Socket 当前记录为 L2。
 - condition variable、rwlock 及后续阶段均须通过独立任务确认，不直接写成“已掌握”。
 - 原始笔记与源码保留原路径；发现的程序问题作为后续调试练习，不在整理时偷偷修正。
 
-## 最新学习进度：2026-10-09
+## 最新学习进度：2026-10-10
 
-StraightLinePlanner 编译/注册、Nav2 加载、RViz 路径和 MPPI 跟踪已由学习者确认；新增 Costmap 障碍物拒绝、互斥锁排错与四/八方向 A* 记录。本次读取 Ubuntu 真实源码，重新编译运行八方向固定地图通过，记录循环后显式 unlock 与摘要的差异。
+A* 已完成不可达测试、astarSearch() 封装、goal_y 修正及 start==goal 单点路径验证；AStarPlanner 插件框架 colcon build 成功并可由 pluginlib 发现（当日学习会话证据）。已学习 Costmap 坐标转换、Path/MPPI 职责并开始算法拆分，createPlan() 进入实现与代码审查。
 
-周期重规划、完整 footprint、astarSearch() 封装、Nav2 AStarPlanner 和多场景边界测试仍待完成；MASTERY 不变，第七章源码归档和独立验收继续保留。见 [今日记录](daily/2026-10-09.md)、[当前断点](CURRENT.md) 与 [ROS 2 索引](ros2/README.md)。
+Waypoint Follower Action 状态异常与底盘速度超时尚待定位，不能归因于 A*；尚无 Gazebo AStarPlanner 绕障成功证据。本次未重跑 ROS2，MASTERY 不变。见 [今日记录](daily/2026-10-10.md)、[当前断点](CURRENT.md) 与 [ROS 2 索引](ros2/README.md)。
 
 ## 学习节奏
 
@@ -68,6 +68,8 @@ StraightLinePlanner 编译/注册、Nav2 加载、RViz 路径和 MPPI 跟踪已�
 - [DAY6](DAY6/readme.md)：`mmap`、semaphore 与 mutex 练习。
 
 ## 近期每日记录
+
+- [2026-10-10](daily/2026-10-10.md)：A* 封装与边界检查、AStarPlanner 插件框架构建/发现、Costmap→Path 集成审查及未定位的 Action/速度超时异常。
 
 - [2026-10-09](daily/2026-10-09.md)：直线规划器、Costmap、互斥锁排错及四/八方向 A*；真实源码核验与八方向重跑。
 

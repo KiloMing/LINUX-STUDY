@@ -12,7 +12,9 @@
 
 旧记录仍保留在 `DAY1/`–`DAY6/`。从新结构启用后，使用 `YYYY-MM-DD.md` 命名。
 
-最新记录：[2026-10-09](2026-10-09.md)：StraightLinePlanner、Costmap 障碍物检查、锁排错与四/八方向 A*。已读取真实源码并重跑八方向固定地图；保留重规划、footprint、函数封装、Nav2 A* 与边界测试待办。
+最新记录：[2026-10-10](2026-10-10.md)：A* 不可达与单点路径、函数封装、Costmap 转换、AStarPlanner 插件框架构建/发现及 createPlan() 审查；Action 异常待定位，Gazebo 绕障未验证，MASTERY 不变。
+
+[2026-10-09](2026-10-09.md)：StraightLinePlanner、Costmap 障碍物检查、锁排错与四/八方向 A*。已读取真实源码并重跑八方向固定地图；当日待办后续进展以 10 月 10 日记录为准。
 
 [2026-10-08](2026-10-08.md) 保留 pluginlib 与规划器教学阶段历史证据。
 
