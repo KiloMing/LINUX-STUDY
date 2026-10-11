@@ -1,6 +1,8 @@
 # RGB-D 视觉 SLAM 应用路线
 
-更新：2026-10-11。前置里程碑：学习者确认激光雷达 SLAM + Nav2 仿真已跑通，ROS2 第八章结束。以下均是待实施计划，不代表已经运行通过。
+更新：2026-10-11。前置里程碑：学习者确认激光雷达 SLAM + Nav2 仿真已跑通，ROS2 第八章结束。第一阶段已有部分运行确认，其余任务仍为待实施/待验收，不代表全部运行通过。
+
+10 月 11 日进展：Gazebo RGB/Depth 显示、PointCloud2 桥接、RViz 点云显示已由学习者确认。点云 frame_id 为 `second_robot/base_footprint/camera_sensor`，临时 static_transform_publisher 补齐 TF 后显示成功；下一步工程化 TF、同步最终相机/bridge/launch 并补齐传感器验收，再继续 RTAB-Map。本仓库尚未同步这些最终源码，详见 [今日记录](../daily/2026-10-11.md)。
 
 目标：使用成熟的 RTAB-Map 与 Nav2 完成从仿真到 FET3588 实体移动机器人的系统集成。当前不以研究视觉 SLAM 算法为主线，已有 Linux/C++、ROS2、TF、差速控制与导航知识继续复用。
 

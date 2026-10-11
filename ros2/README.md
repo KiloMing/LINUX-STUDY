@@ -10,6 +10,8 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前证据
 
+2026-10-11 第九章 RGB-D 仿真：学习者确认 Gazebo RGB/Depth 显示、PointCloud2 桥接与 RViz 点云显示成功。点云 `frame_id=second_robot/base_footprint/camera_sensor`，临时 static_transform_publisher 补齐与 camera_link 的零变换后显示成功。TF 工程化、四条相机 bridge/最终 launch 同步和 RTAB-Map 仍待完成；本地旧 launch 仅桥接 `/clock`，不代表今天运行版本。本次只归档文档、未重跑仿真，见 [今日记录](../daily/2026-10-11.md)。
+
 2026-09-21 已在本地创建 `ament_cmake` C++ package，开始练习 `rclcpp` 依赖、`add_executable`、`ament_target_dependencies`、`install(TARGETS ...)`、`ament_package()`、`colcon build`、`source install/setup.bash`、`ros2 pkg executables` 和 `ros2 run`。当前 package 已可被 ROS2 发现，并能查询已安装 executable；曾因 target 名不一致出现 `No executable found`。这属于 guided 入门证据，ROS2 构建基础记 L1；尚无独立 node/topic 数据流，当时 TF2/URDF/RViz 尚未开始；后续课程进度见下文，独立掌握仍按验收记录。
 
 2026-09-23 已完成 `time_topic` 定时发布（学习者自述），并开始 Subscription。新增 Timer 句柄与创建、lambda 捕获、Executor 调度以及 CMake target 未定义问题的记录，见 [当日笔记](../daily/2026-09-23.md)。
@@ -43,7 +45,7 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 视觉巡航教学计划
 
-[第九至十五章教学计划与流程](VISUAL_PATROL_TEACHING_PLAN.md)：24 个学习单元，贯穿 RGB-D 仿真、建图定位、导航、多点巡航、拍照、异常处理及真机部署。第一课交付相机接口表、配置快照和缺失项清单。该计划待实施，课程进度继续以 CURRENT 和 daily 验收记录为准。
+[第九至十五章教学计划与流程](VISUAL_PATROL_TEACHING_PLAN.md)：24 个学习单元，贯穿 RGB-D 仿真、建图定位、导航、多点巡航、拍照、异常处理及真机部署。第一课交付相机接口表、配置快照和缺失项清单。该计划已开始 RGB-D 仿真学习，完整验收与后续课次继续以 CURRENT 和 daily 记录为准。
 
 ## 当前学习顺序
 

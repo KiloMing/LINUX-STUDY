@@ -4,6 +4,8 @@
 
 ## 当前进度快照
 
+**第九章最新断点（2026-10-11）：** 学习者确认 Gazebo RGB/Depth 显示、PointCloud2 桥接和 RViz 点云显示已跑通。点云 `frame_id=second_robot/base_footprint/camera_sensor`；临时补充 `camera_link` 到该坐标系的零变换后显示成功。TF 兼容方案仍待工程化，之后继续 RTAB-Map。仓库 camera Xacro 已有 RGB-D 传感器，但没有兼容 TF；旧 launch 仅有 `/clock` bridge，四条相机 bridge 与最终 launch 待从 Ubuntu 同步。本次未重跑仿真，详见 [今日 RGB-D 记录](daily/2026-10-11.md)。
+
 **激光雷达 SLAM + Nav2 仿真已跑通，第八章结束。** 这是学习者在 2026-10-11 明确确认的课程与运行进度；自定义 A* 已进入后续优化阶段。下一阶段主线调整为 **Gazebo RGB-D → RTAB-Map 建图/定位 → Nav2 导航 → Gemini Pro 真机相机 → FET3588 部署 → 实体底盘集成**，以成熟视觉 SLAM 框架的应用和系统集成为目标。
 
 本次只更新文档，没有重跑 ROS2/Gazebo，也没有取得 Ubuntu 中今天的最终 A* 源码和完整日志。课程结束不等于所有异常分支、碰撞安全或独立掌握均已验收；MASTERY 不变。今天的 `planner_server`、`GoalOccupied` 与索引初始化排错主题及证据缺口见 [10 月 11 日记录](daily/2026-10-11.md)，具体下一阶段任务见 [RGB-D 应用路线](ros2/RGBD_ROADMAP.md)。10 月 9、10 日记录保留为当时状态，不再作为当前学习断点。
@@ -73,9 +75,9 @@
 
 ## 下一次测试
 
-执行 [视觉巡航教学计划第一课](ros2/VISUAL_PATROL_TEACHING_PLAN.md)：先整理相机接口表、当前配置快照和缺失项，再推进以下 RGB-D 传感器验收。教学计划已制定，尚未计入实际完成课次。
+执行 [视觉巡航教学计划第一课](ros2/VISUAL_PATROL_TEACHING_PLAN.md)：先整理相机接口表、当前配置快照和缺失项，再推进以下 RGB-D 传感器验收。教学计划已制定，RGB-D 显示与临时 TF 验证已有上述运行确认，完整课次验收仍待补齐。
 
-下一次主任务：检查 Ubuntu `~/my_ros/chapt6_ws` 的相机模型和 Gazebo/ros_gz 版本，区分普通 RGB 与 RGB-D 传感器；配置 RGB、Depth、CameraInfo 和点云桥接，验证频率、时间戳、深度单位、图像对齐、光学坐标系与 RViz 显示。保持 `/clock` 单一发布，保存配置和短 rosbag。此关通过后再启动 RTAB-Map，详见 [第一阶段验收](ros2/RGBD_ROADMAP.md)。
+下一次主任务：先同步最终运行源码并工程化 TF 兼容方案，再检查 Ubuntu `~/my_ros/chapt6_ws` 的相机模型和 Gazebo/ros_gz 版本，区分普通 RGB 与 RGB-D 传感器；配置 RGB、Depth、CameraInfo 和点云桥接，验证频率、时间戳、深度单位、图像对齐、光学坐标系与 RViz 显示。保持 `/clock` 单一发布，保存配置和短 rosbag。此关通过后再启动 RTAB-Map，详见 [第一阶段验收](ros2/RGBD_ROADMAP.md)。
 
 并行归档：同步今天真正跑通的 A* 源码和日志，补齐 planner_server、GoalOccupied、索引初始化的发生条件与修复前后证据；A* 距障和速度时间戳问题作为遗留项跟进，不再把它们写成“第八章尚未结束”。
 
