@@ -41,6 +41,10 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 按 workspace 或明确主题建立子目录。不要提交 `build/`、`install/`、`log/`；记录所用发行版与官方文档链接。
 
 
+## 视觉巡航教学计划
+
+[第九至十五章教学计划与流程](VISUAL_PATROL_TEACHING_PLAN.md)：24 个学习单元，贯穿 RGB-D 仿真、建图定位、导航、多点巡航、拍照、异常处理及真机部署。第一课交付相机接口表、配置快照和缺失项清单。该计划待实施，课程进度继续以 CURRENT 和 daily 验收记录为准。
+
 ## 当前学习顺序
 
 截至 2026-10-11，**激光雷达 SLAM + Nav2 仿真已跑通，第八章结束**（学习者明确确认）。当前进入 **Gazebo RGB-D → RTAB-Map 建图/定位 → Nav2 导航 → Gemini Pro 真机相机 → FET3588 部署 → 实体底盘集成**。详细任务、接口与逐阶段验收见 [RGB-D 视觉 SLAM 应用路线](RGBD_ROADMAP.md)。

@@ -73,6 +73,8 @@
 
 ## 下一次测试
 
+执行 [视觉巡航教学计划第一课](ros2/VISUAL_PATROL_TEACHING_PLAN.md)：先整理相机接口表、当前配置快照和缺失项，再推进以下 RGB-D 传感器验收。教学计划已制定，尚未计入实际完成课次。
+
 下一次主任务：检查 Ubuntu `~/my_ros/chapt6_ws` 的相机模型和 Gazebo/ros_gz 版本，区分普通 RGB 与 RGB-D 传感器；配置 RGB、Depth、CameraInfo 和点云桥接，验证频率、时间戳、深度单位、图像对齐、光学坐标系与 RViz 显示。保持 `/clock` 单一发布，保存配置和短 rosbag。此关通过后再启动 RTAB-Map，详见 [第一阶段验收](ros2/RGBD_ROADMAP.md)。
 
 并行归档：同步今天真正跑通的 A* 源码和日志，补齐 planner_server、GoalOccupied、索引初始化的发生条件与修复前后证据；A* 距障和速度时间戳问题作为遗留项跟进，不再把它们写成“第八章尚未结束”。

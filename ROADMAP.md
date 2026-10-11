@@ -6,6 +6,8 @@
 
 路线按前置关系排列。阶段可以因真实项目、掌握证据或技术变化调整，但不能只因为“想跳过”而跳过。
 
+具体教学按 [视觉巡航教学计划](ros2/VISUAL_PATROL_TEACHING_PLAN.md) 推进：24 个学习单元，每课安排原理、最小实验、独立变式与验收；课次不等于固定工期。
+
 ## 时间与安排
 
 主线：Linux/C++ → Socket/调试 → CMake → ROS2/TF/URDF/ros2_control → 激光雷达 SLAM + Nav2 仿真（已跑通）→ Gazebo RGB-D → RTAB-Map 建图/定位 → Nav2 视觉导航 → Gemini Pro 真机相机 → FET3588 部署 → 实体底盘集成。
