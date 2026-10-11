@@ -43,7 +43,9 @@ Socket 基础、现代 CMake 与必要的 C++ 能力；实际 Ubuntu/ROS 版本�
 
 ## 当前学习顺序
 
-截至 2026-10-10，已推进至 AStarPlanner 集成实现与审查。下一步先确认 waypoint_follower 异常触发阶段、lifecycle 状态和 Planner Server 前序日志，再核验 createPlan() 修正、重新构建并测试实际绕障和异常场景。搜索内部取消、周期重规划、完整 footprint 与切角边界仍待验证。8.1.4 独立加载输出待补，不能由 Nav2 加载结果替代。
+截至 2026-10-11，**激光雷达 SLAM + Nav2 仿真已跑通，第八章结束**（学习者明确确认）。当前进入 **Gazebo RGB-D → RTAB-Map 建图/定位 → Nav2 导航 → Gemini Pro 真机相机 → FET3588 部署 → 实体底盘集成**。详细任务、接口与逐阶段验收见 [RGB-D 视觉 SLAM 应用路线](RGBD_ROADMAP.md)。
+
+下一次只先验收 Gazebo 的 RGB、Depth、CameraInfo、点云与 TF/时间同步，再接 RTAB-Map。A* 距障优化、速度指令时间戳异常、最终源码和独立复现转为遗留项；今天排错主题与未取得的证据见 [10 月 11 日记录](../daily/2026-10-11.md)。本次文档归档未重跑 ROS2，MASTERY 不变。
 
 第七章 **7.4.3、7.4.4、7.5 已按 10 月 6 日当日运行完成** 的记录继续保留；最终源码同步、干净构建、完整重启、异常路径和独立复现仍待完成。
 

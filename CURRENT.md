@@ -1,14 +1,12 @@
 # CURRENT
 
-最后更新：2026-10-10
+最后更新：2026-10-11
 
 ## 当前进度快照
 
-**第八章已推进至 AStarPlanner 集成实现与代码审查。** 按学习者当日确认和对话，A* 不可达测试得到 `No path found !`，已封装 astarSearch()、修正 goal_y、加入输入边界检查，并验证 start==goal 返回单点路径 `(1,1)`。AStarPlanner 插件框架 colcon build 成功，pluginlib 可发现；已学习 Costmap 坐标转换、Path/MPPI 职责并开始算法模块拆分。
+**激光雷达 SLAM + Nav2 仿真已跑通，第八章结束。** 这是学习者在 2026-10-11 明确确认的课程与运行进度；自定义 A* 已进入后续优化阶段。下一阶段主线调整为 **Gazebo RGB-D → RTAB-Map 建图/定位 → Nav2 导航 → Gemini Pro 真机相机 → FET3588 部署 → 实体底盘集成**，以成熟视觉 SLAM 框架的应用和系统集成为目标。
 
-createPlan() 的残留 throw、取消条件、blocked 分配、origin 赋值、锁作用域、StartOccupied 与 `<cmath>` 等修正仍需核验。waypoint_follower 出现 Goal inactive、callback missed deadline、cancel goal unavailable，底盘出现 velocity timeout；触发阶段和原因未定位，不能归因于 A*。尚无 Gazebo AStarPlanner 绕障成功证据。本次只归档对话，未重跑 ROS2，MASTERY 不变。见 [10 月 10 日记录](daily/2026-10-10.md)。
-
-10 月 9 日真实源码核验与八方向固定地图重跑的历史证据保留；当天搜索仍在 main、循环后显式 unlock 的状态见 [历史记录](daily/2026-10-09.md)，不能作为今天最终集成代码已核验的证据。
+本次只更新文档，没有重跑 ROS2/Gazebo，也没有取得 Ubuntu 中今天的最终 A* 源码和完整日志。课程结束不等于所有异常分支、碰撞安全或独立掌握均已验收；MASTERY 不变。今天的 `planner_server`、`GoalOccupied` 与索引初始化排错主题及证据缺口见 [10 月 11 日记录](daily/2026-10-11.md)，具体下一阶段任务见 [RGB-D 应用路线](ros2/RGBD_ROADMAP.md)。10 月 9、10 日记录保留为当时状态，不再作为当前学习断点。
 
 **第七章历史运行快照：7.4.3、7.4.4 与 7.5 已按 10 月 6 日实际运行完成。** `NavigateToPose` 单点导航和 `/follow_waypoints` 路点导航均已跑通；巡检控制节点能按 A/B/C/D 导航，根据 `current_waypoint` 与最终 Result 识别到点，通过自定义 `SpeechText` Service 调用 speaker + `espeak-ng` 播报，并保存 Gazebo 相机的当前图像。
 
@@ -38,7 +36,7 @@ createPlan() 的残留 throw、取消条件、blocked 分配、origin 赋值、�
 
 ## 待验证
 
-- 第八章：createPlan() 最终修正、干净重建与实际绕障、搜索内部取消、周期重规划、完整 footprint、非法/被占据起终点和切角边界仍待验证。无路和 start==goal 已有会话结果，函数封装及插件框架编译/发现已确认，不扩大为完整集成完成。8.1.4 Square/Triangle 独立加载输出仍待补，不能用 Nav2 加载结果替代。
+- 第八章课程已结束；待补的是最终源码同步、干净重建与重启证据，以及搜索取消、周期重规划、完整 footprint、非法/被占据起终点和切角边界测试。10 月 10 日 createPlan() 审查项需对最终源码逐项核验。8.1.4 Square/Triangle 独立加载输出仍待补，不阻塞 RGB-D 仿真起步。
 
 - 独立复现 FaceDetector 与 Patrol 的接口、Server、Client，保存最终源码、构建与运行输出；补测非法目标、服务缺席、请求失败、图片读取失败和空检测结果。
 
@@ -50,6 +48,11 @@ createPlan() 的残留 throw、取消条件、blocked 分配、origin 赋值、�
 - producer-consumer 闭卷独立复现、3P2C 最终运行证据及 rwlock 源码/输出仍待补齐。
 
 ## 当前问题/待解决
+
+- A* 路径靠近障碍物：机器人 footprint/碰撞半径、膨胀层与路径代价策略待联合核验；狭窄通道规划和跟踪仍需优化。
+- 底盘速度指令时间戳异常与 `Velocity command timed out. Braking.` 尚需定位。检查仿真时钟、消息类型/时间戳、速度发布频率及控制器超时，不能直接断言由 A* 或 waypoint_follower 引起。
+- 今天 `planner_server`、`GoalOccupied` 和索引初始化的完整日志/最终改动未返回，暂不把某个具体原因或修复写成已验证结论。
+- Gemini Pro 的深度 USB 识别已有引用会话记录（`2bc5:0614`，480 Mbps）；RGB 接口、兼容驱动、RGB-D 对齐、ROS2 数据与 USB 链路稳定性仍待验证。
 
 - 10 月 6 日的最终 `NavigateToPose`、`FollowWaypoints`、巡检控制器、speaker、`SpeechText.srv` 与 camera bridge 源码仍在 Ubuntu 实际工作区，尚未同步到本仓库。下一次必须从最终运行版本同步，而不是使用对话附件中的修复前快照。
 - 仓库内尚不能重新检查当天 CMake/package.xml 的 Action、rosidl、`sensor_msgs`、`cv_bridge` 与 OpenCV 配置，也没有保存干净构建、完整重启和 A/B/C/D 每点一次语音/照片的运行证据。
@@ -70,7 +73,9 @@ createPlan() 的残留 throw、取消条件、blocked 分配、origin 赋值、�
 
 ## 下一次测试
 
-第八章优先：定位 waypoint_follower 异常触发阶段，检查 lifecycle 状态及 Planner Server 前序日志；核对 createPlan() 审查项，重新构建、完整重启并验证实际绕障和异常场景。补搜索内部取消、周期重规划、完整 footprint 与最终源码证据。详见 [10 月 10 日清单](daily/2026-10-10.md)。
+下一次主任务：检查 Ubuntu `~/my_ros/chapt6_ws` 的相机模型和 Gazebo/ros_gz 版本，区分普通 RGB 与 RGB-D 传感器；配置 RGB、Depth、CameraInfo 和点云桥接，验证频率、时间戳、深度单位、图像对齐、光学坐标系与 RViz 显示。保持 `/clock` 单一发布，保存配置和短 rosbag。此关通过后再启动 RTAB-Map，详见 [第一阶段验收](ros2/RGBD_ROADMAP.md)。
+
+并行归档：同步今天真正跑通的 A* 源码和日志，补齐 planner_server、GoalOccupied、索引初始化的发生条件与修复前后证据；A* 距障和速度时间戳问题作为遗留项跟进，不再把它们写成“第八章尚未结束”。
 
 第七章待归档与验收清单继续保留：
 
@@ -83,7 +88,7 @@ createPlan() 的残留 throw、取消条件、blocked 分配、origin 赋值、�
 
 ## 下一步
 
-第八章当前已推进至 AStarPlanner 集成审查，下一步定位 Action 异常并核验完整导航；插件可发现不等于 Gazebo 绕障成功。第七章 7.5 巡检闭环的当日运行确认保持有效，仍需同步 Ubuntu 中真正跑通的最终源码，并做干净重建、完整重启、异常路径与独立复现验收。
+按 RGB-D 六阶段路线推进，先完成仿真传感器验收，再验证建图、保存/加载、定位和 Nav2。首次视觉导航联调使用官方规划器建立基线，之后再对比自定义 A*。真机相机、FET3588 与底盘分别验收后集成。第七、八章最终源码和独立复现证据继续补齐。
 
 第六章 `ros2_control` 已完成课程收尾：当前 launch 自动启动 joint state 与 diff drive 控制器，并只桥接一次 `/clock`；`scan_bridge` 与 Gazebo Server 统一继承 `gz_env`。仍应在每次完整重启后用控制器列表、publisher 详情、消息与 TF 做运行验收。
 

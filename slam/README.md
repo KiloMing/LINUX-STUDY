@@ -6,9 +6,11 @@
 
 ## 前置
 
-ROS 2 通信与调试、TF2/URDF/RViz、运动学、可靠 odom、IMU/LiDAR 数据和时间/坐标一致性。
+ROS 2 通信与调试、TF2/URDF/RViz、运动学、可靠 odom、所选传感器数据和时间/坐标一致性；RGB-D 路线需同步的 RGB、Depth 与 CameraInfo。
 
 ## 当前证据
+
+**2026-10-11：激光雷达 SLAM + Nav2 仿真已跑通，第八章结束**（学习者确认，本次未重跑）。当前主线转入 [RGB-D 视觉 SLAM 应用路线](../ros2/RGBD_ROADMAP.md)。A* 距障、速度时间戳异常与排错补证见 [当日记录](../daily/2026-10-11.md)。下述 10 月 4、5 日内容为历史快照，不是当前断点。
 
 2026-10-04 已完成 Chapter 7 / 7.2.1 SLAM Toolbox 在线建图，并用 `map_saver_cli` 保存 `test_map.pgm` 与 `test_map.yaml`。静态仓储场景下采用 20Hz LiDAR、低速弧线运动并避免碰撞后，建图稳定性明显改善。
 
