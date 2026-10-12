@@ -1,8 +1,10 @@
 # RGB-D 视觉 SLAM 应用路线
 
-更新：2026-10-11。前置里程碑：学习者确认激光雷达 SLAM + Nav2 仿真已跑通，ROS2 第八章结束。第一阶段已有部分运行确认，其余任务仍为待实施/待验收，不代表全部运行通过。
+更新：2026-10-12。前置里程碑：学习者确认激光雷达 SLAM + Nav2 仿真已跑通，ROS2 第八章结束。第一阶段已有部分运行确认，其余任务仍为待实施/待验收，不代表全部运行通过。
 
 10 月 11 日进展：Gazebo RGB/Depth 显示、PointCloud2 桥接、RViz 点云显示已由学习者确认。点云 frame_id 为 `second_robot/base_footprint/camera_sensor`，临时 static_transform_publisher 补齐 TF 后显示成功；下一步工程化 TF、同步最终相机/bridge/launch 并补齐传感器验收，再继续 RTAB-Map。本仓库尚未同步这些最终源码，详见 [今日记录](../daily/2026-10-11.md)。
+
+10 月 12 日进展：RTAB-Map 已在 Gazebo 室内复杂场景实际运行，能显示 RGB 图像和 3D Map，但平移后的点云重影/条纹和空间错位未解决。确认建图节点使用轮式 `/diff_drive_controller/odom`，关闭视觉/ICP 里程计；三个相机消息 header 使用 `camera_optical_frame`。在虚拟机约 33%～41% 实时运行率下，当前 Ubuntu Xacro 请求 120 Hz、640×480，建议先验证单帧几何/光学 TF、CameraInfo/同步及 odom，单变量测试降为 15 Hz。场景更换不解决核心异常；**第一、第二阶段仍未完成验收**，见 [10 月 12 日排错记录](../daily/2026-10-12.md)。
 
 目标：使用成熟的 RTAB-Map 与 Nav2 完成从仿真到 FET3588 实体移动机器人的系统集成。当前不以研究视觉 SLAM 算法为主线，已有 Linux/C++、ROS2、TF、差速控制与导航知识继续复用。
 

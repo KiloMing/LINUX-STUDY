@@ -1,8 +1,11 @@
 # CURRENT
 
-最后更新：2026-10-11
+最后更新：2026-10-12
 
 ## 当前进度快照
+
+**第九章最新断点（2026-10-12）：** 已能在 Gazebo 复杂室内场景运行 RTAB-Map RGB-D 建图，但三维地图在平移后依然有重影/扭曲，**未验收通过**。启动脚本明确使用 `/diff_drive_controller/odom`（`visual_odometry=false` / `icp_odometry=false`）；RGB-D PointCloud2、Depth、CameraInfo 的消息 `frame_id` 均为 `camera_optical_frame`，但尚未验证 TF/内参与几何一致。当前 Ubuntu 相机配置请求 120 Hz、640×480，虚拟机实时率约 33%～41%；拟单独测试降为 15 Hz。复杂场景未消除异常，因此下次优先做 **静止单帧点云 → 激光点云对照 → optical TF/CameraInfo → odom 直行叠加 → RTAB-Map 同步/优化**。本次只整理对话和已有仓库信息，未同步 Ubuntu 最终 Xacro、world、launch、mapping.sh，也没有重跑构建。详见 [10 月 12 日 RGB-D 排错记录](daily/2026-10-12.md)。
+
 
 **第九章最新断点（2026-10-11）：** 学习者确认 Gazebo RGB/Depth 显示、PointCloud2 桥接和 RViz 点云显示已跑通。点云 `frame_id=second_robot/base_footprint/camera_sensor`；临时补充 `camera_link` 到该坐标系的零变换后显示成功。TF 兼容方案仍待工程化，之后继续 RTAB-Map。仓库 camera Xacro 已有 RGB-D 传感器，但没有兼容 TF；旧 launch 仅有 `/clock` bridge，四条相机 bridge 与最终 launch 待从 Ubuntu 同步。本次未重跑仿真，详见 [今日 RGB-D 记录](daily/2026-10-11.md)。
 
