@@ -1,8 +1,10 @@
 # CURRENT
 
-最后更新：2026-10-12
+最后更新：2026-10-13
 
 ## 当前进度快照
+
+**第九章最新断点（2026-10-13）：** 已切换测试 RTAB-Map **RGB-D 视觉里程计**，ROS 2 + RViz 可运行；`/rgbd_odom` 曾输出，短暂建立完整 TF `map→odom→base_footprint→base_link→camera_link→camera_optical_frame`。但运行中 `odom→base_footprint` 会间歇性缺失；视觉配准出现 `Not enough inliers 0/20`、`Odom quality=0`，Odometry 协方差曾出现对角线 `9999`，即使 `/rgbd_odom` 仍以约 3～5Hz 发布也**不能认为跟踪有效**。RGB 话题约 8.67Hz；`odom_info` 话题已存在，尚缺 lost/features/matches/inliers 实际诊断值。下一次先核对 RGB-D 时间戳/内参/几何与 `odom_info`，再对比视觉和轮式 odom，不应继续随意补静态 TF 或下调最小内点。**视觉建图尚未验收通过。** 今天的完整故障链和计划见 [2026-10-13](daily/2026-10-13.md)；Ubuntu 最新脚本/Xacro/YAML 仍未同步，GitHub 本次只提交文档。
 
 **第九章最新断点（2026-10-12）：** 已能在 Gazebo 复杂室内场景运行 RTAB-Map RGB-D 建图，但三维地图在平移后依然有重影/扭曲，**未验收通过**。启动脚本明确使用 `/diff_drive_controller/odom`（`visual_odometry=false` / `icp_odometry=false`）；RGB-D PointCloud2、Depth、CameraInfo 的消息 `frame_id` 均为 `camera_optical_frame`，但尚未验证 TF/内参与几何一致。当前 Ubuntu 相机配置请求 120 Hz、640×480，虚拟机实时率约 33%～41%；拟单独测试降为 15 Hz。复杂场景未消除异常，因此下次优先做 **静止单帧点云 → 激光点云对照 → optical TF/CameraInfo → odom 直行叠加 → RTAB-Map 同步/优化**。本次只整理对话和已有仓库信息，未同步 Ubuntu 最终 Xacro、world、launch、mapping.sh，也没有重跑构建。详见 [10 月 12 日 RGB-D 排错记录](daily/2026-10-12.md)。
 
@@ -78,20 +80,9 @@
 
 ## 下一次测试
 
-执行 [视觉巡航教学计划第一课](ros2/VISUAL_PATROL_TEACHING_PLAN.md)：先整理相机接口表、当前配置快照和缺失项，再推进以下 RGB-D 传感器验收。教学计划已制定，RGB-D 显示与临时 TF 验证已有上述运行确认，完整课次验收仍待补齐。
+**优先继续 2026-10-13 的 RGB-D VO 故障验证**，无需重做已经成功的 RGB/Depth 接入。保持当前 Gazebo/ROS2 时间基一致，先捕获失败时的 `/rtabmap/odom_info` 与 `/rgbd_odom.pose.covariance`，并同时记录 `/rgbd_image` 频率、RGB/Depth/CameraInfo 同帧时间戳、frame、相机内参和有效深度。核查 `odom→base_footprint` 是否只由视觉 odom 发布、frame_id/optical TF 与 Xacro 宏调用是否匹配；先让机器人静止获得稳定有效位姿，再做慢速位姿对比，最后测试 MapCloud。见 [今日记录](daily/2026-10-13.md) 中逐步验收和命令。**当前地图/TF 不稳定，不进入 Nav2 实时导航验收。**
 
-下一次主任务：先同步最终运行源码并工程化 TF 兼容方案，再检查 Ubuntu `~/my_ros/chapt6_ws` 的相机模型和 Gazebo/ros_gz 版本，区分普通 RGB 与 RGB-D 传感器；配置 RGB、Depth、CameraInfo 和点云桥接，验证频率、时间戳、深度单位、图像对齐、光学坐标系与 RViz 显示。保持 `/clock` 单一发布，保存配置和短 rosbag。此关通过后再启动 RTAB-Map，详见 [第一阶段验收](ros2/RGBD_ROADMAP.md)。
-
-并行归档：同步今天真正跑通的 A* 源码和日志，补齐 planner_server、GoalOccupied、索引初始化的发生条件与修复前后证据；A* 距障和速度时间戳问题作为遗留项跟进，不再把它们写成“第八章尚未结束”。
-
-第七章待归档与验收清单继续保留：
-
-1. 从 Ubuntu `~/my_ros/chapt6_ws` 同步 10 月 6 日最终运行源码：Action Client、巡检控制器、speaker、`SpeechText.srv`、camera bridge launch、CMake 和 package.xml。
-2. 在仓库中先做逐文件 diff，确认 `latest_image_` 已使用 `if (!latest_image_)`，节点名、Server 名、字段和依赖都是最终版本，再归档而不覆盖其他工作。
-3. 在干净终端重新构建并重新 source，完整重启 Gazebo、Nav2、speaker 和 patrol controller，排除旧 install 空间造成的假成功。
-4. 保存 Action、Service、Topic/QoS、每点到达日志、语音结果和 `photo_A`～`photo_D` 文件证据。
-5. 注入 Server/Service/bridge 缺席、Goal aborted/canceled、相机首帧未到和图片路径不可写等错误，确认节点能报告并继续安全运行。
-6. 脱离笔记独立复现最小 `FollowWaypoints` Client 和一次完整巡检，再决定是否上调 Action/Service/传感器集成掌握等级。
+同步 Ubuntu 真正运行版本到仓库之前必须逐文件 diff，保留旧轮式里程计基线和独立建图数据库；不将聊天建议中的开关、性能优化或复位逻辑误写为已验证完成。之前 A*、Action、巡检与真机硬件遗留项不因本次视觉实验自动关闭。
 
 ## 下一步
 

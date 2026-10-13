@@ -1,10 +1,12 @@
 # RGB-D 视觉 SLAM 应用路线
 
-更新：2026-10-12。前置里程碑：学习者确认激光雷达 SLAM + Nav2 仿真已跑通，ROS2 第八章结束。第一阶段已有部分运行确认，其余任务仍为待实施/待验收，不代表全部运行通过。
+更新：2026-10-13。前置里程碑：学习者确认激光雷达 SLAM + Nav2 仿真已跑通，ROS2 第八章结束。第一阶段已有部分运行确认，其余任务仍为待实施/待验收，不代表全部运行通过。
 
 10 月 11 日进展：Gazebo RGB/Depth 显示、PointCloud2 桥接、RViz 点云显示已由学习者确认。点云 frame_id 为 `second_robot/base_footprint/camera_sensor`，临时 static_transform_publisher 补齐 TF 后显示成功；下一步工程化 TF、同步最终相机/bridge/launch 并补齐传感器验收，再继续 RTAB-Map。本仓库尚未同步这些最终源码，详见 [今日记录](../daily/2026-10-11.md)。
 
 10 月 12 日进展：RTAB-Map 已在 Gazebo 室内复杂场景实际运行，能显示 RGB 图像和 3D Map，但平移后的点云重影/条纹和空间错位未解决。确认建图节点使用轮式 `/diff_drive_controller/odom`，关闭视觉/ICP 里程计；三个相机消息 header 使用 `camera_optical_frame`。在虚拟机约 33%～41% 实时运行率下，当前 Ubuntu Xacro 请求 120 Hz、640×480，建议先验证单帧几何/光学 TF、CameraInfo/同步及 odom，单变量测试降为 15 Hz。场景更换不解决核心异常；**第一、第二阶段仍未完成验收**，见 [10 月 12 日排错记录](../daily/2026-10-12.md)。
+
+10 月 13 日进展：在 Ubuntu 仿真工作区试运行 `rgbd_odometry` + RTAB-Map，使用 RViz MapCloud/MapGraph 可视化；`/rgbd_odom` 可发布，TF 从 `map→odom→base_footprint→base_link` 曾完整连通，但会间歇性缺失视觉 `odom→base_footprint`。前端日志 `Registration failed: Not enough inliers 0/20`、`quality=0`，无效 Odometry 一帧协方差对角线为 `9999`，因此 **有消息频率不代表有效跟踪**。RGB 接收频率约 8.67Hz，视觉里程计多段约 0.2～6Hz，频率还需与图像同步/特征质量分开对照。静止/直行精度与地图质量未通过，第一、二阶段仍待验收。详见 [10 月 13 日记录](../daily/2026-10-13.md)。仓库尚未同步当天运行脚本和最终相机 Xacro/YAML，本次仅更新学习文档。
 
 目标：使用成熟的 RTAB-Map 与 Nav2 完成从仿真到 FET3588 实体移动机器人的系统集成。当前不以研究视觉 SLAM 算法为主线，已有 Linux/C++、ROS2、TF、差速控制与导航知识继续复用。
 
@@ -23,13 +25,13 @@
 
 每个阶段通过后再推进。每周安排一个可验收结果，驱动兼容性与板卡系统尚未核实，不承诺固定完成日期。手动遥控建图先跑通；无人值守的自主探索建图需要额外的探索策略，不把 SLAM + Nav2 的接通写成自动探索已实现。
 
-## 下一次学习：只先打通仿真 RGB-D
+## 下一次学习：先修复视觉里程计有效跟踪，再验收 RGB-D 建图
 
-1. 从 Ubuntu `~/my_ros/chapt6_ws` 保存现有可运行基线，核对 Gazebo 与 ros_gz 的实际版本、world、相机 Xacro/SDF 和启动文件。
-2. 列出 RGB、Depth、CameraInfo、PointCloud2 的实际话题、类型、frame_id 与发布频率，区分已有普通 RGB 相机和深度传感器。
-3. 配置传感器与桥接，沿用已经验证的 GZ_IP 设置与单一 `/clock` 桥接；仿真节点统一使用仿真时间。
-4. 在 RViz 显示图像、点云及 TF，移动机器人检查几何与时间一致性；保存截图、短数据包及配置。
-5. 完成第一阶段验收后，再安装/配置 RTAB-Map。相机单独驱动问题作为后续真机阶段任务，不阻塞仿真起步。
+1. 捕获 `/rtabmap/odom_info` 的 `lost/features/matches/inliers` 和 `/rgbd_odom` 的有效/无效协方差，确认是否始终为 `inliers=0`。
+2. 分层检查 RGB、Depth、CameraInfo 同帧时间戳与分辨率、内参/深度有效值、相机 optical TF、`/rgbd_image` 同步频率。谨慎区分软件渲染导致的低墙钟频率和算法失配。
+3. 以 `map→odom→base_footprint→base_link` 为目标验证单一 TF 发布者；禁止用临时静态 `odom→base_footprint` 假装修复动态里程计。
+4. 在**静止正常且连续有效跟踪**之后再做慢速直行、缓慢转弯，分别计算视觉、轮式 odom 相对于起点的误差，并与 Gazebo 真值比较；持续保存 TF 图、位姿曲线及节点日志。
+5. 前端可靠后，再验收 RTAB-Map 的三维/二维地图、回环和保存/加载定位；若只对地图表现做视觉优化，暂不把配置推进到 Nav2。保留轮式 odom 方案作对照，后续再探索融合。
 
 ## 数据接口与迁移边界
 
