@@ -12,7 +12,9 @@
 
 旧记录仍保留在 `DAY1/`–`DAY6/`。从新结构启用后，使用 `YYYY-MM-DD.md` 命名。
 
-最新记录：[2026-10-13](2026-10-13.md)：RGB-D 视觉里程计切换、RTAB-Map/RViz 软件渲染、`odom→base_footprint` TF 间歇断连、`Not enough inliers 0/20` 和无效 Odometry 协方差 `9999` 的证据与后续验证步骤。**故障未修复**。
+最新记录：[2026-10-14](2026-10-14.md)：切换 `/camera_odom`、关闭轮式 odom TF 并保留 cmd_vel、修复 Launch 空参数错误；归档 4 张原始截图，分析特征不足、预测投影越界与持续失跟。**视觉里程计故障未修复**，下一步静止检查预测/TF，再做低速真值对比。
+
+上一日：[2026-10-13](2026-10-13.md)：RGB-D 视觉里程计切换、RTAB-Map/RViz 软件渲染、`odom→base_footprint` TF 间歇断连、`Not enough inliers 0/20` 和无效 Odometry 协方差 `9999` 的证据与后续验证步骤。**故障未修复**。
 
 上一日：[2026-10-12](2026-10-12.md)：RTAB-Map RGB-D 三维建图平移漂移、复杂 SDF 场景对照、轮式 odom/相机 optical frame/120 Hz 配置分析；故障未修复，记录下一次分层核验步骤。
 

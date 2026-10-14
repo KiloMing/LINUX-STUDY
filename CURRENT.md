@@ -1,10 +1,12 @@
 # CURRENT
 
-最后更新：2026-10-13
+最后更新：2026-10-14
 
 ## 当前进度快照
 
-**第九章最新断点（2026-10-13）：** 已切换测试 RTAB-Map **RGB-D 视觉里程计**，ROS 2 + RViz 可运行；`/rgbd_odom` 曾输出，短暂建立完整 TF `map→odom→base_footprint→base_link→camera_link→camera_optical_frame`。但运行中 `odom→base_footprint` 会间歇性缺失；视觉配准出现 `Not enough inliers 0/20`、`Odom quality=0`，Odometry 协方差曾出现对角线 `9999`，即使 `/rgbd_odom` 仍以约 3～5Hz 发布也**不能认为跟踪有效**。RGB 话题约 8.67Hz；`odom_info` 话题已存在，尚缺 lost/features/matches/inliers 实际诊断值。下一次先核对 RGB-D 时间戳/内参/几何与 `odom_info`，再对比视觉和轮式 odom，不应继续随意补静态 TF 或下调最小内点。**视觉建图尚未验收通过。** 今天的完整故障链和计划见 [2026-10-13](daily/2026-10-13.md)；Ubuntu 最新脚本/Xacro/YAML 仍未同步，GitHub 本次只提交文档。
+**第九章最新断点（2026-10-14）：** 本次视觉话题为 `/camera_odom`。原轮式 `/diff_drive_controller/odom` 基线保留，设置 `enable_odom_tf=false` 并保留底盘 cmd_vel；TF 是否真正停止仍待核查。删除 Bash 启动参数 `odom_frame_id:=''` 后进入 RGB-D VO 处理阶段，但出现初始化仅 5/20 个特征、0/20 与 7/20 内点、预测投影越界、无 guess 重试失败及 `quality=0`，SLAM 因无可用 odom 忽略图像。**运动后频繁失跟/漂移尚未修复**，不能把降低 MinInliers 或 quality>0 单独视为通过。下一步先静止检查有效跟踪、`guess_frame_id`、`Odom/GuessMotion` 与 TF 发布者，再核对外参、RGB-D 配准、纹理、帧率/同步，最后低速前后/左右旋转并对比 Gazebo 真值。详见 [2026-10-14 记录与 4 张截图](daily/2026-10-14.md)。本次仅归档文档与证据，Ubuntu 最终源码未同步、未重跑仿真。
+
+**第九章历史断点（2026-10-13）：** 已切换测试 RTAB-Map **RGB-D 视觉里程计**，ROS 2 + RViz 可运行；`/rgbd_odom` 曾输出，短暂建立完整 TF `map→odom→base_footprint→base_link→camera_link→camera_optical_frame`。但运行中 `odom→base_footprint` 会间歇性缺失；视觉配准出现 `Not enough inliers 0/20`、`Odom quality=0`，Odometry 协方差曾出现对角线 `9999`，即使 `/rgbd_odom` 仍以约 3～5Hz 发布也**不能认为跟踪有效**。RGB 话题约 8.67Hz；`odom_info` 话题已存在，尚缺 lost/features/matches/inliers 实际诊断值。下一次先核对 RGB-D 时间戳/内参/几何与 `odom_info`，再对比视觉和轮式 odom，不应继续随意补静态 TF 或下调最小内点。**视觉建图尚未验收通过。** 今天的完整故障链和计划见 [2026-10-13](daily/2026-10-13.md)；Ubuntu 最新脚本/Xacro/YAML 仍未同步，GitHub 本次只提交文档。
 
 **第九章最新断点（2026-10-12）：** 已能在 Gazebo 复杂室内场景运行 RTAB-Map RGB-D 建图，但三维地图在平移后依然有重影/扭曲，**未验收通过**。启动脚本明确使用 `/diff_drive_controller/odom`（`visual_odometry=false` / `icp_odometry=false`）；RGB-D PointCloud2、Depth、CameraInfo 的消息 `frame_id` 均为 `camera_optical_frame`，但尚未验证 TF/内参与几何一致。当前 Ubuntu 相机配置请求 120 Hz、640×480，虚拟机实时率约 33%～41%；拟单独测试降为 15 Hz。复杂场景未消除异常，因此下次优先做 **静止单帧点云 → 激光点云对照 → optical TF/CameraInfo → odom 直行叠加 → RTAB-Map 同步/优化**。本次只整理对话和已有仓库信息，未同步 Ubuntu 最终 Xacro、world、launch、mapping.sh，也没有重跑构建。详见 [10 月 12 日 RGB-D 排错记录](daily/2026-10-12.md)。
 
@@ -80,7 +82,7 @@
 
 ## 下一次测试
 
-**优先继续 2026-10-13 的 RGB-D VO 故障验证**，无需重做已经成功的 RGB/Depth 接入。保持当前 Gazebo/ROS2 时间基一致，先捕获失败时的 `/rtabmap/odom_info` 与 `/rgbd_odom.pose.covariance`，并同时记录 `/rgbd_image` 频率、RGB/Depth/CameraInfo 同帧时间戳、frame、相机内参和有效深度。核查 `odom→base_footprint` 是否只由视觉 odom 发布、frame_id/optical TF 与 Xacro 宏调用是否匹配；先让机器人静止获得稳定有效位姿，再做慢速位姿对比，最后测试 MapCloud。见 [今日记录](daily/2026-10-13.md) 中逐步验收和命令。**当前地图/TF 不稳定，不进入 Nav2 实时导航验收。**
+**优先继续 2026-10-14 的 camera_odom 故障验证**：停车对准有纹理场景，连续记录 quality、lost/inliers、位姿协方差与 TF，不能只凭消息频率或 quality>0 验收。读取 `guess_frame_id`、`Odom/GuessMotion`、控制器 `enable_odom_tf`，检查 `/tf` 各发布者实际广播的父子变换；再核查相机 TF/外参、RGB-D 配准和同窗口帧率/同步。静止稳定后，以低速前进、后退、左转、右转逐项比较 Gazebo 真值与 `/camera_odom` 的相对位姿。完整命令和证据见 [今日记录](daily/2026-10-14.md)。**当前地图/TF 不稳定，不进入 Nav2 实时导航验收。**
 
 同步 Ubuntu 真正运行版本到仓库之前必须逐文件 diff，保留旧轮式里程计基线和独立建图数据库；不将聊天建议中的开关、性能优化或复位逻辑误写为已验证完成。之前 A*、Action、巡检与真机硬件遗留项不因本次视觉实验自动关闭。
 
